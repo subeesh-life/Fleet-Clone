@@ -14,7 +14,7 @@ const clientStopSelection = ref('forAllStops')
             <div class="text-subtitle1 text-grey-9 text-weight-medium q-ml-xs">Manage Client</div>
           </div>
           <div class="col flex justify-end">
-            <div>
+            <div class="flex items-center">
               <q-tooltip>Add Client</q-tooltip>
               <iconify-icon
                 icon="hugeicons:add-circle-half-dot"

@@ -138,7 +138,7 @@ const handleApply = () => {
             <div class="text-subtitle1 text-grey-9 text-weight-medium q-ml-xs">Event Name</div>
           </div>
           <div class="col flex justify-end">
-            <div @click="eventNameDrawer = true">
+            <div class="flex items-center" @click="eventNameDrawer = true">
               <iconify-icon
                 icon="hugeicons:add-circle-half-dot"
                 width="24px"
