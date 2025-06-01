@@ -38,13 +38,13 @@ const handleDelete = (event: Event) => {
           <div class="col-4 flex justify-end">
             <div class="flex items-center" @click="handleOpenDrawer">
               <div v-if="showSavedNotes" class="cursor-pointer q-mr-md">
-                <iconify-icon icon="hugeicons:delete-02" width="24px" height="24px" 
-                  class="text-red-10" @click="handleDelete($event)" />
+                <iconify-icon icon="hugeicons:delete-02" width="24px" height="24px" class="text-red-10"
+                  @click="handleDelete($event)" />
                 <q-tooltip>Delete Note</q-tooltip>
               </div>
               <div>
-                <iconify-icon :icon="showSavedNotes ? 'hugeicons:reload' : 'hugeicons:add-circle-half-dot'" 
-                  width="24px" height="24px" class="text-secondary cursor-pointer" />
+                <iconify-icon :icon="showSavedNotes ? 'hugeicons:reload' : 'hugeicons:add-circle-half-dot'" width="24px"
+                  height="24px" class="text-secondary cursor-pointer" />
                 <q-tooltip>{{ showSavedNotes ? 'Update Notes' : 'Add Notes' }}</q-tooltip>
               </div>
             </div>
@@ -77,7 +77,7 @@ const handleDelete = (event: Event) => {
         </div>
         <q-separator class="q-my-md" />
       </q-card-section>
-      <q-card-section>
+      <q-card-section class="q-pt-none">
         <div class="text-subtitle2 text-grey-7 q-pb-sm">You can skip this field if not needed</div>
         <q-input v-model="tempNote" square outlined placeholder="Add notes / comments" autogrow />
       </q-card-section>
