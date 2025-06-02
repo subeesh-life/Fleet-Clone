@@ -5,7 +5,7 @@ const clientStopSelection = ref('forAllStops')
 const activeTab = ref('existing-client')
 const maximizedToggle = ref(false)
 const clientType = ref('Group')
-const searchEventType = ref('')
+const searchclientType = ref('')
 const selectedClients = ref([])
 </script>
 
@@ -46,7 +46,7 @@ const selectedClients = ref([])
     </q-card>
   </div>
 
-  <!-- Event Note Drawer -->
+  <!-- client Note Drawer -->
   <q-dialog persistent v-model="clientDrawer" :maximized="maximizedToggle" transition-show="slide-up"
     transition-hide="slide-down">
     <q-card class="column window-height	window-width">
@@ -54,7 +54,7 @@ const selectedClients = ref([])
         <div class="row items-start justify-between">
           <div>
             <div class="text-h6 text-weight-bold">Add Client</div>
-            <div class="text-caption text-grey-7">Select the clients you wish to add to this event.</div>
+            <div class="text-caption text-grey-7">Select the clients you wish to add to this client.</div>
           </div>
           <div class="row items-center q-gutter-x-md">
             <q-btn color="primary" label="Apply" />
@@ -89,12 +89,12 @@ const selectedClients = ref([])
               <div class="col-6 bg-grey-1">
                 <q-card-section class="q-pt-none">
                   <q-table flat outline bordered :rows="[
-                    { event: 'Home to School', subtext: 'Business', type: 'With Revenue' },
-                    { event: 'School to Home', subtext: 'Business', type: 'With Revenue' },
-                    { event: 'School to School', subtext: 'Business', type: 'With Revenue' },
-                    { event: 'Field Trip', subtext: 'Business', type: 'With Revenue' },
-                    { event: 'Excursion', subtext: 'Internal', type: 'Without Revenue' },
-                    { event: 'City Tour', subtext: 'Internal', type: 'Without Revenue' },
+                    { client: 'Gems International', subtext: 'Business', type: 'With Revenue' },
+                    { client: 'Emirates International School', subtext: 'Business', type: 'With Revenue' },
+                    { client: 'Abu Dhabi Indian School', subtext: 'Business', type: 'With Revenue' },
+                    { client: 'Al Reem International School', subtext: 'Business', type: 'With Revenue' },
+                    { client: 'Amercian International School', subtext: 'Business', type: 'With Revenue' },
+                    { client: 'Amity International ', subtext: 'Business', type: 'With Revenue' },
                   ]" :columns="[
                     {
                       name: 'select',
@@ -104,23 +104,15 @@ const selectedClients = ref([])
                       headerClasses: 'bg-grey-2',
                     },
                     {
-                      name: 'event',
-                      label: 'Event Type',
-                      field: 'event',
+                      name: 'client',
+                      label: 'Groups',
+                      field: 'client',
                       sortable: true,
                       align: 'left',
                       headerClasses: 'bg-grey-2',
                     },
-                    {
-                      name: 'type',
-                      label: 'Event Usage',
-                      field: 'type',
-                      sortable: true,
-                      align: 'left',
-                      headerClasses: 'bg-grey-2',
-                      classes: 'text-grey-7 text-caption',
-                    },
-                  ]" row-key="event" :pagination="{ rowsPerPage: 7 }">
+
+                  ]" row-key="client" :pagination="{ rowsPerPage: 7 }">
                     <template v-slot:top>
                       <div class="row items-center full-width q-col-gutter-x-md">
                         <div class="col-6 q-pl-none">
@@ -128,7 +120,7 @@ const selectedClients = ref([])
                             :options="['Group', 'Entity', 'Individual']" />
                         </div>
                         <div class="col-6">
-                          <q-input v-model="searchEventType" dense outlined placeholder="Search">
+                          <q-input v-model="searchclientType" dense outlined placeholder="Search">
                             <template v-slot:prepend>
                               <q-icon name="search" />
                             </template>
@@ -140,16 +132,18 @@ const selectedClients = ref([])
 
                     <template v-slot:body-cell-select="props">
                       <q-td>
-                        <q-checkbox v-model="selectedClients" :val="props.row.event" dense class="no-outline" />
+                        <q-checkbox v-model="selectedClients" :val="props.row.client" dense class="no-outline" />
                       </q-td>
                     </template>
 
-                    <template v-slot:body-cell-event="props">
+                    <template v-slot:body-cell-client="props">
                       <q-td>
                         <div class="column">
-                          <div>{{ props.row.event }}</div>
-                          <div v-if="props.row.subtext" class="text-caption text-grey-7">
-                            {{ props.row.subtext }}
+                          <div class="row items-center">
+                            <q-avatar size="32px" color="primary" text-color="white">
+                              <img src="https://cdn.quasar.dev/img/avatar.png">
+                            </q-avatar>
+                            <div class="text-body2 text-weight-medium q-pl-sm">{{ props.row.client }}</div>
                           </div>
                         </div>
                       </q-td>
@@ -162,7 +156,7 @@ const selectedClients = ref([])
                   <q-img src="/src/assets/states/empty-state-loader.svg" style="width: 100px; height: 80px" />
                   <div class="text-h6">No Clients Selected Yet!</div>
                   <div class="text-body2 text-center text-grey-7">
-                    Select clients to add to this event.
+                    Select clients to add to this client.
                   </div>
                 </q-card-section>
               </div>
