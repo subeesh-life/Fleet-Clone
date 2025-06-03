@@ -54,7 +54,7 @@ const selectedClients = ref([])
         <div class="row items-start justify-between">
           <div>
             <div class="text-h6 text-weight-bold">Add Client</div>
-            <div class="text-caption text-grey-7">Select the clients you wish to add to this client.</div>
+            <div class="text-caption text-grey-7">Select the clients you wish to add to this event.</div>
           </div>
           <div class="row items-center q-gutter-x-md">
             <q-btn color="primary" label="Apply" />
@@ -86,16 +86,26 @@ const selectedClients = ref([])
         <q-tab-panels v-model="activeTab" animated>
           <q-tab-panel name="existing-client" class="q-pa-none q-mt-sm">
             <div class="row q-py-sm">
-              <div class="col-6 bg-grey-1">
-                <q-card-section class="q-pt-none">
-                  <q-table flat outline bordered :rows="[
-                    { client: 'Gems International', subtext: 'Business', type: 'With Revenue' },
-                    { client: 'Emirates International School', subtext: 'Business', type: 'With Revenue' },
-                    { client: 'Abu Dhabi Indian School', subtext: 'Business', type: 'With Revenue' },
-                    { client: 'Al Reem International School', subtext: 'Business', type: 'With Revenue' },
-                    { client: 'Amercian International School', subtext: 'Business', type: 'With Revenue' },
-                    { client: 'Amity International ', subtext: 'Business', type: 'With Revenue' },
-                  ]" :columns="[
+              <div class="col-md-6 col-sm-12 bg-grey-1">
+                <q-card-section>
+                  <q-table flat outline bordered :rows="[{
+                    client: 'Gems International', subtext: 'Business',
+                    type: 'With Revenue'
+                  }, {
+                    client: 'Emirates International School', subtext: 'Business',
+                    type: 'With Revenue'
+                  }, {
+                    client: 'Abu Dhabi Indian School', subtext: 'Business',
+                    type: 'With Revenue'
+                  }, {
+                    client: 'Al Reem International School', subtext: 'Business',
+                    type: 'With Revenue'
+                  }, {
+                    client: 'Amercian International School', subtext: 'Business',
+                    type: 'With Revenue'
+                  }, {
+                    client: 'Amity International ', subtext: 'Business', type: 'With Revenue'
+                  },]" :columns="[
                     {
                       name: 'select',
                       label: '',
@@ -140,10 +150,15 @@ const selectedClients = ref([])
                       <q-td>
                         <div class="column">
                           <div class="row items-center">
-                            <q-avatar size="32px" color="primary" text-color="white">
+                            <q-avatar size="40px" color="primary" text-color="white">
                               <img src="https://cdn.quasar.dev/img/avatar.png">
                             </q-avatar>
-                            <div class="text-body2 text-weight-medium q-pl-sm">{{ props.row.client }}</div>
+                            <div class="column">
+                              <div class="text-body2 text-weight-medium q-pl-sm">{{ props.row.client }}</div>
+                              <div class="row items-center q-pl-sm">
+                                <IconifyIcon icon="hugeicons:call" width="16px" height="16px" class="text-grey-8" />
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </q-td>
@@ -151,7 +166,7 @@ const selectedClients = ref([])
                   </q-table>
                 </q-card-section>
               </div>
-              <div class="col-6">
+              <div class="col-md-6 col-sm-12">
                 <q-card-section class="flex column flex-center full-height q-col-gutter-sm">
                   <q-img src="/src/assets/states/empty-state-loader.svg" style="width: 100px; height: 80px" />
                   <div class="text-h6">No Clients Selected Yet!</div>
