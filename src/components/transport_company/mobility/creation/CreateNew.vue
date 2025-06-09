@@ -9,6 +9,15 @@ import ManageClients from './associated_cards/ManageClients.vue'
 import AddNotes from './associated_cards/AddNotes.vue'
 import TabController from './associated_tabs/TabController.vue'
 import EventThreshold from './threshold/EventThreshold.vue'
+import ConfirmationModal from 'src/components/shared/modals/ConfirmationModal.vue'
+import { useRouter } from 'vue-router'
+
+const showCancelConfirmationModal = ref(false)
+const confirmCancellation = async () => {
+  await router.push({ name: 'dispatch' })
+}
+const showDraftConfirmationModal = ref(false)
+
 import { L } from 'boot/leaflet'
 
 onMounted(() => {
@@ -33,6 +42,8 @@ const prefix = ref('')
 const suffix = ref('')
 const showPopupEdit = ref(false)
 const eventThresholdDrawer = ref(false)
+const router = useRouter()
+
 const copyEventReferenceId = async () => {
   try {
     await navigator.clipboard.writeText(eventReferenceId.value)
@@ -60,6 +71,8 @@ const updateEventReferenceId = () => {
   prefix.value = ''
   suffix.value = ''
 }
+
+
 </script>
 <template>
   <q-page class="bg-grey-1" style="border-top: 1px solid #e0e0e0">
@@ -84,13 +97,7 @@ const updateEventReferenceId = () => {
                       <q-input dense filled v-model="prefix" label="Prefix" />
                     </div>
                     <div class="col-12">
-                      <q-input
-                        dense
-                        filled
-                        v-model="eventReferenceId"
-                        label="Reference ID"
-                        readonly
-                      />
+                      <q-input dense filled v-model="eventReferenceId" label="Reference ID" readonly />
                     </div>
                     <div class="col-12">
                       <q-input dense filled v-model="suffix" label="Suffix" />
@@ -118,15 +125,8 @@ const updateEventReferenceId = () => {
       <div class="col-md-6 flex justify-end">
         <div class="q-gutter-x-md flex items-center">
           <div class="set-threshold-btn">
-            <q-btn
-              dense
-              outline
-              color="white"
-              @click="eventThresholdDrawer = true"
-              text-color="grey-7"
-              round
-              class="gt-sm"
-            >
+            <q-btn dense outline color="white" @click="eventThresholdDrawer = true" text-color="grey-7" round
+              class="gt-sm">
               <q-icon>
                 <IconifyIcon icon="hugeicons:sorting-05" width="12px" height="12px" />
               </q-icon>
@@ -136,43 +136,34 @@ const updateEventReferenceId = () => {
             </q-btn>
           </div>
           <div class="controls">
-            <q-btn
-              outline
-              color="grey-7"
-              :label="$q.screen.gt.sm ? 'Cancel' : undefined"
-              class="q-ml-sm"
-              :to="{ name: 'dispatch' }"
-            >
+            <q-btn outline color="grey-7" :label="$q.screen.gt.sm ? 'Cancel' : undefined" class="q-ml-sm"
+              @click="showCancelConfirmationModal = true">
               <template v-if="!$q.screen.gt.sm">
                 <iconify-icon icon="hugeicons:cancel-01" width="20px" height="20px" />
               </template>
             </q-btn>
-            <q-btn
-              outline
-              color="secondary"
-              :label="$q.screen.gt.sm ? 'Save as Draft' : undefined"
-              class="q-ml-sm"
-            >
+            <q-btn outline color="secondary" :label="$q.screen.gt.sm ? 'Save as Draft' : undefined" class="q-ml-sm"
+              @click="showDraftConfirmationModal = true">
               <template v-if="!$q.screen.gt.sm">
                 <iconify-icon icon="hugeicons:hard-drive" width="20px" height="20px" />
               </template>
             </q-btn>
-            <q-btn
-              color="primary"
-              :label="$q.screen.gt.sm ? 'Create Event' : undefined"
-              class="q-ml-sm"
-              :to="{ name: '' }"
-            >
+            <q-btn color="primary" :label="$q.screen.gt.sm ? 'Create Event' : undefined" class="q-ml-sm"
+              :to="{ name: '' }">
               <template v-if="!$q.screen.gt.sm">
-                <iconify-icon
-                  icon="solar:diskette-outline"
-                  class="text-white"
-                  width="20px"
-                  height="20px"
-                />
+                <iconify-icon icon="solar:diskette-outline" class="text-white" width="20px" height="20px" />
               </template>
             </q-btn>
           </div>
+          <!-- Confirmation Modal for cancel event-->
+          <ConfirmationModal v-model="showCancelConfirmationModal" title="Confirm cancellation of this event?"
+            message="Are you sure you want to cancel this event? All unsaved changes will be lost." type="warning"
+            confirmText="Confirm Cancellation" cancelText="Cancel" @confirm="confirmCancellation" />
+
+          <!-- Confirmation Modal for draft event-->
+          <ConfirmationModal v-model="showDraftConfirmationModal" title="Save event as draft?"
+            message="Are you sure you want to save this event as a draft? You can continue editing later before finalizing."
+            type="success" confirmText="Save as Draft" cancelText="Cancel" />
         </div>
       </div>
     </div>
@@ -201,18 +192,14 @@ const updateEventReferenceId = () => {
         </div>
         <div class="col-md-4 col-xs-12">
           <div class="bg-grey-2">
-            <div id="map" style="height: 100%; width: 100%">
-              <div class="map-controls">
-                <q-btn round color="primary" size="md" class="add-stop-btn">
-                  <iconify-icon
-                    icon="hugeicons:plus-sign"
-                    class="text-white"
-                    width="20px"
-                    height="20px"
-                  />
-                  <q-tooltip>Add New Stop</q-tooltip>
-                </q-btn>
-              </div>
+            <div class="map-container">
+              <div id="map" style="height: 100%; width: 100%"></div>
+            </div>
+            <div class="map-controls">
+              <q-btn round color="primary" size="md" class="add-stop-btn">
+                <iconify-icon icon="hugeicons:plus-sign" class="text-white" width="20px" height="20px" />
+                <q-tooltip>Add New Stop</q-tooltip>
+              </q-btn>
             </div>
           </div>
         </div>
@@ -253,7 +240,18 @@ const updateEventReferenceId = () => {
   position: absolute;
   top: 10px;
   right: 10px;
-  z-index: 1000;
+  z-index: 2; // Increased z-index
+  pointer-events: auto;
+}
+
+// Separate container for the map to apply grayscale
+.map-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
 }
 
 .add-stop-btn {

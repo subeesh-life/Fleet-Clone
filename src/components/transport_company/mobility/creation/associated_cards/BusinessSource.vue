@@ -25,31 +25,31 @@ const businessSourceOptions = [
       <q-card-section class="q-py-sm" style="background-color: var(--fleet-color-gray-true-200)">
         <div class="row items-center justify-between">
           <div class="row items-center">
-            <iconify-icon
-              icon="hugeicons:building-02"
-              width="24px"
-              height="24px"
-              class="text-grey-7"
-            />
+            <iconify-icon icon="hugeicons:building-02" width="24px" height="24px" class="text-grey-7" />
             <div class="text-subtitle1 text-grey-9 text-weight-medium q-ml-xs">Business Source</div>
           </div>
           <div>
             <q-btn-dropdown rounded color="primary" v-model="dropdownOpen" :label="businessSource">
               <q-list padding>
-                <q-item
-                  v-for="option in businessSourceOptions"
-                  :key="option.label"
-                  clickable
-                  v-ripple
-                  @click="
+                <q-item v-for="option in businessSourceOptions" :key="option.label" clickable v-ripple
+                  :disable="option.label === 'Farm In' || option.label === 'Farm Out'" @click="
                     () => {
-                      businessSource = option.label
-                      dropdownOpen = false
+                      if (option.label !== 'Farm In' && option.label !== 'Farm Out') {
+                        businessSource = option.label
+                        dropdownOpen = false
+                      }
                     }
-                  "
-                >
+                  ">
                   <q-item-section>
-                    <q-item-label>{{ option.label }}</q-item-label>
+                    <q-item-label>
+                      {{ option.label }}
+                      <q-tooltip v-if="option.label === 'Farm In'">
+                        Currenlty Unavailable
+                      </q-tooltip>
+                      <q-tooltip v-if="option.label === 'Farm Out'">
+                        Currenlty Unavailable
+                      </q-tooltip>
+                    </q-item-label>
                     <q-item-label caption>{{ option.caption }}</q-item-label>
                   </q-item-section>
                 </q-item>

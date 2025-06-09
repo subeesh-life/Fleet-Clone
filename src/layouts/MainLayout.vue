@@ -17,111 +17,70 @@
           <div>
             <q-btn flat round>
               <q-tooltip>Add New</q-tooltip>
-              <iconify-icon
-                icon="hugeicons:add-circle-half-dot"
-                width="24px"
-                height="24px"
-                class="text-grey-9"
-              />
-              <q-menu
-                v-model="addNewMenu"
-                transition-show="jump-down"
-                transition-hide="jump-up"
-                anchor="bottom right"
-                self="top right"
-                :offset="[0, 10]"
-                class="animated-menu"
-              >
+              <iconify-icon icon="hugeicons:add-circle-half-dot" width="24px" height="24px" class="text-grey-9" />
+              <q-menu v-model="addNewMenu" transition-show="jump-down" transition-hide="jump-up" anchor="bottom right"
+                self="top right" :offset="[0, 10]" class="animated-menu">
                 <q-list style="min-width: 300px" padding>
                   <!-- User Info Section -->
 
                   <q-item clickable v-ripple :to="{ name: 'create-event' }">
                     <q-item-section avatar>
-                      <IconifyIcon
-                        icon="hugeicons:route-02"
-                        width="24px"
-                        height="24px"
-                        class="text-grey-7"
-                      />
+                      <IconifyIcon icon="hugeicons:route-02" width="24px" height="24px" class="text-grey-7" />
                     </q-item-section>
                     <q-item-section>
                       <q-item-label>New Event</q-item-label>
-                      <q-item-label caption>Create a new event</q-item-label>
+                      <q-item-label caption>Schedule and manage an upcoming event</q-item-label>
                     </q-item-section>
                   </q-item>
 
                   <q-item clickable v-ripple>
                     <q-item-section avatar>
-                      <iconify-icon
-                        icon="hugeicons:ai-user"
-                        width="24px"
-                        height="24px"
-                        class="text-grey-7"
-                      />
+                      <iconify-icon icon="hugeicons:ai-user" width="24px" height="24px" class="text-grey-7" />
                     </q-item-section>
                     <q-item-section>
                       <q-item-label>New Client</q-item-label>
-                      <q-item-label caption>Create a new client</q-item-label>
+                      <q-item-label caption>Register a new customer profiles</q-item-label>
                     </q-item-section>
                   </q-item>
 
                   <q-item clickable v-ripple>
                     <q-item-section avatar>
-                      <iconify-icon
-                        icon="hugeicons:user-account"
-                        width="24px"
-                        height="24px"
-                        class="text-grey-7"
-                      />
+                      <iconify-icon icon="hugeicons:user-account" width="24px" height="24px" class="text-grey-7" />
                     </q-item-section>
                     <q-item-section>
                       <q-item-label>New Staff</q-item-label>
-                      <q-item-label caption>Create a new staff</q-item-label>
+                      <q-item-label caption>Register a team member or employee</q-item-label>
                     </q-item-section>
                   </q-item>
 
                   <q-item clickable v-ripple>
                     <q-item-section avatar>
-                      <iconify-icon
-                        icon="hugeicons:bus-03"
-                        width="24px"
-                        height="24px"
-                        class="text-grey-7"
-                      />
+                      <iconify-icon icon="hugeicons:bus-03" width="24px" height="24px" class="text-grey-7" />
                     </q-item-section>
                     <q-item-section>
                       <q-item-label>New Vehicle</q-item-label>
-                      <q-item-label caption>Create a new vehicle</q-item-label>
+                      <q-item-label caption>Add details for a new fleet vehicle</q-item-label>
                     </q-item-section>
                   </q-item>
 
                   <q-item clickable v-ripple>
                     <q-item-section avatar>
-                      <iconify-icon
-                        icon="healthicons:truck-driver-outline"
-                        width="30px"
-                        height="30px"
-                        class="text-grey-7"
-                      />
+                      <iconify-icon icon="healthicons:truck-driver-outline" width="30px" height="30px"
+                        class="text-grey-7" />
                     </q-item-section>
                     <q-item-section>
                       <q-item-label>New Driver</q-item-label>
-                      <q-item-label caption>Create a new driver</q-item-label>
+                      <q-item-label caption>Assign a licensed driver to your operations</q-item-label>
                     </q-item-section>
                   </q-item>
 
                   <q-item clickable v-ripple>
                     <q-item-section avatar>
-                      <iconify-icon
-                        icon="hugeicons:user-square"
-                        width="24px"
-                        height="24px"
-                        class="text-grey-7"
-                      />
+                      <iconify-icon icon="hugeicons:user-square" width="24px" height="24px" class="text-grey-7" />
                     </q-item-section>
                     <q-item-section>
                       <q-item-label>New Assistant</q-item-label>
-                      <q-item-label caption>Create a new assistant</q-item-label>
+                      <q-item-label caption>Register a support staff or helper</q-item-label>
                     </q-item-section>
                   </q-item>
                 </q-list>
@@ -131,35 +90,20 @@
           <div>
             <q-btn flat round>
               <q-tooltip>Settings</q-tooltip>
-              <iconify-icon
-                icon="hugeicons:settings-01"
-                width="24px"
-                height="24px"
-                class="text-grey-9"
-              />
+              <iconify-icon icon="hugeicons:settings-01" width="24px" height="24px" class="text-grey-9" />
             </q-btn>
           </div>
           <div>
             <q-btn flat round>
               <q-tooltip>Chats</q-tooltip>
-              <iconify-icon
-                icon="hugeicons:message-01"
-                width="24px"
-                height="24px"
-                class="text-grey-9"
-              />
+              <iconify-icon icon="hugeicons:message-01" width="24px" height="24px" class="text-grey-9" />
             </q-btn>
           </div>
           <div>
             <q-btn flat round>
               <q-badge color="red" rounded class="absolute-top-right q-mr-xs q-mt-xs" />
               <q-tooltip>Notifications</q-tooltip>
-              <iconify-icon
-                icon="hugeicons:notification-01"
-                width="24px"
-                height="24px"
-                class="text-grey-9"
-              />
+              <iconify-icon icon="hugeicons:notification-01" width="24px" height="24px" class="text-grey-9" />
             </q-btn>
           </div>
           <div>
@@ -177,22 +121,10 @@
                 </q-avatar>
               </div>
               <div class="q-ml-sm q-mt-sm">
-                <iconify-icon
-                  icon="hugeicons:arrow-down-01"
-                  width="24px"
-                  height="24px"
-                  class="text-grey-9"
-                />
+                <iconify-icon icon="hugeicons:arrow-down-01" width="24px" height="24px" class="text-grey-9" />
               </div>
-              <q-menu
-                v-model="profileMenu"
-                transition-show="jump-down"
-                transition-hide="jump-up"
-                anchor="bottom right"
-                self="top right"
-                :offset="[0, 10]"
-                class="animated-menu"
-              >
+              <q-menu v-model="profileMenu" transition-show="jump-down" transition-hide="jump-up" anchor="bottom right"
+                self="top right" :offset="[0, 10]" class="animated-menu">
                 <q-list style="min-width: 300px" padding>
                   <!-- User Info Section -->
                   <q-item class="q-px-md">
@@ -205,12 +137,7 @@
                         <div class="text-grey-7 text-caption">john.doe@email.com</div>
                         <q-btn flat dense padding="xs" class="q-ml-xs" @click="copyEmail">
                           <q-tooltip>Copy email</q-tooltip>
-                          <iconify-icon
-                            icon="hugeicons:copy-02"
-                            width="16px"
-                            height="16px"
-                            class="text-grey-7"
-                          />
+                          <iconify-icon icon="hugeicons:copy-02" width="16px" height="16px" class="text-grey-7" />
                         </q-btn>
                       </div>
                     </q-item-section>
@@ -220,12 +147,7 @@
 
                   <q-item clickable v-ripple>
                     <q-item-section avatar>
-                      <IconifyIcon
-                        icon="hugeicons:user-account"
-                        width="24px"
-                        height="24px"
-                        class="text-grey-7"
-                      />
+                      <IconifyIcon icon="hugeicons:user-account" width="24px" height="24px" class="text-grey-7" />
                     </q-item-section>
                     <q-item-section>
                       <q-item-label>My Profile</q-item-label>
@@ -235,12 +157,7 @@
 
                   <q-item clickable v-ripple>
                     <q-item-section avatar>
-                      <iconify-icon
-                        icon="hugeicons:building-03"
-                        width="20px"
-                        height="20px"
-                        class="text-grey-7"
-                      />
+                      <iconify-icon icon="hugeicons:building-03" width="20px" height="20px" class="text-grey-7" />
                     </q-item-section>
                     <q-item-section>
                       <q-item-label>Company Profile</q-item-label>
@@ -250,12 +167,7 @@
 
                   <q-item clickable v-ripple>
                     <q-item-section avatar>
-                      <iconify-icon
-                        icon="hugeicons:language-square"
-                        width="20px"
-                        height="20px"
-                        class="text-grey-7"
-                      />
+                      <iconify-icon icon="hugeicons:language-square" width="20px" height="20px" class="text-grey-7" />
                     </q-item-section>
                     <q-item-section>
                       <q-item-label>Language</q-item-label>
@@ -266,13 +178,7 @@
                   <q-separator class="q-my-sm" />
 
                   <div class="q-px-md q-py-sm">
-                    <q-btn
-                      outline
-                      class="full-width border-grey-7"
-                      color="text-grey-7"
-                      label="Logout"
-                      v-ripple
-                    />
+                    <q-btn outline class="full-width border-grey-7" color="text-grey-7" label="Logout" v-ripple />
                   </div>
                 </q-list>
               </q-menu>
@@ -282,17 +188,8 @@
       </q-toolbar>
     </q-header>
     <!-- Drawer -->
-    <q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-      :mini="miniState"
-      @mouseover="miniState = false"
-      @mouseout="miniState = true"
-      mini-to-overlay
-      :width="300"
-      :breakpoint="500"
-    >
+    <q-drawer v-model="leftDrawerOpen" show-if-above bordered :mini="miniState" @mouseover="miniState = false"
+      @mouseout="miniState = true" mini-to-overlay :width="300" :breakpoint="500">
       <div class="full-height column justify-between">
         <div>
           <q-list>
@@ -300,32 +197,17 @@
             <template v-if="currentMenu === 'main'">
               <template v-for="item in menuItems" :key="item.label">
                 <!-- For items with sub-menu -->
-                <q-expansion-item
-                  v-if="item.children"
-                  expand-separator
-                  class="cursor-pointer"
-                  :label="item.label"
-                  group="somegroup"
-                >
+                <q-expansion-item v-if="item.children" expand-separator class="cursor-pointer" :label="item.label"
+                  group="somegroup">
                   <template v-slot:header>
                     <q-item-section avatar>
-                      <iconify-icon
-                        :icon="item.icon"
-                        width="24px"
-                        height="24px"
-                        class="text-grey-7"
-                      />
+                      <iconify-icon :icon="item.icon" width="24px" height="24px" class="text-grey-7" />
                     </q-item-section>
                     <q-item-section> {{ item.label }} </q-item-section>
                   </template>
                   <q-list class="q-ml-sm q-pl-xl">
-                    <q-item
-                      v-for="child in item.children"
-                      :key="child.label"
-                      clickable
-                      v-ripple
-                      @click="child.action && child.action()"
-                    >
+                    <q-item v-for="child in item.children" :key="child.label" clickable v-ripple
+                      @click="child.action && child.action()">
                       <q-item-section class="text-caption">{{ child.label }}</q-item-section>
                     </q-item>
                   </q-list>
@@ -334,12 +216,7 @@
                 <!-- For items without sub-menu -->
                 <q-item v-else clickable v-ripple>
                   <q-item-section avatar>
-                    <iconify-icon
-                      :icon="item.icon"
-                      width="24px"
-                      height="24px"
-                      class="text-grey-7"
-                    />
+                    <iconify-icon :icon="item.icon" width="24px" height="24px" class="text-grey-7" />
                   </q-item-section>
                   <q-item-section>{{ item.label }}</q-item-section>
                 </q-item>
@@ -348,13 +225,8 @@
 
             <!-- Dispatch Menu -->
             <template v-else-if="currentMenu === 'dispatch'">
-              <q-item
-                v-for="item in dispatchMenu"
-                :key="item.label"
-                clickable
-                v-ripple
-                @click="item.action && item.action()"
-              >
+              <q-item v-for="item in dispatchMenu" :key="item.label" clickable v-ripple
+                @click="item.action && item.action()">
                 <q-item-section avatar>
                   <iconify-icon :icon="item.icon" width="24px" height="24px" class="text-grey-7" />
                 </q-item-section>
@@ -568,24 +440,31 @@ const copyEmail = async () => {
 .animated-menu .q-item:nth-child(1) {
   animation-delay: 0.05s;
 }
+
 .animated-menu .q-item:nth-child(2) {
   animation-delay: 0.1s;
 }
+
 .animated-menu .q-item:nth-child(3) {
   animation-delay: 0.15s;
 }
+
 .animated-menu .q-item:nth-child(4) {
   animation-delay: 0.2s;
 }
+
 .animated-menu .q-item:nth-child(5) {
   animation-delay: 0.25s;
 }
+
 .animated-menu .q-item:nth-child(6) {
   animation-delay: 0.3s;
 }
+
 .animated-menu .q-item:nth-child(7) {
   animation-delay: 0.35s;
 }
+
 .animated-menu .q-item:nth-child(8) {
   animation-delay: 0.4s;
 }
@@ -595,6 +474,7 @@ const copyEmail = async () => {
     opacity: 0;
     transform: scale(0.95) translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: scale(1) translateY(0);
@@ -606,6 +486,7 @@ const copyEmail = async () => {
     opacity: 0;
     transform: translateX(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);

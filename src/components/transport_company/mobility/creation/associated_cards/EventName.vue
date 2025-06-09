@@ -7,12 +7,12 @@ const showSavedItems = ref(false)
 // Separate models for each type
 const routeName = ref('')
 const eventName = ref('')
-const signName = ref('')
+const displayName = ref('')
 
 // Define the arrays to store the lists
 const routeNameList = ref<string[]>([])
 const eventNameList = ref<string[]>([])
-const signNameList = ref<string[]>([])
+const displayNameList = ref<string[]>([])
 
 // Computed property for dynamic label
 const getInputLabel = computed(() => {
@@ -21,8 +21,8 @@ const getInputLabel = computed(() => {
       return 'Route Name'
     case 'eventName':
       return 'Event Name'
-    case 'signName':
-      return 'Sign Name'
+    case 'displayName':
+      return 'Display Name'
     default:
       return 'Event Name'
   }
@@ -36,26 +36,37 @@ const currentModel = computed({
         return routeName.value
       case 'eventName':
         return eventName.value
-      case 'signName':
-        return signName.value
+      case 'displayName':
+        return displayName.value
       default:
         return eventName.value
     }
   },
   set: (value) => {
+    const capitalized = toCapitalizedCase(value);
     switch (selectedEventName.value) {
       case 'routeName':
-        routeName.value = value
-        break
+        routeName.value = capitalized;
+        break;
       case 'eventName':
-        eventName.value = value
-        break
-      case 'signName':
-        signName.value = value
-        break
+        eventName.value = capitalized;
+        break;
+      case 'displayName':
+        displayName.value = capitalized;
+        break;
     }
   },
 })
+
+
+function toCapitalizedCase(str: string): string {
+  return str
+    .split(' ')
+    .map(word =>
+      word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+    )
+    .join(' ');
+}
 
 // Computed property to check if current type already has a value
 const isCurrentTypeAdded = computed(() => {
@@ -64,8 +75,8 @@ const isCurrentTypeAdded = computed(() => {
       return routeNameList.value.length > 0
     case 'eventName':
       return eventNameList.value.length > 0
-    case 'signName':
-      return signNameList.value.length > 0
+    case 'displayName':
+      return displayNameList.value.length > 0
     default:
       return false
   }
@@ -85,9 +96,9 @@ const addToList = () => {
       eventNameList.value.push(currentValue)
       eventName.value = ''
       break
-    case 'signName':
-      signNameList.value.push(currentValue)
-      signName.value = ''
+    case 'displayName':
+      displayNameList.value.push(currentValue)
+      displayName.value = ''
       break
   }
 }
@@ -101,8 +112,8 @@ const allItems = computed(() => {
   if (eventNameList.value.length) {
     items.push({ type: 'Event Name', value: eventNameList.value[0] })
   }
-  if (signNameList.value.length) {
-    items.push({ type: 'Sign Name', value: signNameList.value[0] })
+  if (displayNameList.value.length) {
+    items.push({ type: 'Display Name', value: displayNameList.value[0] })
   }
   return items
 })
@@ -116,8 +127,8 @@ const deleteItem = (type: string) => {
     case 'Event Name':
       eventNameList.value = []
       break
-    case 'Sign Name':
-      signNameList.value = []
+    case 'Display Name':
+      displayNameList.value = []
       break
   }
 }
@@ -139,12 +150,8 @@ const handleApply = () => {
           </div>
           <div class="col flex justify-end">
             <div class="flex items-center" @click="eventNameDrawer = true">
-              <iconify-icon
-                icon="hugeicons:add-circle-half-dot"
-                width="24px"
-                height="24px"
-                class="text-secondary cursor-pointer"
-              />
+              <iconify-icon icon="hugeicons:add-circle-half-dot" width="24px" height="24px"
+                class="text-secondary cursor-pointer" />
               <q-tooltip>Add Name</q-tooltip>
             </div>
           </div>
@@ -155,18 +162,11 @@ const handleApply = () => {
     <!-- Display saved items - modified condition -->
     <q-card flat bordered v-if="allItems.length && showSavedItems" class="q-mt-sm">
       <q-card-section>
-        <q-table
-          :rows="allItems"
-          :columns="[
-            { name: 'type', label: 'Type', field: 'type', align: 'left' },
-            { name: 'value', label: 'Value', field: 'value', align: 'left' },
-            { name: 'actions', label: 'Actions', field: 'actions', align: 'right' },
-          ]"
-          hide-bottom
-          flat
-          dense
-          :pagination="{ rowsPerPage: 0 }"
-        >
+        <q-table :rows="allItems" :columns="[
+          { name: 'type', label: 'Type', field: 'type', align: 'left' },
+          { name: 'value', label: 'Value', field: 'value', align: 'left' },
+          { name: 'actions', label: 'Actions', field: 'actions', align: 'right' },
+        ]" hide-bottom flat dense :pagination="{ rowsPerPage: 0 }">
           <template v-slot:body="props">
             <q-tr :props="props">
               <q-td key="type" :props="props">
@@ -176,14 +176,7 @@ const handleApply = () => {
                 {{ props.row.value }}
               </q-td>
               <q-td key="actions" :props="props" class="text-right">
-                <q-btn
-                  flat
-                  round
-                  dense
-                  color="negative"
-                  icon="delete"
-                  @click="deleteItem(props.row.type)"
-                >
+                <q-btn flat round dense color="negative" icon="delete" @click="deleteItem(props.row.type)">
                   <q-tooltip>Delete</q-tooltip>
                 </q-btn>
               </q-td>
@@ -195,13 +188,7 @@ const handleApply = () => {
   </div>
 
   <!-- Event Name Drawer -->
-  <q-dialog
-    persistent
-    backdrop-filter="blur(2px)"
-    v-model="eventNameDrawer"
-    position="right"
-    :full-height="true"
-  >
+  <q-dialog persistent backdrop-filter="blur(2px)" v-model="eventNameDrawer" position="right" :full-height="true">
     <q-card style="width: 500px" class="column">
       <q-card-section class="q-pb-none">
         <div class="row items-start justify-between">
@@ -211,14 +198,7 @@ const handleApply = () => {
           </div>
           <div class="row items-center q-gutter-x-md">
             <q-btn color="primary" label="Apply" @click="handleApply" />
-            <q-btn
-              flat
-              round
-              dense
-              icon="close"
-              @click="eventNameDrawer = false"
-              class="text-grey-7"
-            >
+            <q-btn flat round dense icon="close" @click="eventNameDrawer = false" class="text-grey-7">
               <q-tooltip>Close</q-tooltip>
             </q-btn>
           </div>
@@ -228,31 +208,16 @@ const handleApply = () => {
       <q-card-section class="q-pt-none">
         <div class="row">
           <div class="col-4">
-            <q-radio
-              v-model="selectedEventName"
-              checked-icon="task_alt"
-              unchecked-icon="panorama_fish_eye"
-              val="routeName"
-              label="Route Name"
-            />
+            <q-radio v-model="selectedEventName" checked-icon="task_alt" unchecked-icon="panorama_fish_eye"
+              val="routeName" label="Route Name" />
           </div>
           <div class="col">
-            <q-radio
-              v-model="selectedEventName"
-              checked-icon="task_alt"
-              unchecked-icon="panorama_fish_eye"
-              val="eventName"
-              label="Event Name"
-            />
+            <q-radio v-model="selectedEventName" checked-icon="task_alt" unchecked-icon="panorama_fish_eye"
+              val="eventName" label="Event Name" />
           </div>
           <div class="col">
-            <q-radio
-              v-model="selectedEventName"
-              checked-icon="task_alt"
-              unchecked-icon="panorama_fish_eye"
-              val="signName"
-              label="Sign Name"
-            />
+            <q-radio v-model="selectedEventName" checked-icon="task_alt" unchecked-icon="panorama_fish_eye"
+              val="displayName" label="Display Name" />
           </div>
         </div>
       </q-card-section>
@@ -260,23 +225,10 @@ const handleApply = () => {
         <div class="row">
           <div class="col">
             <div class="text-subtitle2 text-grey-7">{{ getInputLabel }}</div>
-            <q-input
-              outlined
-              dense
-              v-model="currentModel"
-              :placeholder="`Enter ${getInputLabel}`"
-              :disable="isCurrentTypeAdded"
-              @keyup.enter="addToList"
-            >
+            <q-input outlined dense v-model="currentModel" :placeholder="`Enter ${getInputLabel}`"
+              :disable="isCurrentTypeAdded" @keyup.enter="addToList">
               <template v-slot:after>
-                <q-btn
-                  round
-                  dense
-                  flat
-                  icon="add"
-                  @click="addToList"
-                  :disable="isCurrentTypeAdded"
-                />
+                <q-btn round dense flat icon="add" @click="addToList" :disable="isCurrentTypeAdded" />
               </template>
               <template v-slot:hint>
                 <span v-if="isCurrentTypeAdded" class="text-warning">
@@ -287,19 +239,11 @@ const handleApply = () => {
 
             <!-- Global table to display all items -->
             <div class="q-mt-md">
-              <q-table
-                v-if="allItems.length"
-                :rows="allItems"
-                :columns="[
-                  { name: 'type', label: 'Type', field: 'type', align: 'left' },
-                  { name: 'value', label: 'Value', field: 'value', align: 'left' },
-                  { name: 'actions', label: 'Actions', field: 'actions', align: 'right' },
-                ]"
-                hide-bottom
-                flat
-                dense
-                :pagination="{ rowsPerPage: 0 }"
-              >
+              <q-table v-if="allItems.length" :rows="allItems" :columns="[
+                { name: 'type', label: 'Type', field: 'type', align: 'left' },
+                { name: 'value', label: 'Value', field: 'value', align: 'left' },
+                { name: 'actions', label: 'Actions', field: 'actions', align: 'right' },
+              ]" hide-bottom flat dense :pagination="{ rowsPerPage: 0 }">
                 <template v-slot:body="props">
                   <q-tr :props="props">
                     <q-td key="type" :props="props">
@@ -309,14 +253,7 @@ const handleApply = () => {
                       {{ props.row.value }}
                     </q-td>
                     <q-td key="actions" :props="props" class="text-right">
-                      <q-btn
-                        flat
-                        round
-                        dense
-                        color="negative"
-                        icon="delete"
-                        @click="deleteItem(props.row.type)"
-                      >
+                      <q-btn flat round dense color="negative" icon="delete" @click="deleteItem(props.row.type)">
                         <q-tooltip>Delete</q-tooltip>
                       </q-btn>
                     </q-td>

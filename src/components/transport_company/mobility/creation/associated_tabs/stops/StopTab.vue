@@ -1,7 +1,16 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import { useQuasar } from 'quasar'
 
 const $q = useQuasar()
+
+const startEndWaitTimePopup = ref(false)
+const startEndWaitTime = ref(5)
+const startEndWaitTimeType = ref('Minutes')
+const withinStopWaitTimePopup = ref(false)
+const withinStopWaitTime = ref(2)
+const withinStopWaitTimeType = ref('Minutes')
+
 </script>
 
 <template>
@@ -12,29 +21,14 @@ const $q = useQuasar()
           <div class="col">
             <div class="column q-col-gutter-sm">
               <div class="row items-center">
-                <iconify-icon
-                  icon="hugeicons:play"
-                  width="20px"
-                  height="20px"
-                  class="text-grey-7 q-mr-xs"
-                /><span class="text-subtitle2 text-grey-7">7:30 am </span>
-                <q-btn
-                  primary
-                  outline
-                  color="primary"
-                  label="Add Start Location"
-                  size="sm"
-                  class="q-ml-sm"
-                />
+                <iconify-icon icon="hugeicons:play" width="20px" height="20px" class="text-grey-7 q-mr-xs" /><span
+                  class="text-subtitle2 text-grey-7">7:30 am </span>
+                <q-btn primary outline color="primary" label="Add Start Location" size="sm" class="q-ml-sm" />
               </div>
 
               <div class="row items-center">
-                <iconify-icon
-                  icon="hugeicons:stop"
-                  width="20px"
-                  height="20px"
-                  class="text-grey-7 q-mr-xs"
-                /><span class="text-subtitle2 text-grey-7">8:25 am </span>
+                <iconify-icon icon="hugeicons:stop" width="20px" height="20px" class="text-grey-7 q-mr-xs" /><span
+                  class="text-subtitle2 text-grey-7">8:25 am </span>
                 <q-btn color="primary" outline label="Add End Location" size="sm" class="q-ml-sm" />
               </div>
             </div>
@@ -45,47 +39,69 @@ const $q = useQuasar()
       <q-card-section class="q-py-sm">
         <div class="col-12 q-pt-sm row items-center justify-between">
           <div class="col flex items-center">
-            <iconify-icon
-              icon="hugeicons:clock-04"
-              width="20px"
-              height="20px"
-              class="text-grey-7 q-mr-sm"
-            />
+            <iconify-icon icon="hugeicons:clock-04" width="20px" height="20px" class="text-grey-7 q-mr-sm" />
             <div class="text-caption text-grey-7 text-weight-bold">
               <template v-if="$q.screen.lt.xl"> Start & End<br />Wait Time: </template>
               <template v-else> Start & End Wait Time: </template>
-              <span class="text-secondary cursor-pointer"
-                >5 mins
-                <iconify-icon
-                  icon="hugeicons:edit-02"
-                  width="16px"
-                  height="16px"
-                  class="text-secondary q-ml-xs"
-                />
+              <span class="text-secondary cursor-pointer">5 mins
+                <iconify-icon icon="hugeicons:edit-02" width="16px" height="16px" class="text-secondary q-ml-xs" />
                 <q-tooltip>Update Time</q-tooltip>
               </span>
+              <q-popup-edit v-model="startEndWaitTimePopup" :cover="false" :offset="[0, 10]">
+                <div style="max-width: 300px" class="q-pa-sm">
+                  <div>
+                    <div class="text-subtitle2">Modify Start & End Wait Time</div>
+                    <div class="row q-col-gutter-sm q-mt-sm">
+                      <div class="col-6">
+                        <div class="text-body2 q-pb-xs">Time</div>
+                        <q-input dense filled v-model="startEndWaitTime" type="number" />
+                      </div>
+                      <div class="col-6">
+                        <div class="text-body2 q-pb-xs">Duration</div>
+                        <q-select dense filled v-model="startEndWaitTimeType" :options="['Minutes', 'Hours']" />
+                      </div>
+
+                    </div>
+                  </div>
+                  <q-card-actions align="right">
+                    <q-btn flat label="Cancel" color="grey-7" v-close-popup />
+                    <q-btn flat label="Update" color="primary" />
+                  </q-card-actions>
+                </div>
+              </q-popup-edit>
             </div>
           </div>
           <div class="col flex items-center">
-            <iconify-icon
-              icon="hugeicons:clock-05"
-              width="20px"
-              height="20px"
-              class="text-grey-7 q-mr-sm"
-            />
+            <iconify-icon icon="hugeicons:clock-05" width="20px" height="20px" class="text-grey-7 q-mr-sm" />
             <div class="text-caption text-grey-7 text-weight-bold">
               <template v-if="$q.screen.lt.xl"> Within stop<br />Wait Time: </template>
               <template v-else> Within stop Wait Time: </template>
-              <span class="text-secondary cursor-pointer"
-                >2 mins
-                <iconify-icon
-                  icon="hugeicons:edit-02"
-                  width="16px"
-                  height="16px"
-                  class="text-secondary q-ml-xs"
-                />
+              <span class="text-secondary cursor-pointer">2 mins
+                <iconify-icon icon="hugeicons:edit-02" width="16px" height="16px" class="text-secondary q-ml-xs" />
                 <q-tooltip>Update Time</q-tooltip>
               </span>
+              <q-popup-edit v-model="withinStopWaitTimePopup" :cover="false" :offset="[0, 10]">
+                <div style="max-width: 300px" class="q-pa-sm">
+                  <div>
+                    <div class="text-subtitle2">Modify Within Stop Wait Time</div>
+                    <div class="row q-col-gutter-sm q-mt-sm">
+                      <div class="col-6">
+                        <div class="text-body2 q-pb-xs">Time</div>
+                        <q-input dense filled v-model="withinStopWaitTime" type="number" />
+                      </div>
+                      <div class="col-6">
+                        <div class="text-body2 q-pb-xs">Duration</div>
+                        <q-select dense filled v-model="withinStopWaitTimeType" :options="['Minutes', 'Hours']" />
+                      </div>
+
+                    </div>
+                  </div>
+                  <q-card-actions align="right">
+                    <q-btn flat label="Cancel" color="grey-7" v-close-popup />
+                    <q-btn flat label="Update" color="primary" />
+                  </q-card-actions>
+                </div>
+              </q-popup-edit>
             </div>
           </div>
         </div>
@@ -123,7 +139,7 @@ const $q = useQuasar()
 </template>
 <style scoped>
 .stats-section {
-  background: #1a73e8;
+  background: var(--q-secondary);
   position: relative;
   overflow: hidden;
 }

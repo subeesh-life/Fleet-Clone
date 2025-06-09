@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import FleetChips from 'src/components/shared/chips/FleetChips.vue';
 const clientDrawer = ref(false);
 const clientStopSelection = ref('forAllStops')
 const activeTab = ref('existing-client')
@@ -7,6 +8,16 @@ const maximizedToggle = ref(false)
 const clientType = ref('Group')
 const searchclientType = ref('')
 const selectedClients = ref([])
+const gender = ref('male')
+const firstName = ref('')
+const lastName = ref('')
+const country = ref('United Arab Emirates')
+const address = ref('')
+const unitNumber = ref('')
+const email = ref('')
+const countryCode = ref('+971')
+const phone = ref('')
+const profileType = ref('Passenger')
 </script>
 
 <template>
@@ -19,7 +30,7 @@ const selectedClients = ref([])
             <div class="text-subtitle1 text-grey-9 text-weight-medium q-ml-xs">Manage Client</div>
           </div>
           <div class="col flex justify-end">
-            <div class="flex items-center" @click="clientDrawer = true">
+            <div class="flex items-center" v-if="clientStopSelection === 'forAllStops'" @click="clientDrawer = true">
               <q-tooltip>Add Client</q-tooltip>
               <iconify-icon icon="hugeicons:add-circle-half-dot" width="24px" height="24px"
                 class="text-secondary cursor-pointer" />
@@ -33,12 +44,12 @@ const selectedClients = ref([])
           <div class="q-gutter-md">
             <q-radio v-model="clientStopSelection" checked-icon="task_alt" unchecked-icon="panorama_fish_eye"
               val="forAllStops" label="For All Stops">
-              <q-tooltip self="top start"> This option will assign the same client to all stops. </q-tooltip>
+              <div class="text-caption text-grey-7">Selective clients for all stops</div>
             </q-radio>
+            <!-- <div class="text-subtitle2 text-grey-7">Client Schedule</div> -->
             <q-radio v-model="clientStopSelection" checked-icon="task_alt" unchecked-icon="panorama_fish_eye"
               val="withinStops" label="Within Stops">
-              <q-tooltip self="top start"> This option allows you to assign a different client to each stop.
-              </q-tooltip>
+              <div class="text-caption text-grey-7">Choose clients on each stop</div>
             </q-radio>
           </div>
         </div>
@@ -49,11 +60,14 @@ const selectedClients = ref([])
   <!-- client Note Drawer -->
   <q-dialog persistent v-model="clientDrawer" :maximized="maximizedToggle" transition-show="slide-up"
     transition-hide="slide-down">
-    <q-card class="column window-height	window-width">
+    <q-card class="window-height	window-width" col-md-12 col-xs-12>
       <q-card-section class="q-pb-none">
         <div class="row items-start justify-between">
           <div>
-            <div class="text-h6 text-weight-bold">Add Client</div>
+            <div class="flex items-center">
+              <div class="text-h6 text-weight-bold q-mr-sm">Add Client </div>
+              <FleetChips text="For All Stops" color="success" :iconVisibility="false" />
+            </div>
             <div class="text-caption text-grey-7">Select the clients you wish to add to this event.</div>
           </div>
           <div class="row items-center q-gutter-x-md">
@@ -68,43 +82,55 @@ const selectedClients = ref([])
       <q-card-section class="q-pt-none">
         <q-tabs v-model="activeTab" dense align="justify" class="tab-style" inline-label no-caps active-color="white"
           indicator-color="primary" active-bg-color="primary">
-          <q-tab name="existing-client">
+          <q-tab name="existing-client" :class="{ 'bg-grey-2': activeTab !== 'existing-client' }">
             <template v-slot:default>
               <IconifyIcon icon="hugeicons:ai-user" width="24px" height="24px" class="q-mr-sm" />
               <span>Exisitng Clients</span>
             </template>
           </q-tab>
-          <q-tab name="new-client" v-model="activeTab">
+          <q-tab name="new-client" v-model="activeTab" :class="{ 'bg-grey-2': activeTab !== 'new-client' }">
             <template v-slot:default>
               <IconifyIcon icon="hugeicons:add-circle-half-dot" width="24px" height="24px" class="q-mr-sm " />
-              <span>Create New</span>
-              <q-tooltip self="top start"> Currently unavailable </q-tooltip>
+              <span>Create New Individual</span>
+              <q-tooltip self="top start"> Add a new individual profile.
+              </q-tooltip>
             </template>
           </q-tab>
-
         </q-tabs>
+
         <q-tab-panels v-model="activeTab" animated>
+          <!-- Existing Client Selection-->
           <q-tab-panel name="existing-client" class="q-pa-none q-mt-sm">
             <div class="row q-py-sm">
               <div class="col-md-6 col-sm-12 bg-grey-1">
                 <q-card-section>
                   <q-table flat outline bordered :rows="[{
-                    client: 'Gems International', subtext: 'Business',
-                    type: 'With Revenue'
+                    client: 'Gems Education', phone: '971501234567', email: 'gems@gmail.com', address: 'Abu Dhabi, UAE',
+                    type: 'With Revenue', image: 'https://d1yjjnpx0p53s8.cloudfront.net/styles/logo-thumbnail/s3/042019/gems-education.jpg?e4GtceV6NoC8OR0WGuay25bCAtCFT2mT&itok=X-sjpl1A'
                   }, {
-                    client: 'Emirates International School', subtext: 'Business',
-                    type: 'With Revenue'
+                    client: 'Aldar Education', phone: '971501234567', email: 'aldar@gmail.com', address: 'Abu Dhabi, UAE',
+                    type: 'With Revenue', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRG7m5a0bShdDPvaq83WyNe7yOc8pwKRGi6JA&s'
                   }, {
-                    client: 'Abu Dhabi Indian School', subtext: 'Business',
-                    type: 'With Revenue'
+                    client: 'Taaleem', phone: '971501234567', email: 'taaleem@gmail.com', address: 'Dubai, UAE',
+                    type: 'With Revenue', image: 'https://media.licdn.com/dms/image/v2/C560BAQFxkDDhvEBnOQ/company-logo_200_200/company-logo_200_200/0/1631354649259?e=2147483647&v=beta&t=hj8QLaKDOcoZV11YwkNh6KdXGNJZOlDGFSpwLa8Dv1g'
                   }, {
-                    client: 'Al Reem International School', subtext: 'Business',
-                    type: 'With Revenue'
+                    client: 'Innoventure Education', phone: '971501234567', email: 'innoventure@gmail.com', address: 'Al Ain, UAE',
+                    type: 'With Revenue', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwXzxA5lNSaiRRrWUorZ3fwjj3tyInVHpKkQ&s'
                   }, {
-                    client: 'Amercian International School', subtext: 'Business',
-                    type: 'With Revenue'
-                  }, {
-                    client: 'Amity International ', subtext: 'Business', type: 'With Revenue'
+                    client: 'SABIS Education', phone: '971501234567', email: 'sabis@gmail.com', address: 'Dubai, UAE',
+                    type: 'With Revenue', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNO16M1qltXTGNDFCCtmbUPrgw2TMn86NhLQ&s'
+                  },
+                  {
+                    client: 'Bloom Education', phone: '971501234567', email: 'bloom@gmail.com', address: 'Fujairah, UAE',
+                    type: 'With Revenue', image: 'https://media.licdn.com/dms/image/v2/D4D0BAQGviDc2oDXAKg/company-logo_200_200/company-logo_200_200/0/1737348691103/bloomeducationllc_logo?e=2147483647&v=beta&t=8R8Y2UiYQN2A4b513ZGwya7vsLc4klPgZqgTttKOUuk'
+                  },
+                  {
+                    client: 'Esol Education', phone: '971501234567', email: 'esol@gmail.com', address: 'Umm Al Quwain, UAE',
+                    type: 'With Revenue', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRApFxFWxU0zfVChCYfj8z4zhWC54fpIXkHDQ&s'
+                  },
+                  {
+                    client: 'Athena Education ', phone: '971501234567', email: 'athena@gmail.com', address: 'Dubai, UAE',
+                    type: 'With Revenue', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUiOk9owYLBQFLdRuVVG9LTI9aGR5kXQ2EOw&s'
                   },]" :columns="[
                     {
                       name: 'select',
@@ -151,12 +177,32 @@ const selectedClients = ref([])
                         <div class="column">
                           <div class="row items-center">
                             <q-avatar size="40px" color="primary" text-color="white">
-                              <img src="https://cdn.quasar.dev/img/avatar.png">
+                              <img :src="props.row.image">
                             </q-avatar>
                             <div class="column">
-                              <div class="text-body2 text-weight-medium q-pl-sm">{{ props.row.client }}</div>
+                              <div class="text-body2 text-weight-medium q-pl-sm">{{
+                                props.row.client }}</div>
                               <div class="row items-center q-pl-sm">
-                                <IconifyIcon icon="hugeicons:call" width="16px" height="16px" class="text-grey-8" />
+                                <q-chip class="bg-blue-1 text-blue text-caption" dense square>
+                                  #4D96F2
+                                </q-chip>
+                                <q-chip dense rounded style="height: 24px; width: 24px; border: 1px solid #0000001F;"
+                                  class="q-mr-sm bg-white">
+                                  <IconifyIcon icon="hugeicons:call" width="16px" height="16px" class="text-grey-8" />
+                                  <q-tooltip>{{ props.row.phone }}</q-tooltip>
+                                </q-chip>
+                                <q-chip dense rounded style="height: 24px; width: 24px; border: 1px solid #0000001F;"
+                                  class="q-mr-sm bg-white">
+                                  <IconifyIcon icon="hugeicons:mail-01" width="16px" height="16px"
+                                    class="text-grey-8" />
+                                  <q-tooltip>{{ props.row.email }}</q-tooltip>
+                                </q-chip>
+                                <q-chip dense rounded style="height: 24px; width: 24px; border: 1px solid #0000001F;"
+                                  class="bg-white">
+                                  <IconifyIcon icon="hugeicons:location-06" width="16px" height="16px"
+                                    class="text-grey-8" />
+                                  <q-tooltip>{{ props.row.address }}</q-tooltip>
+                                </q-chip>
                               </div>
                             </div>
                           </div>
@@ -168,13 +214,104 @@ const selectedClients = ref([])
               </div>
               <div class="col-md-6 col-sm-12">
                 <q-card-section class="flex column flex-center full-height q-col-gutter-sm">
-                  <q-img src="/src/assets/states/empty-state-loader.svg" style="width: 100px; height: 80px" />
+
+                  <q-img src="src/assets/states/empty-state-loader.svg" style="width: 100px; height: 80px" />
                   <div class="text-h6">No Clients Selected Yet!</div>
                   <div class="text-body2 text-center text-grey-7">
-                    Select clients to add to this client.
+                    Choose Clients from the Available List
+                  </div>
+
+                </q-card-section>
+              </div>
+            </div>
+          </q-tab-panel>
+          <!-- New Client Creation-->
+          <q-tab-panel name="new-client" class="q-pa-none q-mt-sm">
+            <div class="row q-py-sm">
+              <div class="col-12 ">
+                <!--Header Section-->
+                <q-card flat bordered class="my-card q-mx-md q-mb-md">
+                  <q-card-section class="bg-grey-1">
+                    <div class="text-h6">Choose the profile type</div>
+                    <div class="text-body2 text-grey-7">Select the profile type you wish to create.</div>
+                    <div class="row q-col-gutter-x-md">
+                      <div class="col-md-2 col-xs-12 q-mt-sm">
+                        <q-select dense outlined v-model="profileType" placeholder="Choose Profile Type"
+                          class="bg-white" :options="['Passenger', 'Student', 'Guardian', 'Staff', 'Product']" />
+                      </div>
+                    </div>
+                  </q-card-section>
+
+
+                </q-card>
+
+                <!--Form Section-->
+                <q-card-section>
+                  <div class="row q-col-gutter-x-md q-gutter-y-md">
+                    <div class="col-md-4 col-xs-12">
+                      <div class="text-body2 q-mb-sm">First Name</div>
+                      <q-input dense outlined clearable v-model="firstName" placeholder="Enter First Name" />
+                    </div>
+                    <div class="col-md-4 col-xs-12">
+                      <div class="text-body2 q-mb-sm">Last Name</div>
+                      <q-input dense outlined clearable v-model="lastName" placeholder="Enter Last Name" />
+                    </div>
+                    <div class="col-md-4 col-xs-12">
+                      <div class="text-body2 q-mb-sm">Choose Gender</div>
+                      <q-btn-toggle v-model="gender" class="my-custom-toggle" no-caps rounded unelevated
+                        toggle-color="primary" color="white" text-color="primary" :options="[
+                          { label: 'Male', value: 'male', class: gender !== 'male' ? 'bg-grey-2' : '' },
+                          { label: 'Female', value: 'female', class: gender !== 'female' ? 'bg-grey-2' : '' }
+                        ]" />
+                    </div>
+                    <div class="col-md-2 col-xs-12">
+                      <div class="text-body2 q-mb-sm">Country</div>
+                      <q-select dense outlined v-model="country" placeholder="Choose Country"
+                        :options="['United Arab Emirates', 'Saudi Arabia', 'Qatar', 'Bahrain', 'Kuwait', 'Oman']" />
+                    </div>
+                    <div class="col-md-8 col-xs-12">
+                      <div class="text-body2 q-mb-sm">Address</div>
+                      <q-input dense outlined clearable v-model="address" placeholder="Search Address">
+                        <template v-slot:prepend>
+                          <iconify-icon icon="hugeicons:search-02" width="24px" height="24px" />
+                        </template>
+                      </q-input>
+                    </div>
+                    <div class="col-md-2 col-xs-12">
+                      <div class="text-body2 q-mb-sm">Unit Number</div>
+                      <q-input dense outlined clearable v-model="unitNumber" placeholder="Enter Unit Number" />
+                    </div>
+                    <div class="col-md-4 col-xs-12">
+                      <div class="text-body2 q-mb-sm">Email</div>
+                      <q-input dense outlined clearable v-model="email" placeholder="Enter Email" />
+                    </div>
+                    <div class="col-md-4 col-xs-12">
+                      <div class="text-body2 q-mb-sm">Primary Phone</div>
+                      <div class="row q-col-gutter-x-md">
+                        <div class="col-md-4 col-xs-4">
+                          <q-select dense outlined v-model="countryCode" placeholder="Enter Country Code"
+                            :options="['+971', '+972', '+973', '+974', '+975', '+976']">
+                            <template v-slot:prepend>
+                              <q-avatar size="24px">
+                                <q-img class="fit" src="https://flagicons.lipis.dev/flags/4x3/ae.svg" />
+                              </q-avatar>
+                            </template>
+                          </q-select>
+                        </div>
+                        <div class="col-md-8 col-xs-8">
+                          <q-input dense outlined v-model="phone" placeholder="Enter Primary Phone">
+                            <template v-slot:append>
+                              <iconify-icon icon="hugeicons:add-circle-half-dot" width="24px" height="24px"
+                                class="cursor-pointer" />
+                            </template>
+                          </q-input>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </q-card-section>
               </div>
+
             </div>
           </q-tab-panel>
         </q-tab-panels>

@@ -143,31 +143,14 @@ const events = ref([
       <div class="col-md-8 flex justify-end q-gutter-x-md">
         <DateRange class="gt-sm" />
         <TimeRange class="gt-sm" />
+
         <div class="row q-gutter-x-sm">
           <q-btn push color="white" text-color="grey-9" round class="gt-sm">
             <q-icon>
-              <IconifyIcon icon="hugeicons:layout-grid" width="16px" height="16px" />
+              <IconifyIcon icon="hugeicons:search-02" width="16px" height="16px" />
             </q-icon>
             <q-tooltip>
-              <div class="text-caption">Grid View</div>
-            </q-tooltip>
-          </q-btn>
-          <q-btn push color="primary" text-color="white" round class="gt-sm">
-            <q-icon>
-              <IconifyIcon icon="hugeicons:menu-06" width="16px" height="16px" />
-            </q-icon>
-            <q-tooltip>
-              <div class="text-caption">List View</div>
-            </q-tooltip>
-          </q-btn>
-        </div>
-        <div class="row q-gutter-x-sm">
-          <q-btn push color="white" text-color="grey-9" round class="gt-sm">
-            <q-icon>
-              <IconifyIcon icon="hugeicons:edit-table" width="16px" height="16px" />
-            </q-icon>
-            <q-tooltip>
-              <div class="text-caption">Edit Table</div>
+              <div class="text-caption">Search Events</div>
             </q-tooltip>
           </q-btn>
           <q-btn push color="white" text-color="grey-9" round>
@@ -200,16 +183,8 @@ const events = ref([
 
     <div class="row">
       <div class="col-12 bg-white rounded-borders q-pa-md">
-        <q-tabs
-          v-model="eventStatus"
-          dense
-          class="text-grey"
-          active-color="primary"
-          indicator-color="primary"
-          align="justify"
-          narrow-indicator
-          style="border-bottom: 1px solid #e0e0e0"
-        >
+        <q-tabs v-model="eventStatus" dense class="text-grey" active-color="primary" indicator-color="primary"
+          align="justify" narrow-indicator style="border-bottom: 1px solid #e0e0e0">
           <q-tab name="all" class="flex">
             <template v-slot:default>
               <div class="row items-center">
@@ -280,14 +255,8 @@ const events = ref([
           <q-tab-panel name="all">
             <div class="row">
               <div class="col-12">
-                <q-table
-                  flat
-                  bordered
-                  :rows="events.flatMap((group) => group.items)"
-                  :columns="columns"
-                  row-key="id"
-                  :pagination="{ rowsPerPage: 10 }"
-                >
+                <q-table flat bordered :rows="events.flatMap((group) => group.items)" :columns="columns" row-key="id"
+                  :pagination="{ rowsPerPage: 10 }">
                   <template v-slot:body>
                     <template v-for="dateGroup in events" :key="dateGroup.date">
                       <!-- Date Header -->
@@ -315,22 +284,11 @@ const events = ref([
                           </div>
                         </td>
                         <td>
-                          <q-chip
-                            :color="event.statusColor"
-                            text-color="white"
-                            size="sm"
-                            class="q-px-sm"
-                          >
+                          <q-chip :color="event.statusColor" text-color="white" size="sm" class="q-px-sm">
                             {{ event.status }}
                           </q-chip>
-                          <q-linear-progress
-                            v-if="event.progress !== undefined"
-                            :value="event.progress"
-                            class="q-mt-sm"
-                            rounded
-                            size="5px"
-                            :color="event.statusColor"
-                          />
+                          <q-linear-progress v-if="event.progress !== undefined" :value="event.progress" class="q-mt-sm"
+                            rounded size="5px" :color="event.statusColor" />
                         </td>
                         <td>
                           <div class="row items-center">
@@ -358,13 +316,8 @@ const events = ref([
                         </td>
                         <td>
                           <div class="row q-gutter-sm">
-                            <q-icon
-                              v-for="asset in event.assets"
-                              :key="asset.id"
-                              :name="asset.icon"
-                              :color="asset.status"
-                              size="md"
-                            />
+                            <q-icon v-for="asset in event.assets" :key="asset.id" :name="asset.icon"
+                              :color="asset.status" size="md" />
                           </div>
                         </td>
                         <td>
@@ -414,6 +367,7 @@ const events = ref([
 
 .status-badge-approved {
   color: $positive;
+
   .text-caption {
     color: lighten($positive, 20%);
   }
@@ -421,6 +375,7 @@ const events = ref([
 
 .status-badge-pending {
   color: $warning;
+
   .text-caption {
     color: lighten($warning, 20%);
   }
@@ -428,6 +383,7 @@ const events = ref([
 
 .status-badge-declined {
   color: $negative;
+
   .text-caption {
     color: lighten($negative, 20%);
   }
