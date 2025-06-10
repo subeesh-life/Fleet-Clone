@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue'
 import StopTab from './stops/StopTab.vue'
 import AssetTab from './assets/AssetTab.vue'
+import StaffTab from './staffs/StaffTab.vue'
 
 const activeTab = ref('stops')
 const mainTab = ref('stops')
@@ -38,23 +39,11 @@ const handleTabClick = (tabName: string) => {
 
 <template>
   <q-card flat outline bordered>
-    <q-tabs
-      v-model="activeTab"
-      dense
-      inline-label
-      class="text-grey"
-      active-color="primary"
-      indicator-color="primary"
-      align="left"
-      narrow-indicator
-    >
+    <q-tabs v-model="activeTab" dense inline-label class="text-grey" active-color="primary" indicator-color="primary"
+      align="left" narrow-indicator>
       <!-- Replace static tabs with v-for -->
       <template v-for="tab in tabs" :key="tab.name">
-        <q-tab
-          :name="tab.name"
-          @click="handleTabClick(tab.name)"
-          :class="{ 'full-tab': isMainTab(tab.name) }"
-        >
+        <q-tab :name="tab.name" @click="handleTabClick(tab.name)" :class="{ 'full-tab': isMainTab(tab.name) }">
           <template v-slot:default>
             <q-tooltip>{{ tab.label }}</q-tooltip>
             <IconifyIcon :icon="tab.icon" width="24px" height="24px" class="q-mr-sm" />
@@ -77,8 +66,7 @@ const handleTabClick = (tabName: string) => {
       </q-tab-panel>
 
       <q-tab-panel name="staff">
-        <div class="text-h6">Staff</div>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+        <StaffTab />
       </q-tab-panel>
     </q-tab-panels>
   </q-card>

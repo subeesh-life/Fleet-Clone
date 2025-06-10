@@ -27,6 +27,11 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/transport_company/mobility/dispatch/DispatchListing.vue'),
       },
       {
+        path: 'tempdispatch',
+        name: 'temp-dispatch',
+        component: () => import('pages/transport_company/mobility/dispatch/DispatchListingOld.vue'),
+      },
+      {
         path: 'creation',
         name: 'create-event',
         component: () => import('components/transport_company/mobility/creation/CreateNew.vue'),

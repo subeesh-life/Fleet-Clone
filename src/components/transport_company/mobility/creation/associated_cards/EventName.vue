@@ -176,7 +176,8 @@ const handleApply = () => {
                 {{ props.row.value }}
               </q-td>
               <q-td key="actions" :props="props" class="text-right">
-                <q-btn flat round dense color="negative" icon="delete" @click="deleteItem(props.row.type)">
+                <q-btn flat round dense color="negative" class="q-pa-none" @click="deleteItem(props.row.type)">
+                  <iconify-icon icon="hugeicons:delete-02" width="24px" height="24px" class="text-red-10" />
                   <q-tooltip>Delete</q-tooltip>
                 </q-btn>
               </q-td>
@@ -253,7 +254,8 @@ const handleApply = () => {
                       {{ props.row.value }}
                     </q-td>
                     <q-td key="actions" :props="props" class="text-right">
-                      <q-btn flat round dense color="negative" icon="delete" @click="deleteItem(props.row.type)">
+                      <q-btn flat round dense class="q-pa-none" @click="deleteItem(props.row.type)">
+                        <iconify-icon icon="hugeicons:delete-02" width="24px" height="24px" class="text-red-10" />
                         <q-tooltip>Delete</q-tooltip>
                       </q-btn>
                     </q-td>

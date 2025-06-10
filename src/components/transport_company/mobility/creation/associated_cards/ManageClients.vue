@@ -53,6 +53,23 @@ const profileType = ref('Passenger')
             </q-radio>
           </div>
         </div>
+        <q-separator class="q-my-md" />
+        <div class="row items-center">
+          <div class="col-md-8 col-sm-12">
+            <q-chip>
+              <q-avatar size="24px" color="primary" text-color="white">2</q-avatar>Group
+            </q-chip>
+            <q-chip>
+              <q-avatar size="24px" color="primary" text-color="white">1</q-avatar>Entity
+            </q-chip>
+            <q-chip>
+              <q-avatar size="24px" color="primary" text-color="white">17</q-avatar>Individual
+            </q-chip>
+          </div>
+          <div class="col-md-4 col-sm-12 flex justify-end">
+            <span class="text-body2 text-negative cursor-pointer">Clear Selection</span>
+          </div>
+        </div>
       </q-card-section>
     </q-card>
   </div>

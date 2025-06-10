@@ -34,28 +34,18 @@ const assetTypes = ref([
           <q-btn flat dense padding="xs" class="q-ml-xs" @click="assetAssociationDrawer = true">
             <q-tooltip>{{
               confirmedAssetAssociation ? 'Change Association' : 'Add Association'
-            }}</q-tooltip>
-            <iconify-icon
-              :icon="
-                confirmedAssetAssociation ? 'hugeicons:reload' : 'hugeicons:add-circle-half-dot'
-              "
-              width="24px"
-              height="24px"
-              class="text-secondary"
-            />
+              }}</q-tooltip>
+            <iconify-icon :icon="confirmedAssetAssociation ? 'hugeicons:reload' : 'hugeicons:add-circle-half-dot'
+              " width="24px" height="24px" class="text-secondary" />
           </q-btn>
         </div>
       </div>
     </div>
   </q-card-section>
 
-  <q-dialog
-    persistent
-    backdrop-filter="blur(2px)"
-    v-model="assetAssociationDrawer"
-    position="right"
-    :full-height="true"
-  >
+
+  <q-dialog persistent backdrop-filter="blur(2px)" v-model="assetAssociationDrawer" position="right"
+    :full-height="true">
     <q-card style="width: 500px" class="column">
       <q-card-section class="q-pb-none">
         <div class="row items-start justify-between">
@@ -67,14 +57,7 @@ const assetTypes = ref([
           </div>
           <div class="col-4 flex justify-end q-gutter-x-md">
             <q-btn color="primary" label="Apply" />
-            <q-btn
-              flat
-              round
-              dense
-              icon="close"
-              @click="assetAssociationDrawer = false"
-              class="text-grey-7"
-            >
+            <q-btn flat round dense icon="close" @click="assetAssociationDrawer = false" class="text-grey-7">
               <q-tooltip>Close</q-tooltip>
             </q-btn>
           </div>
