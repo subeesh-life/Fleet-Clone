@@ -16,11 +16,25 @@ interface EventStatus {
   time: string
 }
 
+interface Activity {
+  icon: string
+  eventType: string
+  subscribedService: string
+}
+
+interface Route {
+  start: string
+  end: string
+  distance: string
+  duration: string
+  stops: number
+}
+
 interface Event {
   schedule: Schedule
   eventStatus: EventStatus
-  activity: string
-  route: string
+  activity: Activity
+  route: Route
   assetsStatus: string
   client: string
   status: string
@@ -81,8 +95,18 @@ const rows = [
             status: 'Upcoming',
             time: '7 M',
           },
-          activity: 'Gas Delivery',
-          route: 'Yas Island - Zone 1 - C67-04 - Saadiyat Island - District 2 - D8',
+          activity: {
+            icon: 'hugeicons:delivery-truck-02',
+            eventType: 'Oneway',
+            subscribedService: 'Gas Delivery',
+          },
+          route: {
+            start: 'Yas Island',
+            end: 'Zone 1 - C67-04 - Saadiyat Island',
+            distance: '100 km',
+            duration: '1 H 30 M',
+            stops: 3
+          },
           assetsStatus: 'Available',
           client: 'B',
           status: 'Ready',
@@ -98,8 +122,18 @@ const rows = [
             status: 'Upcoming',
             time: '11 M',
           },
-          activity: 'Food Supply',
-          route: 'Dubai Mall - Burj Khalifa - Downtown Dubai',
+          activity: {
+            icon: 'hugeicons:school-bus',
+            eventType: 'Home to School',
+            subscribedService: 'School Transport',
+          },
+          route: {
+            start: 'Dubai Mall',
+            end: 'Burj Khalifa - Downtown Dubai',
+            distance: '100 km',
+            duration: '1 H 30 M',
+            stops: 3
+          },
           assetsStatus: 'In Transit',
           client: 'E',
           status: 'In Progress',
@@ -115,8 +149,18 @@ const rows = [
             status: 'Live',
             time: '23 M',
           },
-          activity: 'Package Delivery',
-          route: 'Dubai International Airport - Business Bay - DIFC',
+          activity: {
+            icon: 'hugeicons:truck',
+            eventType: 'Oneway',
+            subscribedService: 'Package Delivery',
+          },
+          route: {
+            start: 'Dubai International Airport',
+            end: 'Business Bay - DIFC',
+            distance: '100 km',
+            duration: '1 H 30 M',
+            stops: 3
+          },
           assetsStatus: 'Available',
           client: 'F',
           status: 'Ready',
@@ -141,8 +185,18 @@ const rows = [
             status: 'Delayed',
             time: '10 D 19 H 10 M',
           },
-          activity: 'Water Supply',
-          route: 'Dubai Marina - Tower 1 - Abu Dhabi - Downtown',
+          activity: {
+            icon: 'hugeicons:delivery-truck-02',
+            eventType: 'Oneway',
+            subscribedService: 'Water Supply',
+          },
+          route: {
+            start: 'Dubai Marina',
+            end: 'Tower 1 - Abu Dhabi - Downtown',
+            distance: '100 km',
+            duration: '1 H 30 M',
+            stops: 3
+          },
           assetsStatus: 'In Transit',
           client: 'A',
           status: 'In Progress',
@@ -167,8 +221,18 @@ const rows = [
             status: 'Canceled',
             time: '2 D 13 H 29 M',
           },
-          activity: 'Maintenance',
-          route: 'Sharjah Industrial Area - Dubai Mall',
+          activity: {
+            icon: 'hugeicons:delivery-truck-02',
+            eventType: 'Oneway',
+            subscribedService: 'Maintenance',
+          },
+          route: {
+            start: 'Sharjah Industrial Area',
+            end: 'Dubai Mall',
+            distance: '100 km',
+            duration: '1 H 30 M',
+            stops: 3
+          },
           assetsStatus: 'Maintenance',
           client: 'C',
           status: 'Delayed',
@@ -193,8 +257,18 @@ const rows = [
             status: 'Completed',
             time: '15:00',
           },
-          activity: 'Equipment Transport',
-          route: 'Jebel Ali Port - Dubai Industrial City',
+          activity: {
+            icon: 'hugeicons:delivery-truck-02',
+            eventType: 'Oneway',
+            subscribedService: 'Equipment Transport',
+          },
+          route: {
+            start: 'Jebel Ali Port',
+            end: 'Dubai Industrial City',
+            distance: '100 km',
+            duration: '1 H 30 M',
+            stops: 3
+          },
           assetsStatus: 'Available',
           client: 'D',
           status: 'Completed',
@@ -376,7 +450,7 @@ const columns: QTableColumn[] = [
 
       <div class="col-12">
         <q-tab-panels v-model="eventStatus" animated>
-          <q-tab-panel name="all">
+          <q-tab-panel name="all" class="q-pt-none">
 
             <q-table flat bordered :columns="columns" :rows="groupedRows" row-key="eventDetails?.id"
               :pagination="{ rowsPerPage: 7 }" :rows-per-page-options="[5, 7, 10]" v-model:selected="selectedEvents"
@@ -417,8 +491,37 @@ const columns: QTableColumn[] = [
                         :color="event.eventStatus.status === 'Upcoming' ? 'purple' : event.eventStatus.status === 'Live' ? 'success' : event.eventStatus.status === 'Delayed' ? 'warning' : event.eventStatus.status === 'Completed' ? 'grey' : event.eventStatus.status === 'Canceled' ? 'error' : 'secondary'"
                         :iconVisibility="false" />
                     </td>
-                    <td>{{ event.activity }}</td>
-                    <td>{{ event.route }}</td>
+                    <td>
+                      <div class="row items-start q-gutter-x-sm flex items-center full-height">
+                        <div class="column gt-md">
+                          <IconifyIcon :icon="event.activity.icon" width="24px" height="24px" class="text-grey-7" />
+                        </div>
+                        <div class="column">
+                          <div class="row items-center">
+                            <span class="text-caption">{{ event.activity.subscribedService }}</span>
+                          </div>
+                          <div class="row items-center">
+                            <span class="text-caption">{{ event.activity.eventType }}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="column">
+                        <div class="row items-center q-mb-sm">
+                          <IconifyIcon icon="hugeicons:play" width="16px" height="16px" class="text-grey-7" />
+                          <span class="q-ml-xs text-grey-9">{{ event.route.start }}</span>
+                        </div>
+                        <q-chip dense class="bg-blue-1 text-blue" square>
+                          {{ event.route.stops }} Stops • {{ event.route.distance }} • {{ event.route.duration }}
+                        </q-chip>
+                        <div class="row items-center q-mt-sm">
+                          <IconifyIcon icon="hugeicons:stop" width="16px" height="16px" class="text-grey-7" />
+                          <span class="q-ml-xs text-grey-9">{{ event.route.end }}</span>
+                        </div>
+                      </div>
+                      <!-- {{ event.route.start }} - {{ event.route.end }} -->
+                    </td>
                     <td>{{ event.assetsStatus }}</td>
                     <td>{{ event.client }}</td>
                     <td>{{ event.status }}</td>
