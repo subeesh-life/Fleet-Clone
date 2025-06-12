@@ -258,6 +258,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
+import { useKeyboardShortcuts } from '../composables/useKeyboardShortcuts'
 
 const router = useRouter()
 const $q = useQuasar()
@@ -266,6 +267,10 @@ const miniState = ref(true)
 const currentMenu = ref('main')
 const profileMenu = ref(false)
 const addNewMenu = ref(false)
+
+// Initialize keyboard shortcuts
+useKeyboardShortcuts(router)
+
 // Add dispatch submenu items
 const dispatchMenu = [
   {

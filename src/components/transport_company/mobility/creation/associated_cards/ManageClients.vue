@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import FleetChips from 'src/components/shared/chips/FleetChips.vue';
 const clientDrawer = ref(false);
-const clientStopSelection = ref('forAllStops')
+const clientStopSelection = ref('selectiveClients')
 const activeTab = ref('existing-client')
 const maximizedToggle = ref(false)
 const clientType = ref('Group')
@@ -30,7 +30,8 @@ const profileType = ref('Passenger')
             <div class="text-subtitle1 text-grey-9 text-weight-medium q-ml-xs">Manage Client</div>
           </div>
           <div class="col flex justify-end">
-            <div class="flex items-center" v-if="clientStopSelection === 'forAllStops'" @click="clientDrawer = true">
+            <div class="flex items-center" v-if="clientStopSelection === 'selectiveClients'"
+              @click="clientDrawer = true">
               <q-tooltip>Add Client</q-tooltip>
               <iconify-icon icon="hugeicons:add-circle-half-dot" width="24px" height="24px"
                 class="text-secondary cursor-pointer" />
@@ -43,13 +44,13 @@ const profileType = ref('Passenger')
         <div class="q-pa-none">
           <div class="q-gutter-md">
             <q-radio v-model="clientStopSelection" checked-icon="task_alt" unchecked-icon="panorama_fish_eye"
-              val="forAllStops" label="For All Stops">
-              <div class="text-caption text-grey-7">Selective clients for all stops</div>
+              val="selectiveClients" label="Selective Clients">
+              <div class="text-caption text-grey-7">Choose clients for all stops</div>
             </q-radio>
             <!-- <div class="text-subtitle2 text-grey-7">Client Schedule</div> -->
             <q-radio v-model="clientStopSelection" checked-icon="task_alt" unchecked-icon="panorama_fish_eye"
-              val="withinStops" label="Within Stops">
-              <div class="text-caption text-grey-7">Choose clients on each stop</div>
+              val="nonSelectiveClients" label="Non-Selective Clients">
+              <div class="text-caption text-grey-7">Choose clients when adding a stop</div>
             </q-radio>
           </div>
         </div>

@@ -223,7 +223,16 @@ const rows = [
                         logo: 'src/assets/clients/logo-a.svg',
                         name: 'Al Noor Innovations FZE',
                         phone: '+971 50 123 4567',
-                        email: 'b@example.com'
+                        email: 'b@example.com',
+                        clientType: 'Group',
+                        totalPax: 10,
+                        totalPaxIcon: 'hugeicons:user-01',
+                        malePax: 5,
+                        malePaxIcon: 'hugeicons:user-01',
+                        femalePax: 5,
+                        femalePaxIcon: 'hugeicons:user-01',
+                        disabledPax: 0,
+                        disabledPaxIcon: 'hugeicons:user-01',
                     }],
                     status: 'Approved',
                 },
@@ -646,13 +655,14 @@ const columns: QTableColumn[] = [
     <q-page class="q-pa-md bg-grey-1" style="border-top: 1px solid #e0e0e0">
         <div class="row flex justify-between items-center q-mb-md">
             <div class="col-md-4">
-                <q-breadcrumbs>
+                <q-breadcrumbs active-color="secondary">
                     <template v-slot:separator>
                         <q-icon size="1.5em" name="chevron_right" color="primary" />
                     </template>
                     <q-breadcrumbs-el label="Home" :to="{ name: 'executive-dashboard' }" />
-                    <q-breadcrumbs-el label="Mobility" />
-                    <q-breadcrumbs-el label="Dispatch" />
+                    <q-breadcrumbs-el label="Mobility" :to="{ name: 'mobility-link' }" />
+                    <q-breadcrumbs-el label="Dispatch" :to="{ name: 'dispatch-link' }" />
+                    <q-breadcrumbs-el label="Listing" color="text-grey-7" />
                 </q-breadcrumbs>
             </div>
 
@@ -707,7 +717,7 @@ const columns: QTableColumn[] = [
                         <template v-slot:default>
                             <div class="row items-center">
                                 All
-                                <FleetChips text="32" color="success" :iconVisibility="false" class="q-ml-sm" />
+                                <FleetChips text="32" color="success" :iconVisibility="false" class="q-ml-sm gt-sm" />
                             </div>
                         </template>
                     </q-tab>
@@ -716,7 +726,7 @@ const columns: QTableColumn[] = [
                         <template v-slot:default>
                             <div class="row items-center">
                                 Upcoming
-                                <FleetChips text="219" color="purple" :iconVisibility="false" class="q-ml-sm" />
+                                <FleetChips text="219" color="purple" :iconVisibility="false" class="q-ml-sm gt-sm" />
                             </div>
                         </template>
                     </q-tab>
@@ -725,7 +735,7 @@ const columns: QTableColumn[] = [
                         <template v-slot:default>
                             <div class="row items-center">
                                 Missed
-                                <FleetChips text="17" color="error" :iconVisibility="false" class="q-ml-sm" />
+                                <FleetChips text="17" color="error" :iconVisibility="false" class="q-ml-sm gt-sm" />
                             </div>
                         </template>
                     </q-tab>
@@ -734,7 +744,7 @@ const columns: QTableColumn[] = [
                         <template v-slot:default>
                             <div class="row items-center">
                                 Live
-                                <FleetChips text="173" color="success" :iconVisibility="false" class="q-ml-sm" />
+                                <FleetChips text="173" color="success" :iconVisibility="false" class="q-ml-sm gt-sm" />
                             </div>
                         </template>
                     </q-tab>
@@ -743,7 +753,7 @@ const columns: QTableColumn[] = [
                         <template v-slot:default>
                             <div class="row items-center">
                                 Delayed
-                                <FleetChips text="35" color="warning" :iconVisibility="false" class="q-ml-sm" />
+                                <FleetChips text="35" color="warning" :iconVisibility="false" class="q-ml-sm gt-sm" />
                             </div>
                         </template>
                     </q-tab>
@@ -752,7 +762,7 @@ const columns: QTableColumn[] = [
                         <template v-slot:default>
                             <div class="row items-center">
                                 Completed
-                                <FleetChips text="651" color="grey" :iconVisibility="false" class="q-ml-sm" />
+                                <FleetChips text="651" color="grey" :iconVisibility="false" class="q-ml-sm gt-sm" />
                             </div>
                         </template>
                     </q-tab>
@@ -761,7 +771,7 @@ const columns: QTableColumn[] = [
                         <template v-slot:default>
                             <div class="row items-center">
                                 Canceled
-                                <FleetChips text="19" color="error" :iconVisibility="false" class="q-ml-sm" />
+                                <FleetChips text="19" color="error" :iconVisibility="false" class="q-ml-sm gt-sm" />
                             </div>
                         </template>
                     </q-tab>
@@ -1042,7 +1052,7 @@ const columns: QTableColumn[] = [
 
                         <!-- Modal -  Driver Details-->
                         <q-dialog v-model="showDriverDialog" backdrop-filter="blur(2px)">
-                            <q-card style="width: 500px; max-width: 80vw;">
+                            <q-card style="width: 600px; max-width: 80vw;">
                                 <q-bar class="bg-primary text-white">
                                     <div class="row items-center text-weight-medium">
                                         Driver Details
@@ -1088,6 +1098,34 @@ const columns: QTableColumn[] = [
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="row items-center">
+                                            <div class="column">
+                                                <div class="text-caption  text-grey-7">
+                                                    HOS Remaining Hrs
+                                                </div>
+                                                <div class="text-body2 text-weight-medium text-grey-9 ">
+                                                    3 H 17 M <br /> &nbsp;
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row items-center">
+                                            <div class="column">
+                                                <div class=" text-caption text-grey-7 ellipsis">
+                                                    Position & Level
+                                                </div>
+                                                <div class="text-body2 text-weight-medium text-grey-9 ellipsis">
+                                                    Intermediate driver <br /> Level 2
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </q-card-section>
+                                <q-separator />
+                                <q-card-section>
+                                    <div class="row items-center justify-end q-gutter-x-sm">
+                                        <q-btn flat label="Cancel" color="grey-7" class="q-mr-sm"
+                                            @click="selectedDriverEvent = null" />
+                                        <q-btn outline label="More Details" color="secondary" />
                                     </div>
                                 </q-card-section>
                             </q-card>

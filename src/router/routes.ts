@@ -27,15 +27,27 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/transport_company/mobility/dispatch/DispatchListing.vue'),
       },
       {
-        path: 'tempdispatch',
-        name: 'temp-dispatch',
-        component: () => import('pages/transport_company/mobility/dispatch/DispatchListingOld.vue'),
-      },
-      {
         path: 'creation',
         name: 'create-event',
         component: () => import('components/transport_company/mobility/creation/CreateNew.vue'),
       },
+      {
+        path: 'mobility-links',
+        name: 'mobility-link',
+        component: () =>
+          import('components/transport_company/mobility/breadcrumb-links/MobilitySectionLinks.vue'),
+      },
+      {
+        path: 'dispatch-links',
+        name: 'dispatch-link',
+        component: () =>
+          import('components/transport_company/mobility/breadcrumb-links/DispatchSectionLinks.vue'),
+      },
+      // {
+      //   path: 'live-map',
+      //   name: 'live-map',
+      //   component: () => import('pages/transport_company/mobility/live-map/LiveMap.vue'),
+      // },
     ],
   },
 
