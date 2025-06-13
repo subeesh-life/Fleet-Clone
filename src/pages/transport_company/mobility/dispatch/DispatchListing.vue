@@ -120,6 +120,11 @@ const selectAll = ref(false)
 const menuState = ref<Record<number, boolean>>({})
 const selectedVehicleEvent = ref<Event | null>(null)
 const selectedDriverEvent = ref<Event | null>(null)
+const searchEventsDialog = ref(false)
+const searchText = ref('')
+const searchEvents = ref<string[]>(["Event Type", "Event Name", "Event ID", "Vehicle ID", "VIN Number", "Asset Type", "Vehicle Make", "Vehicle Model", "Vehicle Year", "Plate Number"])
+const selectedFilter = ref<string>('Event Type')
+const activeFilters = ref<{type: string, value: string}[]>([])
 
 const showDialog = computed({
     get: () => selectedVehicleEvent.value !== null,
@@ -649,6 +654,19 @@ const columns: QTableColumn[] = [
     { name: 'actions', label: 'Actions', field: 'actions', align: 'left', headerClasses: 'bg-grey-2' },
 ]
 
+const addFilter = () => {
+    if (searchText.value && selectedFilter.value) {
+        activeFilters.value.push({
+            type: selectedFilter.value,
+            value: searchText.value
+        })
+        searchText.value = ''
+    }
+}
+
+const removeFilter = (index: number) => {
+    activeFilters.value.splice(index, 1)
+}
 
 </script>
 <template>
@@ -671,7 +689,8 @@ const columns: QTableColumn[] = [
                 <TimeRange class="gt-sm" />
 
                 <div class="row q-gutter-x-sm">
-                    <q-btn push color="white" text-color="grey-9" round class="gt-sm">
+                    <q-btn push color="white" text-color="grey-9" round class="gt-sm"
+                        @click="searchEventsDialog = true">
                         <q-icon>
                             <IconifyIcon icon="hugeicons:search-02" width="16px" height="16px" />
                         </q-icon>
@@ -707,7 +726,7 @@ const columns: QTableColumn[] = [
             </div>
         </div>
 
-        <!--Tabs & Table Data-->
+        <!--Tabs & Table Data for All Events-->
 
         <div class="row">
             <div class="col-12 bg-white rounded-borders q-pa-md">
@@ -781,6 +800,49 @@ const columns: QTableColumn[] = [
             <div class="col-12">
                 <q-tab-panels v-model="eventStatus" animated>
                     <q-tab-panel name="all" class="q-pt-none">
+
+                        <q-card v-if="selectedEvents.length > 0" flat bordered class="q-pa-xs q-mb-md full-width">
+                            <q-card-section class="q-pa-none">
+                                <div class="row">
+                                    <div class="col flex items-center">
+                                        <q-btn flat dense class="q-px-sm full-width" color="primary">
+                                            <IconifyIcon icon="hugeicons:filter-horizontal" width="24px" height="24px"
+                                                class="text-grey-7 q-mr-sm gt-sm" />
+                                            <span>Threshold</span>
+                                        </q-btn>
+                                    </div>
+
+                                    <div class="col flex items-center">
+                                        <q-btn flat dense class="q-px-sm full-width" color="primary"
+                                            :disabled="selectedEvents.length > 1">
+                                            <IconifyIcon icon="hugeicons:flip-left" width="24px" height="24px"
+                                                class="text-grey-7 q-mr-sm gt-sm" />
+                                            <span>Clone</span>
+                                            <q-tooltip v-if="selectedEvents.length > 1">
+                                                <div class="text-caption">
+                                                    You can only clone one event at a time.
+                                                </div>
+                                            </q-tooltip>
+                                        </q-btn>
+                                    </div>
+                                    <div class="col flex items-center">
+                                        <q-btn flat dense class="q-px-sm full-width" color="primary">
+                                            <IconifyIcon icon="hugeicons:security-check" width="24px" height="24px"
+                                                class="text-grey-7 q-mr-sm gt-sm" />
+                                            <span>Apply Policy</span>
+                                        </q-btn>
+                                    </div>
+
+                                    <div class="col flex items-center">
+                                        <q-btn flat dense class="q-px-sm full-width" color="primary">
+                                            <IconifyIcon icon="hugeicons:filter-horizontal" width="24px" height="24px"
+                                                class="text-grey-7 q-mr-sm gt-sm" />
+                                            <span>Merge</span>
+                                        </q-btn>
+                                    </div>
+                                </div>
+                            </q-card-section>
+                        </q-card>
 
                         <q-table flat bordered :columns="columns" :rows="groupedRows" row-key="eventDetails?.id"
                             :pagination="{ rowsPerPage: 7 }" :rows-per-page-options="[5, 7, 10]"
@@ -1130,6 +1192,85 @@ const columns: QTableColumn[] = [
                                 </q-card-section>
                             </q-card>
                         </q-dialog>
+
+
+                        <!-- Card -  Search Events  -->
+
+                        <q-dialog v-model="searchEventsDialog" backdrop-filter="blur(2px)" transition-show="jump-down"
+                            transition-hide="jump-up" persistent>
+                            <q-card style="width: 600px; max-width: 80vw;">
+                                <q-card-section>
+                                    <div class="row flex items-center">
+                                        <div class="col-10">
+                                            <div class="text-h6">Search Events</div>
+                                            <div class="text-body2 text-grey-7">
+                                                Find events faster with the filters below.
+                                            </div>
+
+                                        </div>
+                                        <div class="col-2 flex justify-end">
+                                            <q-btn flat dense @click="searchEventsDialog = false">
+                                                <IconifyIcon icon="hugeicons:cancel-01" width="24px" height="24px"
+                                                    class="text-grey-7" />
+                                            </q-btn>
+                                        </div>
+                                    </div>
+                                    <q-separator class="q-my-md" />
+                                    <div class="row">
+                                        <div class="col-12 q-mr-sm">
+                                            <q-chip v-for="filterTypes in searchEvents" :key="filterTypes"
+                                                :selected="selectedFilter === filterTypes"
+                                                @click="selectedFilter = selectedFilter === filterTypes ? '' : filterTypes"
+                                                :outline="selectedFilter !== filterTypes"
+                                                :color="selectedFilter === filterTypes ? 'primary' : 'grey-7'"
+                                                :text-color="selectedFilter === filterTypes ? 'white' : 'grey-7'"
+                                                :icon="selectedFilter === filterTypes ? 'check' : undefined"
+                                                class="text-caption cursor-pointer">
+                                                {{ filterTypes }}
+                                            </q-chip>
+                                        </div>
+                                        <div class="col-12 q-pt-md">
+                                            <q-input autofocus outlined v-model="searchText" placeholder="Search for...">
+                                                <template v-slot:prepend>
+                                                    <IconifyIcon icon="hugeicons:search-02" width="24px" height="24px"
+                                                        class="text-grey-7" />
+                                                </template>
+                                                <template v-slot:append>
+                                                  <q-btn flat dense @click="addFilter">
+                                                    <IconifyIcon icon="hugeicons:add-01" width="24px" height="24px"
+                                                  class="text-grey-7" />
+                                                  <q-tooltip>Add Filter</q-tooltip>
+                                                  </q-btn>
+                                                </template>
+                                            </q-input>
+                                        </div>
+                                        <div class="col-12 q-mt-sm" v-if="activeFilters.length > 0">
+                                            <div class="row q-gutter-x-sm q-gutter-y-sm">
+                                                <q-badge v-for="(filter, index) in activeFilters" :key="index"
+                                                    color="grey-3" text-color="primary" class="text-caption">
+                                                    {{ filter.type }}:
+                                                    <q-chip color="primary" text-color="white" class="text-caption">
+                                                        {{ filter.value }}
+                                                        <q-btn flat dense round size="xs" class="q-ml-sm" @click="removeFilter(index)">
+                                                            <IconifyIcon icon="hugeicons:cancel-01" width="12px" height="12px" />
+                                                        </q-btn>
+                                                    </q-chip>
+                                                </q-badge>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </q-card-section>
+
+                                <q-card-section>
+                                    <div class="col-12 flex justify-end q-gutter-x-sm">
+                                        <q-btn outline label="Clear" color="secondary" />
+                                        <q-btn label="Search" color="primary" />
+                                    </div>
+                                </q-card-section>
+                            </q-card>
+                        </q-dialog>
+
 
                     </q-tab-panel>
                 </q-tab-panels>

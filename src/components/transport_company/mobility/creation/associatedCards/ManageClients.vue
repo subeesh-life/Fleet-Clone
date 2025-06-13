@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
 import FleetChips from 'src/components/shared/chips/FleetChips.vue';
 const clientDrawer = ref(false);
-const clientStopSelection = ref('selectiveClients')
+const clientSelection = ref('selectiveClients')
 const activeTab = ref('existing-client')
 const maximizedToggle = ref(false)
 const clientType = ref('Group')
@@ -18,6 +18,19 @@ const email = ref('')
 const countryCode = ref('+971')
 const phone = ref('')
 const profileType = ref('Passenger')
+const manageClients = reactive(
+  {
+    group: 2,
+    entity: 3,
+    individual: 17
+  }
+)
+const clearSelection = () => {
+  manageClients.group = 0
+  manageClients.entity = 0
+  manageClients.individual = 0
+}
+
 </script>
 
 <template>
@@ -30,8 +43,8 @@ const profileType = ref('Passenger')
             <div class="text-subtitle1 text-grey-9 text-weight-medium q-ml-xs">Manage Client</div>
           </div>
           <div class="col flex justify-end">
-            <div class="flex items-center" v-if="clientStopSelection === 'selectiveClients'"
-              @click="clientDrawer = true">
+
+            <div class="flex items-center" v-if="clientSelection === 'selectiveClients'" @click="clientDrawer = true">
               <q-tooltip>Add Client</q-tooltip>
               <iconify-icon icon="hugeicons:add-circle-half-dot" width="24px" height="24px"
                 class="text-secondary cursor-pointer" />
@@ -43,32 +56,33 @@ const profileType = ref('Passenger')
       <q-card-section class="q-py-sm">
         <div class="q-pa-none">
           <div class="q-gutter-md">
-            <q-radio v-model="clientStopSelection" checked-icon="task_alt" unchecked-icon="panorama_fish_eye"
+            <q-radio v-model="clientSelection" checked-icon="task_alt" unchecked-icon="panorama_fish_eye"
               val="selectiveClients" label="Selective Clients">
               <div class="text-caption text-grey-7">Choose clients for all stops</div>
             </q-radio>
             <!-- <div class="text-subtitle2 text-grey-7">Client Schedule</div> -->
-            <q-radio v-model="clientStopSelection" checked-icon="task_alt" unchecked-icon="panorama_fish_eye"
+            <q-radio v-model="clientSelection" checked-icon="task_alt" unchecked-icon="panorama_fish_eye"
               val="nonSelectiveClients" label="Non-Selective Clients">
               <div class="text-caption text-grey-7">Choose clients when adding a stop</div>
             </q-radio>
           </div>
         </div>
-        <q-separator class="q-my-md" />
-        <div class="row items-center">
+        <q-separator class="q-my-md" v-if="clientSelection === 'selectiveClients'" />
+        <div class="row items-center" v-if="clientSelection === 'selectiveClients'">
           <div class="col-md-8 col-sm-12">
             <q-chip>
-              <q-avatar size="24px" color="primary" text-color="white">2</q-avatar>Group
+              <q-avatar size="24px" color="primary" text-color="white">{{ manageClients.group }}</q-avatar>Group
             </q-chip>
             <q-chip>
-              <q-avatar size="24px" color="primary" text-color="white">1</q-avatar>Entity
+              <q-avatar size="24px" color="primary" text-color="white">{{ manageClients.entity }}</q-avatar>Entity
             </q-chip>
             <q-chip>
-              <q-avatar size="24px" color="primary" text-color="white">17</q-avatar>Individual
+              <q-avatar size="24px" color="primary" text-color="white">{{ manageClients.individual
+                }}</q-avatar>Individual
             </q-chip>
           </div>
           <div class="col-md-4 col-sm-12 flex justify-end">
-            <span class="text-body2 text-negative cursor-pointer">Clear Selection</span>
+            <span class="text-body2 text-negative cursor-pointer" @click="clearSelection">Clear Selection</span>
           </div>
         </div>
       </q-card-section>
@@ -251,10 +265,10 @@ const profileType = ref('Passenger')
                 <q-card flat bordered class="my-card q-mx-md q-mb-md">
                   <q-card-section class="bg-grey-1">
                     <div class="text-h6">Choose the profile type</div>
-                    <div class="text-body2 text-grey-7">Select the profile type you wish to create.</div>
+                     <div class="text-body2 text-grey-7">Select the profile type you wish to create.</div>
                     <div class="row q-col-gutter-x-md">
                       <div class="col-md-2 col-xs-12 q-mt-sm">
-                        <q-select dense outlined v-model="profileType" placeholder="Choose Profile Type"
+                         <q-select dense outlined v-model="profileType" placeholder="Choose Profile Type"
                           class="bg-white" :options="['Passenger', 'Student', 'Guardian', 'Staff', 'Product']" />
                       </div>
                     </div>

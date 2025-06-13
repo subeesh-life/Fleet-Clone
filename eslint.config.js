@@ -38,10 +38,33 @@ export default [
   {
     files: ['**/*.ts', '**/*.vue'],
     rules: {
+      'indent': ['error', 2],
+      'quotes': ['error', 'single'],
+      'semi': ['error', 'always'],
+      'brace-style': ['error', '1tbs'],
+
+      // Your custom Vue rule
+      'vue/max-attributes-per-line': ['warn', {
+        singleline: 4,
+      }],
+
+      // Quasar-specific adjustments
+      'vue/multi-word-component-names': 'off',
       '@typescript-eslint/consistent-type-imports': [
         'error',
         { prefer: 'type-imports' }
       ],
+      /* 'vue/max-attributes-per-line': ['warn', {
+        singleline: 4,
+      }], */
+    },
+    features: {
+      stylistic: {
+        semi: true,
+        indent: 2,
+        quotes: 'single',
+        braceStyle: '1tbs',
+      },
     }
   },
   // https://github.com/vuejs/eslint-config-typescript
@@ -82,8 +105,10 @@ export default [
       'prefer-promise-reject-errors': 'off',
 
       // allow debugger during development only
-      'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
-    }
+      'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+
+    },
+
   },
 
   {
