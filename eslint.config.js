@@ -58,14 +58,14 @@ export default [
         singleline: 4,
       }], */
     },
-    features: {
-      stylistic: {
-        semi: true,
-        indent: 2,
-        quotes: 'single',
-        braceStyle: '1tbs',
-      },
-    }
+    // features: {
+    //   stylistic: {
+    //     semi: true,
+    //     indent: 2,
+    //     quotes: 'single',
+    //     braceStyle: '1tbs',
+    //   },
+    // }
   },
   // https://github.com/vuejs/eslint-config-typescript
   ...vueTsEslintConfig({
