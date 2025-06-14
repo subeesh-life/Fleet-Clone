@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
-import FleetChips from 'src/components/shared/chips/FleetChips.vue';
+import FleetChips from 'components/shared/chips/FleetChips.vue';
 const clientDrawer = ref(false);
 const clientSelection = ref('selectiveClients')
 const activeTab = ref('existing-client')

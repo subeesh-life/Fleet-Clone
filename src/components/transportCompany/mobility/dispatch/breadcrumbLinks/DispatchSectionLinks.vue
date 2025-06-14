@@ -4,7 +4,7 @@
 <template>
     <q-page class="q-pa-md bg-grey-1" style="border-top: 1px solid #e0e0e0">
         <div class="row flex justify-between items-center q-mb-md">
-            <div class="col-md-4" style="min-height: 42px; display: flex; align-items: center;">
+            <div class="col-md-4 flex items-center" style="min-height: 42px;">
                 <q-breadcrumbs active-color="secondary">
                     <template v-slot:separator>
                         <q-icon size="1.5em" name="chevron_right" color="primary" />

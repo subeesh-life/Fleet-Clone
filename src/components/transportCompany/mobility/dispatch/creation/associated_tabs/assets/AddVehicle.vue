@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import VehiclePlate from 'src/components/shared/card/VehiclePlate.vue'
+import VehiclePlate from 'components/shared/card/VehiclePlate.vue'
 
 const vehicleDrawer = ref(false)
 const maximizedToggle = ref(false)

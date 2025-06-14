@@ -13,7 +13,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'executive-dashboard',
         name: 'executive-dashboard',
-        component: () => import('pages/transport_company/dashboard/ExecutiveDashboard.vue'),
+        component: () => import('pages/transportCompany/dashboard/ExecutiveDashboard.vue'),
       },
     ],
   },
@@ -24,29 +24,35 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'dispatch',
         name: 'dispatch',
-        component: () => import('pages/transport_company/mobility/dispatch/DispatchListing.vue'),
+        component: () => import('pages/transportCompany/mobility/dispatch/DispatchListing.vue'),
       },
       {
         path: 'creation',
         name: 'create-event',
-        component: () => import('components/transport_company/mobility/creation/CreateNew.vue'),
+        component: () => import('components/transportCompany/mobility/dispatch/creation/CreateNew.vue'),
       },
       {
         path: 'mobility-links',
         name: 'mobility-link',
         component: () =>
-          import('components/transport_company/mobility/breadcrumb-links/MobilitySectionLinks.vue'),
+          import('components/transportCompany/mobility/dispatch/breadcrumbLinks/MobilitySectionLinks.vue'),
       },
       {
         path: 'dispatch-links',
         name: 'dispatch-link',
         component: () =>
-          import('components/transport_company/mobility/breadcrumb-links/DispatchSectionLinks.vue'),
+          import('components/transportCompany/mobility/dispatch/breadcrumbLinks/DispatchSectionLinks.vue'),
+      },
+      {
+        path: 'dispatch-details',
+        name: 'dispatch-details',
+        component: () =>
+          import('components/transportCompany/mobility/dispatch/details/DispatchDetails.vue'),
       },
       // {
       //   path: 'live-map',
       //   name: 'live-map',
-      //   component: () => import('pages/transport_company/mobility/live-map/LiveMap.vue'),
+      //   component: () => import('pages/transportCompany/mobility/live-map/LiveMap.vue'),
       // },
     ],
   },

@@ -9,7 +9,7 @@ import ManageClients from './associatedCards/ManageClients.vue'
 import AddNotes from './associatedCards/AddNotes.vue'
 import TabController from './associated_tabs/TabController.vue'
 import EventThreshold from './threshold/EventThreshold.vue'
-import ConfirmationModal from 'src/components/shared/modals/ConfirmationModal.vue'
+import ConfirmationModal from 'components/shared/modals/ConfirmationModal.vue'
 import { useRouter } from 'vue-router'
 
 const showCancelConfirmationModal = ref(false)

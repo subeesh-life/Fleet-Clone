@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import ExecutiveKpis from 'src/components/transport_company/dashboards/KPIs/ExecutiveKPIs.vue'
-import ExpensesChart from 'src/components/transport_company/dashboards/charts/ExpensesChart.vue'
-import UtilizationChart from 'src/components/transport_company/dashboards/charts/UtilizationChart.vue'
-import MaintenanceChart from 'src/components/transport_company/dashboards/charts/MaintenanceChart.vue'
-import EnvironmentalSustainabilityChart from 'src/components/transport_company/dashboards/charts/EnvironmentalSustainabilityChart.vue'
-import NotificationChart from 'src/components/transport_company/dashboards/charts/NotificationChart.vue'
+import ExecutiveKpis from 'components/transportCompany/dashboards/KPIs/ExecutiveKPIs.vue'
+import ExpensesChart from 'components/transportCompany/dashboards/charts/ExpensesChart.vue'
+import UtilizationChart from 'components/transportCompany/dashboards/charts/UtilizationChart.vue'
+import MaintenanceChart from 'components/transportCompany/dashboards/charts/MaintenanceChart.vue'
+import EnvironmentalSustainabilityChart from 'components/transportCompany/dashboards/charts/EnvironmentalSustainabilityChart.vue'
+import NotificationChart from 'components/transportCompany/dashboards/charts/NotificationChart.vue'
 import { ref } from 'vue'
 const showAllCards = ref(false)
 </script>
