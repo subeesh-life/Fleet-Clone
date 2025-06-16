@@ -100,7 +100,7 @@ const tab = ref('all');
           <q-card-section class="q-pa-none">
             <div class="row">
               <div class="col-md-12 col-xs-12 bg-white rounded-borders q-pa-md">
-        <q-tabs v-model="tab" dense class="text-grey" active-color="primary" indicator-color="primary"
+        <q-tabs v-model="tab"  dense class="text-grey" active-color="primary" indicator-color="primary"
           align="justify" narrow-indicator style="border-bottom: 1px solid #e0e0e0">
           <q-tab name="all" class="flex">
             <template v-slot:default>
@@ -173,6 +173,9 @@ const tab = ref('all');
               </div>
             </template>
           </q-tab>
+
+
+
         </q-tabs>
       </div>
             </div>
