@@ -2,6 +2,8 @@
 import { ref } from 'vue';
 import EventCard from './cards/EventCard.vue';
 import AssetCard from './cards/AssetCard.vue';
+import ClientCard from './cards/ClientCard.vue';
+import LogInformation from 'components/shared/card/LogInformation.vue';
 
 const tab = ref('all');
 </script>
@@ -54,6 +56,8 @@ const tab = ref('all');
       <div class="col-md-4 col-xs-12">
         <EventCard />
         <AssetCard />
+        <ClientCard />
+        <LogInformation />
       </div>
 
       <div class="col-md-8 col-xs-12">
