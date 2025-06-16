@@ -49,7 +49,7 @@
             </div>
 
             <div class="row items-center q-pl-sm text-grey-7 text-caption">
-              Jun 16, 2025 9:00 AM
+              Jun 16, 2025 9:47 AM
             </div>
 
           </div>
