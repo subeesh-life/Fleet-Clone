@@ -1311,7 +1311,7 @@ const clearSearchFilters = () => {
     <!-- Model - Filter Drawer-->
     <q-dialog persistent backdrop-filter="blur(2px)" v-model="dispatchFilterDrawer" position="right"
       :full-height="true">
-      <q-card style="width: 500px" class="column">
+      <q-card  class="column">
         <q-card-section class="q-pb-none">
           <div class="row items-start justify-between">
             <div>
