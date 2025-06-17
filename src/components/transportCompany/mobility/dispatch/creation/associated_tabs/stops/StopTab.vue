@@ -124,7 +124,7 @@ const withinStopWaitTimeType = ref('Minutes')
         </div>
       </q-card-section>
       <q-card-section class="flex column flex-center q-col-gutter-sm">
-        <q-img src="/src/assets/states/empty-state-loader.svg" style="width: 100px; height: 80px" />
+        <q-img src="/public/assets/states/empty-state-loader.svg" style="width: 100px; height: 80px" />
         <div class="text-h6">No Stops Added Yet!</div>
         <div class="text-body2 text-center text-grey-7">
           Add stops to plan and optimize your route.
