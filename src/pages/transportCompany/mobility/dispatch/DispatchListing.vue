@@ -267,7 +267,7 @@ const rows = [
             }
           },
           client: [{
-            logo: '@/assets/clients/logo-b.svg',
+            logo: '../assets/clients/logo-a.svg',
             name: 'Al Noor Innovations FZE',
             phone: '+971 50 123 4567',
             email: 'b@example.com',
