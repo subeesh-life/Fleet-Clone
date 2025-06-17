@@ -2,7 +2,7 @@
 
 </script>
 <template>
-  <q-card flat bordered class="q-pa-xs full-width">
+  <q-card flat bordered class="q-pa-xs full-width q-mb-md ">
     <q-card-section class="q-pa-xs q-gutter-xs">
       <div class="text-body1 text-weight-medium">Log Information</div>
       <div class="row">

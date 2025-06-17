@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { ref } from 'vue';
 import EventCard from './cards/EventCard.vue';
 import AssetCard from './cards/AssetCard.vue';
 import ClientCard from './cards/ClientCard.vue';
 import LogInformation from 'components/shared/card/LogInformation.vue';
+import DispatchTabs from './tabs/DispatchTabs.vue';
 
-const tab = ref('all');
 </script>
 <template>
   <q-page class="q-pa-md bg-grey-1" style="border-top: 1px solid #e0e0e0">
@@ -25,7 +24,7 @@ const tab = ref('all');
       <div class="col-md-8 flex justify-end q-gutter-x-md">
 
         <div class="row q-gutter-x-sm">
-          <q-btn outline color="primary" text-color="grey-7" round class="gt-sm">
+          <q-btn flat color="primary" text-color="grey-7" round class="gt-sm">
             <q-icon>
               <IconifyIcon icon="hugeicons:filter-horizontal" width="16px" height="16px" class="text-grey-7" />
             </q-icon>
@@ -33,7 +32,7 @@ const tab = ref('all');
               <div class="text-caption">Event Thresold</div>
             </q-tooltip>
           </q-btn>
-          <q-btn outline color="primary" text-color="grey-7" round>
+          <q-btn flat color="primary" text-color="grey-7" round>
             <q-icon>
               <IconifyIcon icon="hugeicons:edit-01" width="16px" height="16px" class="text-grey-7" />
             </q-icon>
@@ -41,7 +40,7 @@ const tab = ref('all');
               <div class="text-caption">Edit</div>
             </q-tooltip>
           </q-btn>
-          <q-btn outline color="primary" text-color="grey-7" round :to="{ name: 'dispatch' }">
+          <q-btn flat color="primary" text-color="grey-7" round :to="{ name: 'dispatch' }">
             <q-icon>
               <IconifyIcon icon="hugeicons:cancel-01" width="16px" height="16px" class="text-grey-7" />
             </q-icon>
@@ -61,89 +60,7 @@ const tab = ref('all');
       </div>
 
       <div class="col-md-8 col-xs-12">
-        <q-card flat bordered class="q-pa-xs q-mb-md full-width">
-          <q-card-section class="q-pa-none">
-            <div class="row">
-              <div class="col-md-12 col-xs-12 bg-white rounded-borders q-pa-md">
-                <q-tabs v-model="tab" dense class="text-grey" active-color="primary" indicator-color="primary"
-                  align="justify" narrow-indicator style="border-bottom: 1px solid #e0e0e0">
-                  <q-tab name="all" class="flex">
-                    <template v-slot:default>
-                      <IconifyIcon icon="hugeicons:more" width="24px" height="24px" class="q-mb-xs" />
-                      <div class="row items-center">
-                        Details
-                      </div>
-                    </template>
-                  </q-tab>
-
-                  <q-tab name="route-details" class="flex">
-                    <template v-slot:default>
-                      <IconifyIcon icon="hugeicons:route-02" width="24px" height="24px" class="q-mb-xs" />
-                      <div class="row items-center">
-                        Routes
-                      </div>
-                    </template>
-                  </q-tab>
-
-                  <q-tab name="dvir" class="flex">
-                    <template v-slot:default>
-                      <IconifyIcon icon="hugeicons:check-list" width="24px" height="24px" class="q-mb-xs" />
-                      <div class="row items-center">
-                        DVIR
-                      </div>
-                    </template>
-                  </q-tab>
-
-                  <q-tab name="alerts" class="flex">
-                    <template v-slot:default>
-                      <IconifyIcon icon="hugeicons:notification-01" width="24px" height="24px" class="q-mb-xs" />
-                      <div class="row items-center">
-                        Notifications
-                      </div>
-                    </template>
-                  </q-tab>
-
-                  <q-tab name="billing" class="flex">
-                    <template v-slot:default>
-                      <IconifyIcon icon="hugeicons:invoice-02" width="24px" height="24px" class="q-mb-xs" />
-                      <div class="row items-center">
-                        Billing
-                      </div>
-                    </template>
-                  </q-tab>
-
-                  <q-tab name="cost" class="flex">
-                    <template v-slot:default>
-                      <IconifyIcon icon="hugeicons:dollar-02" width="24px" height="24px" class="q-mb-xs" />
-                      <div class="row items-center">
-                        Cost
-                      </div>
-                    </template>
-                  </q-tab>
-
-                  <q-tab name="expenses" class="flex">
-                    <template v-slot:default>
-                      <IconifyIcon icon="hugeicons:credit-card" width="24px" height="24px" class="q-mb-xs" />
-                      <div class="row items-center">
-                        Expenses
-                      </div>
-                    </template>
-                  </q-tab>
-
-                  <q-tab name="logs" class="flex">
-                    <template v-slot:default>
-                      <IconifyIcon icon="hugeicons:clock-02" width="24px" height="24px" class="q-mb-xs" />
-                      <div class="row items-center">
-                        Logs
-                      </div>
-                    </template>
-                  </q-tab>
-
-                </q-tabs>
-              </div>
-            </div>
-          </q-card-section>
-        </q-card>
+        <DispatchTabs />
       </div>
     </div>
   </q-page>

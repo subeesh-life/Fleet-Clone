@@ -39,7 +39,7 @@ import VehiclePlate from 'components/shared/card/VehiclePlate.vue'
         <!-- Vehicles Tab-->
         <q-tab-panel name="vehicles" class="q-pa-none cursor-pointer">
           <div class="row q-pa-sm flex items-center">
-            <div class="col-8 flex items-center">
+            <div class="col-8 flex items-center q-py-xs">
               <VehiclePlate />
               <div class="q-ml-md">
                 <div>
@@ -69,7 +69,7 @@ import VehiclePlate from 'components/shared/card/VehiclePlate.vue'
         <!-- Drivers Tab-->
         <q-tab-panel name="drivers" class="q-pa-none cursor-pointer">
           <div class="row q-pa-sm flex items-center">
-            <div class="col-8">
+            <div class="col-8 q-py-xs">
               <div class="row flex items-center">
                 <q-avatar size="40px" color="primary" text-color="white">
                   <img src="https://i.pravatar.cc/150?img=59" />
@@ -110,7 +110,7 @@ import VehiclePlate from 'components/shared/card/VehiclePlate.vue'
         <!-- Assistants Tab-->
         <q-tab-panel name="assistants" class="q-pa-none cursor-pointer">
           <div class="row q-pa-sm flex items-center">
-            <div class="col-12 text-center q-pa-md">
+            <div class="col-12 text-center q-pa-md ">
               <div class="text-body2 text-weight-medium text-grey-7">No assistant added yet!</div>
             </div>
           </div>
