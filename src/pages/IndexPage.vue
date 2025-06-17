@@ -5,7 +5,7 @@
         <div></div>
         <div class="full-width q-pt-xl">
           <div class="text-center">
-            <q-img src="../assets/wiot_logo.png" style="width: 80px" class="q-mb-md" />
+            <q-img src="public/assets/wiot_logo.png" style="width: 80px" class="q-mb-md" />
             <div class="text-h4 text-weight-bold">Customer Portal</div>
             <div class="text-subtitle2 text-grey-7 q-mt-sm">
               Enter your username and password to continue.
@@ -91,7 +91,7 @@
       >
         <q-carousel-slide
           name="1"
-          img-src="../assets/slides/slide_one.png"
+          img-src="public/assets/slides/slide_one.png"
           class="carousel-slide"
         />
         <q-carousel-slide
