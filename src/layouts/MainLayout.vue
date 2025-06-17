@@ -7,7 +7,7 @@
           <iconify-icon icon="hugeicons:menu-02" width="24px" height="24px" class="text-grey-9" />
         </q-btn>
         <div class="flex items-center q-ml-sm">
-          <q-img src="public/assets/logo.svg" style="width: 30px; height: 30px" />
+          <q-img src="../assets/logo.svg" style="width: 30px; height: 30px" />
           <q-toolbar-title class="gt-xs"> Sunshine Transports </q-toolbar-title>
         </div>
 

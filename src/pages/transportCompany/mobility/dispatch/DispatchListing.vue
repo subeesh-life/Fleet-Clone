@@ -267,7 +267,7 @@ const rows = [
             }
           },
           client: [{
-            logo: 'public/assets/clients/logo-a.svg',
+            logo: '@/assets/clients/logo-b.svg',
             name: 'Al Noor Innovations FZE',
             phone: '+971 50 123 4567',
             email: 'b@example.com',
@@ -341,7 +341,7 @@ const rows = [
             }
           },
           client: [{
-            logo: 'public/assets/clients/logo-b.svg',
+            logo: '../assets/clients/logo-b.svg',
             name: 'Oasis Venture Group',
             phone: '+971 50 123 4567',
             email: 'oasis@email.com'
@@ -407,7 +407,7 @@ const rows = [
           },
           client: [
             {
-              logo: 'public/assets/clients/logo-c.svg',
+              logo: '../assets/clients/logo-c.svg',
               name: 'Fujairah Logistics',
               phone: '+971 50 123 4567',
               email: 'fujairah@logistics.com',
@@ -494,7 +494,7 @@ const rows = [
             }
           },
           client: [{
-              logo: 'public/assets/clients/et.webp',
+              logo: '../assets/clients/et.webp',
             name: 'Emirates Transport',
             phone: '+971 50 123 4567',
             email: 'et@email.com'
@@ -568,7 +568,7 @@ const rows = [
             }
           },
           client: [{
-            logo: 'public/assets/clients/salama.png',
+            logo: '../assets/clients/salama.png',
             name: 'Salama School Transport',
             phone: '+971 50 123 4567',
             email: 'salama@transport.com'
@@ -642,7 +642,7 @@ const rows = [
             }
           },
           client: [{
-            logo: 'src/assets/clients/logo-d.svg',
+            logo: '../assets/clients/logo-d.svg',
             name: 'Dubai Perfume',
             phone: '+971 50 123 4567',
             email: 'dubai.perfume@email.com'
