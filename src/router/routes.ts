@@ -13,8 +13,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'executive-dashboard',
         name: 'executive-dashboard',
-        component: () =>
-          import('pages/transportCompany/dashboard/ExecutiveDashboard.vue'),
+        component: () => import('pages/transportCompany/dashboard/ExecutiveDashboard.vue'),
       },
     ],
   },
@@ -25,18 +24,13 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'dispatch',
         name: 'dispatch',
-        component: () =>
-          import(
-            'pages/transportCompany/mobility/dispatch/DispatchListing.vue'
-          ),
+        component: () => import('pages/transportCompany/mobility/dispatch/DispatchListing.vue'),
       },
       {
         path: 'creation',
         name: 'create-event',
         component: () =>
-          import(
-            'components/transportCompany/mobility/dispatch/creation/CreateNew.vue'
-          ),
+          import('components/transportCompany/mobility/dispatch/creation/CreateNew.vue'),
       },
       {
         path: 'mobility-links',
@@ -58,9 +52,7 @@ const routes: RouteRecordRaw[] = [
         path: 'dispatch-details',
         name: 'dispatch-details',
         component: () =>
-          import(
-            'components/transportCompany/mobility/dispatch/details/DispatchDetails.vue'
-          ),
+          import('components/transportCompany/mobility/dispatch/details/DispatchDetails.vue'),
       },
       // {
       //   path: 'live-map',
@@ -70,6 +62,17 @@ const routes: RouteRecordRaw[] = [
     ],
   },
 
+  {
+    path: '/admin-regulator',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      {
+        path: 'live-map',
+        name: 'live-map',
+        component: () => import('pages/adminRegulator/liveMap/LiveMap.vue'),
+      },
+    ],
+  },
   // Always leave this as last one,
   // but you can also remove it
   {
