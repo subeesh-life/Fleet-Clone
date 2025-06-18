@@ -13,7 +13,8 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'executive-dashboard',
         name: 'executive-dashboard',
-        component: () => import('pages/transportCompany/dashboard/ExecutiveDashboard.vue'),
+        component: () =>
+          import('pages/transportCompany/dashboard/ExecutiveDashboard.vue'),
       },
     ],
   },
@@ -24,13 +25,18 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'dispatch',
         name: 'dispatch',
-        component: () => import('pages/transportCompany/mobility/dispatch/DispatchListing.vue'),
+        component: () =>
+          import(
+            'pages/transportCompany/mobility/dispatch/DispatchListing.vue'
+          ),
       },
       {
         path: 'creation',
         name: 'create-event',
         component: () =>
-          import('components/transportCompany/mobility/dispatch/creation/CreateNew.vue'),
+          import(
+            'components/transportCompany/mobility/dispatch/creation/CreateNew.vue'
+          ),
       },
       {
         path: 'mobility-links',
@@ -52,7 +58,9 @@ const routes: RouteRecordRaw[] = [
         path: 'dispatch-details',
         name: 'dispatch-details',
         component: () =>
-          import('components/transportCompany/mobility/dispatch/details/DispatchDetails.vue'),
+          import(
+            'components/transportCompany/mobility/dispatch/details/DispatchDetails.vue'
+          ),
       },
       // {
       //   path: 'live-map',

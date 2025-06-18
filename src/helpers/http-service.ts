@@ -1,4 +1,4 @@
-// httpService.ts
+// http-service.ts
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import axios from 'axios';
 
@@ -13,6 +13,19 @@ interface ApiError {
   message: string;
   status: number;
   data?: unknown;
+}
+
+// Custom error class to replace 'as any'
+class CustomApiError extends Error {
+  status: number;
+  data?: unknown;
+
+  constructor(message: string, status: number, data?: unknown) {
+    super(message);
+    this.name = 'CustomApiError';
+    this.status = status;
+    this.data = data;
+  }
 }
 
 class HttpService {
@@ -75,18 +88,12 @@ class HttpService {
         }
 
         const apiError: ApiError = {
-          message:
-            error.response?.data?.message ||
-            error.message ||
-            'An error occurred',
+          message: error.response?.data?.message || error.message || 'An error occurred',
           status: error.response?.status || 0,
           data: error.response?.data,
         };
 
-        const wrappedError = new Error(apiError.message);
-
-        (wrappedError as any).status = apiError.status;
-        (wrappedError as any).data = apiError.data;
+        const wrappedError = new CustomApiError(apiError.message, apiError.status, apiError.data);
 
         return Promise.reject(wrappedError);
       }
@@ -100,40 +107,25 @@ class HttpService {
   }
 
   // POST request
-  async post<T = unknown>(
-    url: string,
-    data?: unknown,
-    config?: AxiosRequestConfig
-  ): Promise<T> {
+  async post<T = unknown>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<T> {
     const response = await this.api.post<T>(url, data, config);
     return response.data;
   }
 
   // PUT request
-  async put<T = unknown>(
-    url: string,
-    data?: unknown,
-    config?: AxiosRequestConfig
-  ): Promise<T> {
+  async put<T = unknown>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<T> {
     const response = await this.api.put<T>(url, data, config);
     return response.data;
   }
 
   // PATCH request
-  async patch<T = unknown>(
-    url: string,
-    data?: unknown,
-    config?: AxiosRequestConfig
-  ): Promise<T> {
+  async patch<T = unknown>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<T> {
     const response = await this.api.patch<T>(url, data, config);
     return response.data;
   }
 
   // DELETE request
-  async delete<T = unknown>(
-    url: string,
-    config?: AxiosRequestConfig
-  ): Promise<T> {
+  async delete<T = unknown>(url: string, config?: AxiosRequestConfig): Promise<T> {
     const response = await this.api.delete<T>(url, config);
     return response.data;
   }
@@ -153,9 +145,7 @@ class HttpService {
       },
       onUploadProgress: progressEvent => {
         if (onUploadProgress && progressEvent.total) {
-          const progress = Math.round(
-            (progressEvent.loaded * 100) / progressEvent.total
-          );
+          const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
           onUploadProgress(progress);
         }
       },

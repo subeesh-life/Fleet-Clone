@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import AssetAssociation from './AssetAssociation.vue'
-import AddVehicle from './AddVehicle.vue'
+import AssetAssociation from './AssetAssociation.vue';
+import AddVehicle from './AddVehicle.vue';
 </script>
 <template>
   <AssetAssociation />

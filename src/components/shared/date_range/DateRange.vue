@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed } from 'vue';
 
 const dateRange = ref({
   from: new Date().toISOString().split('T')[0],
   to: new Date().toISOString().split('T')[0],
-})
+});
 
-const showDate = ref(false)
+const showDate = ref(false);
 
 const formattedDate = computed(() => {
   const fromDate = dateRange.value.from
@@ -15,16 +15,16 @@ const formattedDate = computed(() => {
         day: 'numeric',
         year: 'numeric',
       })
-    : ''
+    : '';
   const toDate = dateRange.value.to
     ? new Date(dateRange.value.to).toLocaleDateString('en-US', {
         month: 'short',
         day: 'numeric',
         year: 'numeric',
       })
-    : ''
-  return `${fromDate} - ${toDate}`
-})
+    : '';
+  return `${fromDate} - ${toDate}`;
+});
 </script>
 <template>
   <div

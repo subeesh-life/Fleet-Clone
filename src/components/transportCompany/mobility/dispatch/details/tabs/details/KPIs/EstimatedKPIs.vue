@@ -1,5 +1,4 @@
-<script setup lang="ts">
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <div class="row q-col-gutter-md">
@@ -27,7 +26,7 @@
         </q-card-section>
       </q-card>
     </div>
-     <div class="col-md-4 col-sm-6 col-xs-12">
+    <div class="col-md-4 col-sm-6 col-xs-12">
       <q-card bordered flat class="bg-white">
         <q-card-section class="q-gutter-y-xs">
           <div class="text-caption text-grey-9">Trip Cost</div>
@@ -51,8 +50,5 @@
         </q-card-section>
       </q-card>
     </div>
-
-
-
   </div>
 </template>

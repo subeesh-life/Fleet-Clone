@@ -25,7 +25,7 @@ defineProps({
     required: false,
     default: true,
   },
-})
+});
 </script>
 
 <template>
@@ -33,7 +33,12 @@ defineProps({
     <div class="row flex items-center justify-center q-px-sm">
       <div>
         <div v-if="iconVisibility" class="flex items-start">
-          <IconifyIcon :icon="iconName" width="16px" height="16px" class="q-mr-xs" />
+          <IconifyIcon
+            :icon="iconName"
+            width="16px"
+            height="16px"
+            class="q-mr-xs"
+          />
         </div>
       </div>
       <div>

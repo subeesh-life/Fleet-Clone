@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref } from 'vue';
 
 const notificationChartOptions = ref({
   chart: {
@@ -10,7 +10,16 @@ const notificationChartOptions = ref({
     },
   },
   xaxis: {
-    categories: ['00:00', '03:00', '06:00', '09:00', '12:00', '15:00', '18:00', '21:00'],
+    categories: [
+      '00:00',
+      '03:00',
+      '06:00',
+      '09:00',
+      '12:00',
+      '15:00',
+      '18:00',
+      '21:00',
+    ],
     title: {
       text: 'Time of Day',
     },
@@ -21,7 +30,15 @@ const notificationChartOptions = ref({
     },
   },
   // Colors for different categories
-  colors: ['#FFE082', '#FFCC80', '#FFAB91', '#A5D6A7', '#90CAF9', '#CE93D8', '#B0BEC5'],
+  colors: [
+    '#FFE082',
+    '#FFCC80',
+    '#FFAB91',
+    '#A5D6A7',
+    '#90CAF9',
+    '#CE93D8',
+    '#B0BEC5',
+  ],
   legend: {
     position: 'right',
     offsetY: 40,
@@ -37,11 +54,11 @@ const notificationChartOptions = ref({
     intersect: false,
     y: {
       formatter: function (val: number) {
-        return val + ' notifications'
+        return val + ' notifications';
       },
     },
   },
-})
+});
 
 // Restructured notification data by categories
 const notificationSeries = ref([
@@ -73,7 +90,7 @@ const notificationSeries = ref([
     name: 'Others',
     data: [1, 0, 2, 0, 2, 0, 0, 1],
   },
-])
+]);
 </script>
 
 <template>

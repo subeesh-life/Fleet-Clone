@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref } from 'vue';
 // Add state for utilization view type
-const utilizationViewType = ref('vehicle')
+const utilizationViewType = ref('vehicle');
 
 // Updated chart options for utilization
 const utilizationChartOptions = ref({
@@ -16,7 +16,16 @@ const utilizationChartOptions = ref({
     width: 3,
   },
   xaxis: {
-    categories: ['00:00', '03:00', '06:00', '09:00', '12:00', '15:00', '18:00', '21:00'],
+    categories: [
+      '00:00',
+      '03:00',
+      '06:00',
+      '09:00',
+      '12:00',
+      '15:00',
+      '18:00',
+      '21:00',
+    ],
     title: {
       text: 'Time of Day',
     },
@@ -31,7 +40,7 @@ const utilizationChartOptions = ref({
   tooltip: {
     y: {
       formatter: function (val: number) {
-        return val.toFixed(1) + '%'
+        return val.toFixed(1) + '%';
       },
     },
   },
@@ -40,7 +49,7 @@ const utilizationChartOptions = ref({
     position: 'top',
     horizontalAlign: 'left',
   },
-})
+});
 
 // Sample utilization data
 const utilizationSeries = ref([
@@ -56,7 +65,7 @@ const utilizationSeries = ref([
     name: 'Internal',
     data: [25, 32, 28, 45, 65, 52, 45, 40],
   },
-])
+]);
 </script>
 <template>
   <div class="col-md-6 col-xs-12">

@@ -1,40 +1,50 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref } from 'vue';
 
-const activeTab = ref('standard')
-const tripMode = ref('oneway')
-const subscribedServiceDrawer = ref(false)
-const searchSubscribedService = ref('')
-const showSubscribedService = ref(false)
-const tempSubscribedServiceType = ref('')
-const confirmedSubscribedServiceType = ref('')
+const activeTab = ref('standard');
+const tripMode = ref('oneway');
+const subscribedServiceDrawer = ref(false);
+const searchSubscribedService = ref('');
+const showSubscribedService = ref(false);
+const tempSubscribedServiceType = ref('');
+const confirmedSubscribedServiceType = ref('');
 
 const handleApply = () => {
-  confirmedSubscribedServiceType.value = tempSubscribedServiceType.value
-  showSubscribedService.value = true
-  subscribedServiceDrawer.value = false
-}
+  confirmedSubscribedServiceType.value = tempSubscribedServiceType.value;
+  showSubscribedService.value = true;
+  subscribedServiceDrawer.value = false;
+};
 
-const eventTypeDrawer = ref(false)
-const searchEventType = ref('')
-const eventUsage = ref('')
-const showEventType = ref(false)
-const tempEventType = ref('')
-const confirmedEventType = ref('')
+const eventTypeDrawer = ref(false);
+const searchEventType = ref('');
+const eventUsage = ref('');
+const showEventType = ref(false);
+const tempEventType = ref('');
+const confirmedEventType = ref('');
 const handleApplyEventType = () => {
-  confirmedEventType.value = tempEventType.value
-  showEventType.value = true
-  eventTypeDrawer.value = false
-}
+  confirmedEventType.value = tempEventType.value;
+  showEventType.value = true;
+  eventTypeDrawer.value = false;
+};
 </script>
 
 <template>
   <div class="bg-white">
     <q-card flat bordered>
-      <q-card-section class="q-py-sm" style="background-color: var(--fleet-color-gray-true-200)">
+      <q-card-section
+        class="q-py-sm"
+        style="background-color: var(--fleet-color-gray-true-200)"
+      >
         <div class="row items-center">
-          <iconify-icon icon="hugeicons:route-02" width="24px" height="24px" class="text-grey-7" />
-          <div class="text-subtitle1 text-grey-9 text-weight-medium q-ml-xs">Event Association</div>
+          <iconify-icon
+            icon="hugeicons:route-02"
+            width="24px"
+            height="24px"
+            class="text-grey-7"
+          />
+          <div class="text-subtitle1 text-grey-9 text-weight-medium q-ml-xs">
+            Event Association
+          </div>
         </div>
       </q-card-section>
       <q-card-section class="q-py-sm">
@@ -58,7 +68,9 @@ const handleApplyEventType = () => {
                 @click="subscribedServiceDrawer = true"
               >
                 <q-tooltip>{{
-                  confirmedSubscribedServiceType ? 'Change Service' : 'Add Service'
+                  confirmedSubscribedServiceType
+                    ? 'Change Service'
+                    : 'Add Service'
                 }}</q-tooltip>
                 <iconify-icon
                   :icon="
@@ -84,7 +96,10 @@ const handleApplyEventType = () => {
           <div class="col-6 flex justify-end">
             <div class="text-subtitle2 text-grey-7">
               <div class="flex items-center">
-                <div v-if="showEventType && confirmedEventType" class="text-subtitle2 text-grey-7">
+                <div
+                  v-if="showEventType && confirmedEventType"
+                  class="text-subtitle2 text-grey-7"
+                >
                   {{ confirmedEventType }}
                 </div>
                 <q-btn
@@ -100,16 +115,16 @@ const handleApplyEventType = () => {
                       ? 'Add Event Type'
                       : 'Select a Subscribed Service first'
                   }}</q-tooltip>
-                 <iconify-icon
-                  :icon="
-                    confirmedEventType
-                      ? 'hugeicons:reload'
-                      : 'hugeicons:add-circle-half-dot'
-                  "
-                  width="24px"
-                  height="24px"
-                  class="text-secondary"
-                />
+                  <iconify-icon
+                    :icon="
+                      confirmedEventType
+                        ? 'hugeicons:reload'
+                        : 'hugeicons:add-circle-half-dot'
+                    "
+                    width="24px"
+                    height="24px"
+                    class="text-secondary"
+                  />
                 </q-btn>
               </div>
             </div>
@@ -186,7 +201,9 @@ const handleApplyEventType = () => {
                   val="roundTrip"
                   label="Round Trip"
                 >
-                  <q-tooltip self="top start"> Currently unavailable </q-tooltip>
+                  <q-tooltip self="top start">
+                    Currently unavailable
+                  </q-tooltip>
                 </q-radio>
               </div>
             </div>
@@ -208,7 +225,9 @@ const handleApplyEventType = () => {
         <div class="row items-start justify-between">
           <div>
             <div class="text-h6 text-weight-bold">Subscribed Service</div>
-            <div class="text-caption text-grey-7">Select the service applicable to this event</div>
+            <div class="text-caption text-grey-7">
+              Select the service applicable to this event
+            </div>
           </div>
           <div class="row items-center q-gutter-x-md">
             <q-btn color="primary" label="Apply" @click="handleApply" />
@@ -274,7 +293,12 @@ const handleApplyEventType = () => {
           <template v-slot:top>
             <div class="row items-center full-width">
               <div class="col">
-                <q-input v-model="searchSubscribedService" dense outlined placeholder="Search">
+                <q-input
+                  v-model="searchSubscribedService"
+                  dense
+                  outlined
+                  placeholder="Search"
+                >
                   <template v-slot:prepend>
                     <q-icon name="search" />
                   </template>
@@ -316,7 +340,11 @@ const handleApplyEventType = () => {
             </div>
           </div>
           <div class="row items-center q-gutter-x-md">
-            <q-btn color="primary" label="Apply" @click="handleApplyEventType" />
+            <q-btn
+              color="primary"
+              label="Apply"
+              @click="handleApplyEventType"
+            />
             <q-btn
               flat
               round
@@ -337,12 +365,32 @@ const handleApplyEventType = () => {
           outline
           bordered
           :rows="[
-            { event: 'Home to School', subtext: 'Business', type: 'With Revenue' },
-            { event: 'School to Home', subtext: 'Business', type: 'With Revenue' },
-            { event: 'School to School', subtext: 'Business', type: 'With Revenue' },
+            {
+              event: 'Home to School',
+              subtext: 'Business',
+              type: 'With Revenue',
+            },
+            {
+              event: 'School to Home',
+              subtext: 'Business',
+              type: 'With Revenue',
+            },
+            {
+              event: 'School to School',
+              subtext: 'Business',
+              type: 'With Revenue',
+            },
             { event: 'Field Trip', subtext: 'Business', type: 'With Revenue' },
-            { event: 'Excursion', subtext: 'Internal', type: 'Without Revenue' },
-            { event: 'City Tour', subtext: 'Internal', type: 'Without Revenue' },
+            {
+              event: 'Excursion',
+              subtext: 'Internal',
+              type: 'Without Revenue',
+            },
+            {
+              event: 'City Tour',
+              subtext: 'Internal',
+              type: 'Without Revenue',
+            },
           ]"
           :columns="[
             {
@@ -386,7 +434,12 @@ const handleApplyEventType = () => {
                 />
               </div>
               <div class="col-6">
-                <q-input v-model="searchEventType" dense outlined placeholder="Search">
+                <q-input
+                  v-model="searchEventType"
+                  dense
+                  outlined
+                  placeholder="Search"
+                >
                   <template v-slot:prepend>
                     <q-icon name="search" />
                   </template>
@@ -398,7 +451,12 @@ const handleApplyEventType = () => {
 
           <template v-slot:body-cell-select="props">
             <q-td>
-              <q-radio v-model="tempEventType" :val="props.row.event" dense class="no-outline" />
+              <q-radio
+                v-model="tempEventType"
+                :val="props.row.event"
+                dense
+                class="no-outline"
+              />
             </q-td>
           </template>
 

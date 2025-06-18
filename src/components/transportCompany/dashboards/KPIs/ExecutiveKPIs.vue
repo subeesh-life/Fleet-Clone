@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import FleetChips from 'src/components/shared/chips/FleetChips.vue'
+import FleetChips from 'src/components/shared/chips/FleetChips.vue';
 
 // Remove the local ref and define prop instead
 defineProps<{
-  showAllCards: boolean
-}>()
+  showAllCards: boolean;
+}>();
 </script>
 
 <template>

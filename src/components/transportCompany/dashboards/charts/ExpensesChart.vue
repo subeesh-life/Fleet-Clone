@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref } from 'vue';
 
 // Sample data for today's expenses
 const chartOptions = ref({
@@ -25,7 +25,15 @@ const chartOptions = ref({
     colors: ['transparent'],
   },
   xaxis: {
-    categories: ['Fuel', 'Maintenance', 'Insurance', 'Parking', 'Tolls', 'Cleaning', 'Other'],
+    categories: [
+      'Fuel',
+      'Maintenance',
+      'Insurance',
+      'Parking',
+      'Tolls',
+      'Cleaning',
+      'Other',
+    ],
   },
   yaxis: {
     title: {
@@ -38,7 +46,7 @@ const chartOptions = ref({
   tooltip: {
     y: {
       formatter: function (val: number) {
-        return 'AED ' + val.toFixed(2)
+        return 'AED ' + val.toFixed(2);
       },
     },
   },
@@ -50,7 +58,7 @@ const chartOptions = ref({
       shape: 'circle',
     },
   },
-})
+});
 
 const series = ref([
   {
@@ -61,7 +69,7 @@ const series = ref([
     name: 'Unauthorized',
     data: [0, 0, 0, 0, 50.0, 0, 100.0],
   },
-])
+]);
 </script>
 
 <template>
@@ -70,7 +78,12 @@ const series = ref([
       <div class="text-h6 text-grey-9">Today's Expenses</div>
     </q-card-section>
     <q-card-section>
-      <apex-chart type="bar" height="350" :options="chartOptions" :series="series" />
+      <apex-chart
+        type="bar"
+        height="350"
+        :options="chartOptions"
+        :series="series"
+      />
     </q-card-section>
   </q-card>
 </template>

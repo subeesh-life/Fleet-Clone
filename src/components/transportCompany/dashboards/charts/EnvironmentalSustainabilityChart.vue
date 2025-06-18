@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref } from 'vue';
 // Update default value to 'fuel'
-const utilizationViewType = ref('fuel')
+const utilizationViewType = ref('fuel');
 
 // Updated chart options for utilization
 const utilizationChartOptions = ref({
@@ -17,7 +17,16 @@ const utilizationChartOptions = ref({
     width: 2,
   },
   xaxis: {
-    categories: ['00:00', '03:00', '06:00', '09:00', '12:00', '15:00', '18:00', '21:00'],
+    categories: [
+      '00:00',
+      '03:00',
+      '06:00',
+      '09:00',
+      '12:00',
+      '15:00',
+      '18:00',
+      '21:00',
+    ],
     title: {
       text: 'Time of Day',
     },
@@ -38,7 +47,7 @@ const utilizationChartOptions = ref({
     },
     y: {
       formatter: function (val: number) {
-        return val.toFixed(1) + 'L'
+        return val.toFixed(1) + 'L';
       },
     },
   },
@@ -47,7 +56,7 @@ const utilizationChartOptions = ref({
     position: 'top',
     horizontalAlign: 'left',
   },
-})
+});
 
 // Updated series data to match time categories
 const utilizationSeries = ref([
@@ -59,7 +68,7 @@ const utilizationSeries = ref([
     name: 'Unauthorized',
     data: [5, 8, 15, 22, 25, 20, 15, 10],
   },
-])
+]);
 </script>
 <template>
   <div class="col-md-6 col-xs-12">

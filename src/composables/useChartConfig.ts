@@ -18,14 +18,14 @@ export const useChartConfig = () => {
       horizontalAlign: 'left',
     },
     colors: ['#4CAF50', '#FFC107', '#2196f3'],
-  })
+  });
 
   const createLineChartOptions = (
     xAxisTitle: string,
     yAxisTitle: string,
     yAxisMin = 0,
     yAxisMax = 100,
-    formatter?: (val: number) => string,
+    formatter?: (val: number) => string
   ) => ({
     ...getBaseChartOptions(),
     chart: {
@@ -51,10 +51,10 @@ export const useChartConfig = () => {
         formatter: formatter || ((val: number) => val.toString()),
       },
     },
-  })
+  });
 
   return {
     getBaseChartOptions,
     createLineChartOptions,
-  }
-}
+  };
+};
