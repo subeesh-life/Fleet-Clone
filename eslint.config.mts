@@ -54,9 +54,7 @@ export default [
         'error',
         { prefer: 'type-imports' }
       ],
-      /* 'vue/max-attributes-per-line': ['warn', {
-        singleline: 4,
-      }], */
+      '@typescript-eslint/no-explicit-any': 'warn',
     },
     // features: {
     //   stylistic: {
