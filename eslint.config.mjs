@@ -3,7 +3,7 @@ import globals from 'globals'
 import pluginVue from 'eslint-plugin-vue'
 import pluginQuasar from '@quasar/app-vite/eslint'
 import vueTsEslintConfig from '@vue/eslint-config-typescript'
-import prettierSkipFormatting from '@vue/eslint-config-prettier/skip-formatting'
+// import prettierSkipFormatting from '@vue/eslint-config-prettier/skip-formatting'
 
 export default [
   {
@@ -35,36 +35,6 @@ export default [
    */
   ...pluginVue.configs[ 'flat/essential' ],
 
-  {
-    files: ['**/*.ts', '**/*.vue'],
-    rules: {
-      'indent': ['error', 2],
-      'quotes': ['error', 'single'],
-      'semi': ['error', 'always'],
-      'brace-style': ['error', '1tbs'],
-
-      // Your custom Vue rule
-      'vue/max-attributes-per-line': ['warn', {
-        singleline: 4,
-      }],
-
-      // Quasar-specific adjustments
-      'vue/multi-word-component-names': 'off',
-      '@typescript-eslint/consistent-type-imports': [
-        'error',
-        { prefer: 'type-imports' }
-      ],
-      '@typescript-eslint/no-explicit-any': 'warn',
-    },
-    // features: {
-    //   stylistic: {
-    //     semi: true,
-    //     indent: 2,
-    //     quotes: 'single',
-    //     braceStyle: '1tbs',
-    //   },
-    // }
-  },
   // https://github.com/vuejs/eslint-config-typescript
   ...vueTsEslintConfig({
     // Optional: extend additional configurations from typescript-eslint'.
@@ -118,5 +88,36 @@ export default [
     }
   },
 
-  prettierSkipFormatting
+  {
+    files: ['**/*.ts', '**/*.vue'],
+    rules: {
+      'indent': ['error', 2],
+      'quotes': ['error', 'single'],
+      'semi': ['error', 'always'],
+      'brace-style': ['error', '1tbs'],
+
+      // Your custom Vue rule
+      'vue/max-attributes-per-line': ['warn', {
+        singleline: 4,
+      }],
+
+      // Quasar-specific adjustments
+      'vue/multi-word-component-names': 'off',
+      '@typescript-eslint/consistent-type-imports': [
+        'error',
+        { prefer: 'type-imports' }
+      ],
+      '@typescript-eslint/no-explicit-any': 'warn',
+    },
+    // features: {
+    //   stylistic: {
+    //     semi: true,
+    //     indent: 2,
+    //     quotes: 'single',
+    //     braceStyle: '1tbs',
+    //   },
+    // }
+  },
+
+  // prettierSkipFormatting,
 ]

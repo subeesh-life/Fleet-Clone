@@ -33,7 +33,7 @@ class HttpService {
   private setupInterceptors(): void {
     // Request interceptor
     this.api.interceptors.request.use(
-      (config) => {
+      config => {
         // Add auth token if available
         const token = localStorage.getItem('token');
         if (token) {
@@ -47,7 +47,7 @@ class HttpService {
 
         return config;
       },
-      (error) => {
+      error => {
         return Promise.reject(new Error(error.message || 'Request error'));
       }
     );
@@ -61,7 +61,7 @@ class HttpService {
         }
         return response;
       },
-      (error) => {
+      error => {
         // Handle common errors
         if (error.response?.status === 401) {
           // Unauthorized - redirect to login or refresh token
@@ -75,7 +75,10 @@ class HttpService {
         }
 
         const apiError: ApiError = {
-          message: error.response?.data?.message || error.message || 'An error occurred',
+          message:
+            error.response?.data?.message ||
+            error.message ||
+            'An error occurred',
           status: error.response?.status || 0,
           data: error.response?.data,
         };
@@ -97,31 +100,50 @@ class HttpService {
   }
 
   // POST request
-  async post<T = unknown>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<T> {
+  async post<T = unknown>(
+    url: string,
+    data?: unknown,
+    config?: AxiosRequestConfig
+  ): Promise<T> {
     const response = await this.api.post<T>(url, data, config);
     return response.data;
   }
 
   // PUT request
-  async put<T = unknown>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<T> {
+  async put<T = unknown>(
+    url: string,
+    data?: unknown,
+    config?: AxiosRequestConfig
+  ): Promise<T> {
     const response = await this.api.put<T>(url, data, config);
     return response.data;
   }
 
   // PATCH request
-  async patch<T = unknown>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<T> {
+  async patch<T = unknown>(
+    url: string,
+    data?: unknown,
+    config?: AxiosRequestConfig
+  ): Promise<T> {
     const response = await this.api.patch<T>(url, data, config);
     return response.data;
   }
 
   // DELETE request
-  async delete<T = unknown>(url: string, config?: AxiosRequestConfig): Promise<T> {
+  async delete<T = unknown>(
+    url: string,
+    config?: AxiosRequestConfig
+  ): Promise<T> {
     const response = await this.api.delete<T>(url, config);
     return response.data;
   }
 
   // Upload file
-  async uploadFile<T = unknown>(url: string, file: File, onUploadProgress?: (progress: number) => void): Promise<T> {
+  async uploadFile<T = unknown>(
+    url: string,
+    file: File,
+    onUploadProgress?: (progress: number) => void
+  ): Promise<T> {
     const formData = new FormData();
     formData.append('file', file);
 
@@ -129,9 +151,11 @@ class HttpService {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
-      onUploadProgress: (progressEvent) => {
+      onUploadProgress: progressEvent => {
         if (onUploadProgress && progressEvent.total) {
-          const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+          const progress = Math.round(
+            (progressEvent.loaded * 100) / progressEvent.total
+          );
           onUploadProgress(progress);
         }
       },
