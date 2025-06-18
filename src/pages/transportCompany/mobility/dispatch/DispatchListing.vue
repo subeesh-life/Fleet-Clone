@@ -1029,12 +1029,14 @@ const clearSearchFilters = () => {
                       </div>
                     </td>
                     <td>
-                      <q-btn flat round  @click="activeMoreMenu = event.uniqueId">
+                      <q-btn flat round @click="activeMoreMenu = event.uniqueId">
                         <IconifyIcon icon="hugeicons:more-vertical-circle-01" width="24px" height="24px"
                           class="text-grey-7" />
                       </q-btn>
-                      <q-menu :model-value="activeMoreMenu === event.uniqueId" @update:model-value="val => activeMoreMenu = val ? event.uniqueId : null" transition-show="jump-down" transition-hide="jump-up" anchor="center right"
-                        self="top left" :offset="[-15, 0]" class="animated-menu">
+                      <q-menu :model-value="activeMoreMenu === event.uniqueId"
+                        @update:model-value="val => activeMoreMenu = val ? event.uniqueId : null"
+                        transition-show="jump-down" transition-hide="jump-up" anchor="center right" self="top left"
+                        :offset="[-15, 0]" class="animated-menu">
                         <q-list style="min-width: 300px" padding>
                           <q-item clickable v-ripple :to="{ name: 'dispatch-details' }">
                             <q-item-section avatar>
@@ -1080,7 +1082,8 @@ const clearSearchFilters = () => {
 
                           <q-item clickable v-ripple class="text-negative">
                             <q-item-section avatar>
-                              <IconifyIcon icon="hugeicons:delete-02" width="24px" height="24px" class="text-negative" />
+                              <IconifyIcon icon="hugeicons:delete-02" width="24px" height="24px"
+                                class="text-negative" />
                             </q-item-section>
                             <q-item-section>
                               <q-item-label>Delete Event</q-item-label>
@@ -1311,7 +1314,7 @@ const clearSearchFilters = () => {
     <!-- Model - Filter Drawer-->
     <q-dialog persistent backdrop-filter="blur(2px)" v-model="dispatchFilterDrawer" position="right"
       :full-height="true">
-      <q-card  class="column">
+      <q-card class="column">
         <q-card-section class="q-pb-none">
           <div class="row items-start justify-between">
             <div>
@@ -1337,8 +1340,8 @@ const clearSearchFilters = () => {
               <div class="text-subtitle1 text-weight-medium">Organization</div>
               <div class="q-mt-sm q-gutter-y-xs">
                 <div class="text-subtitle2 text-grey-7">Select Organization</div>
-                <q-select dense outlined multiple use-chips v-model="organization"
-                  :options="organizationOptions" placeholder="Select Organization" />
+                <q-select dense outlined multiple use-chips v-model="organization" :options="organizationOptions"
+                  placeholder="Select Organization" />
               </div>
             </div>
             <div class="col-12">
@@ -1350,23 +1353,23 @@ const clearSearchFilters = () => {
               </div>
               <div class="q-mt-sm q-gutter-y-xs">
                 <div class="text-subtitle2 text-grey-7">Asset Category</div>
-                <q-select dense outlined multiple use-chips v-model="assetCategory"
-                  :options="assetCategoryOptions" placeholder="Select Asset Category" />
+                <q-select dense outlined multiple use-chips v-model="assetCategory" :options="assetCategoryOptions"
+                  placeholder="Select Asset Category" />
               </div>
               <div class="q-mt-sm q-gutter-y-xs">
                 <div class="text-subtitle2 text-grey-7">Asset Type</div>
-                <q-select dense outlined multiple use-chips v-model="assetType"
-                  :options="assetTypeOptions" placeholder="Select Asset Type" />
+                <q-select dense outlined multiple use-chips v-model="assetType" :options="assetTypeOptions"
+                  placeholder="Select Asset Type" />
               </div>
               <div class="q-mt-sm q-gutter-y-xs">
                 <div class="text-subtitle2 text-grey-7">Usage Mode</div>
-                <q-select dense outlined multiple use-chips v-model="usageMode"
-                  :options="usageModeOptions" placeholder="Select Usage Mode" />
+                <q-select dense outlined multiple use-chips v-model="usageMode" :options="usageModeOptions"
+                  placeholder="Select Usage Mode" />
               </div>
               <div class="q-mt-sm q-gutter-y-xs">
                 <div class="text-subtitle2 text-grey-7">Event Type</div>
-                <q-select dense outlined multiple use-chips v-model="eventType"
-                  :options="eventTypeOptions" placeholder="Select Event Type" />
+                <q-select dense outlined multiple use-chips v-model="eventType" :options="eventTypeOptions"
+                  placeholder="Select Event Type" />
               </div>
             </div>
 
