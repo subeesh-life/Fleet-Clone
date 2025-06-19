@@ -1,4 +1,4 @@
-import type { RouteRecordRaw } from 'vue-router'
+import type { RouteRecordRaw } from 'vue-router';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -29,19 +29,24 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'creation',
         name: 'create-event',
-        component: () => import('components/transportCompany/mobility/dispatch/creation/CreateNew.vue'),
+        component: () =>
+          import('components/transportCompany/mobility/dispatch/creation/CreateNew.vue'),
       },
       {
         path: 'mobility-links',
         name: 'mobility-link',
         component: () =>
-          import('components/transportCompany/mobility/dispatch/breadcrumbLinks/MobilitySectionLinks.vue'),
+          import(
+            'components/transportCompany/mobility/dispatch/breadcrumbLinks/MobilitySectionLinks.vue'
+          ),
       },
       {
         path: 'dispatch-links',
         name: 'dispatch-link',
         component: () =>
-          import('components/transportCompany/mobility/dispatch/breadcrumbLinks/DispatchSectionLinks.vue'),
+          import(
+            'components/transportCompany/mobility/dispatch/breadcrumbLinks/DispatchSectionLinks.vue'
+          ),
       },
       {
         path: 'dispatch-details',
@@ -63,6 +68,6 @@ const routes: RouteRecordRaw[] = [
     path: '/:catchAll(.*)*',
     component: () => import('pages/ErrorNotFound.vue'),
   },
-]
+];
 
-export default routes
+export default routes;
