@@ -1,84 +1,88 @@
-import js from '@eslint/js';
-import globals from 'globals';
-import pluginVue from 'eslint-plugin-vue';
-import prettierSkipFormatting from '@vue/eslint-config-prettier/skip-formatting';
+import { defineConfig } from '#q-app/wrappers';
+import { fileURLToPath } from 'node:url';
 
-export default [
-  {
-    ingores: [
-      'node_modules/**',
-      'dist/**',
-      '.quasar/**',
-      'src-capacitor/**',
-      'src-cordova/**',
-      'quasar.config.*.temporary.compiled*',
-      'quasar.config.*',
+export default defineConfig(ctx => {
+  return {
+    boot: ['i18n', 'axios', 'iconify', 'apex', 'leaflet'],
+
+    css: ['app.scss'],
+
+    extras: [
+      'roboto-font', // optional, you are not bound to it
+      'material-icons', // optional, you are not bound to it
     ],
-  },
 
-  js.configs.recommended,
+    build: {
+      target: {
+        browser: ['es2022', 'firefox115', 'chrome115', 'safari14'],
+        node: 'node20',
+      },
 
-  ...pluginVue.configs['flat/essential'],
+      typescript: {
+        strict: true,
+        vueShim: true,
+      },
 
-  {
-    languageOptions: {
-      ecmaVersion: 'latest',
-      sourceType: 'module',
-      globals: {
-        ...globals.browser,
-        ...globals.node, // SSR, Electron, config files
-        process: 'readonly', // process.env.*
-        ga: 'readonly', // Google Analytics
-        cordova: 'readonly',
-        Capacitor: 'readonly',
-        chrome: 'readonly', // BEX related
-        browser: 'readonly', // BEX related
+      vueRouterMode: 'hash',
+
+      vitePlugins: [
+        [
+          '@intlify/unplugin-vue-i18n/vite',
+          {
+            ssr: ctx.modeName === 'ssr',
+
+            include: [fileURLToPath(new URL('./src/i18n', import.meta.url))],
+          },
+        ],
+
+        [
+          'vite-plugin-checker',
+          {
+            vueTsc: true,
+            eslint: {
+              lintCommand:
+                'eslint -c ./eslint.config.js "./src*/**/*.{ts,js,mjs,cjs,vue}"',
+              useFlatConfig: true,
+            },
+          },
+          { server: false },
+        ],
+      ],
+
+      devServer: {
+        proxy: {
+          '/api': {
+            target: 'https://saas-dev.wiotschool.com/',
+            changeOrigin: true,
+            secure: false,
+          },
+        },
       },
     },
-    // add your custom rules here
-    rules: {
-      'prefer-promise-reject-errors': 'off',
-      // allow debugger during development only
-      'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    },
-  },
 
-  {
-    files: ['src-pwa/custom-service-worker.ts'],
-    languageOptions: {
-      globals: {
-        ...globals.serviceworker,
-      },
+    framework: {
+      config: {},
+      plugins: ['Notify'],
     },
-  },
-  {
-    files: ['**/*.ts', '**/*.vue'],
-    rules: {
-      'vue/max-attributes-per-line': [
-        'warn',
-        {
-          singleline: 4,
-        },
-      ],
-      'vue/multi-word-component-names': 'off',
-      '@typescript-eslint/consistent-type-imports': [
-        'error',
-        { prefer: 'type-imports' },
-      ],
-      '@typescript-eslint/no-explicit-any': 'warn',
-      '@typescript-eslint/no-unused-vars': [
-        'error',
-        {
-          argsIgnorePattern: '^_',
-          varsIgnorePattern: '^_',
-        },
-      ],
-      'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-      'no-undef': 'error',
-      'no-duplicate-imports': 'error',
-    },
-  },
 
-  // This disables ESLint formatting rules that conflict with Prettier
-  prettierSkipFormatting,
-];
+    animations: [],
+
+    ssr: {
+      prodPort: 3000, // The default port that the production server should use
+
+      middlewares: [
+        'render', // keep this as last one
+      ],
+
+      pwa: false,
+    },
+
+    pwa: {
+      workboxMode: 'GenerateSW', // 'GenerateSW' or 'InjectManifest'
+    },
+
+    capacitor: {
+      hideSplashscreen: true,
+    },
+  };
+});
