@@ -4,18 +4,46 @@ import type { Ref, ComputedRef } from 'vue';
 // Types
 interface TokenPayload {
   uuid: string;
-  email: string;
-  first_name: string;
-  last_name: string;
-  user_id: number;
-  user_uuid: string;
+  iss: string;
+  aud: string;
+  branch: number;
+  user_relation_uuid: string;
+  station: number;
   portal: string;
   portal_id: number;
   portal_uuid: string;
+  user_id: number;
+  key: string;
   user_type: string;
+  email: string;
+  base_user_uuid: string;
+  services: string;
+  first_name: string;
+  last_name: string;
+  address: string;
+  country: string;
+  phone: string[];
+  is_owner: boolean;
+  portal_timezone: string | null;
+  portal_country: string | null;
   timezone: string;
-  exp: number;
+  image: string;
+  actual_departments: string[];
+  user_uuid: string;
+  tpc_portal_id: number;
+  admin_portal_id: number | null;
+  admin_type: string | null;
+  superadmin_portal_id: number | null;
+  superadmin_type: string | null;
+  root_department: string;
+  admin_department: string | null;
+  gender: number;
+  position_name: string;
+  client: string;
+  ip: string;
+  agent: string;
   iat: number;
+  exp: number;
   [key: string]: any;
 }
 
@@ -130,7 +158,7 @@ const clearStorage = () => {
 };
 
 // Main functions
-const login = (response: AuthResponse) => {
+const setAuthorization = (response: AuthResponse) => {
   accessToken.value = response.access_token;
   refreshToken.value = response.refresh_token;
   user.value = parseJwt(response.access_token);
@@ -207,7 +235,7 @@ export const useAuth = () => {
     isTokenExpired: readonly(isTokenExpired) as ComputedRef<boolean>,
 
     // Methods
-    login,
+    setAuthorization,
     logout,
     updateTokens,
     hasPermission,

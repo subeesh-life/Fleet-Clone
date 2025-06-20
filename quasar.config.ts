@@ -3,7 +3,7 @@ import { fileURLToPath } from 'node:url';
 
 export default defineConfig(ctx => {
   return {
-    boot: ['i18n', 'axios', 'iconify', 'apex', 'leaflet'],
+    boot: ['i18n', 'iconify', 'apex', 'leaflet'],
 
     css: ['app.scss'],
 

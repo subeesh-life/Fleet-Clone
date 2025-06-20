@@ -55,8 +55,8 @@
                 </div>
               </div>
               <q-btn
-                type="submit"
                 glossy
+                type="submit"
                 size="md"
                 class="full-width"
                 label="Sign In"
@@ -109,6 +109,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { httpService } from 'src/helpers/httpService';
+import { useAuth } from 'src/composables/useAuth';
+
+const { setAuthorization } = useAuth();
 
 const email = ref('');
 const password = ref('');
@@ -117,18 +120,21 @@ const isPwdVisible = ref(false);
 const slide = ref(1);
 const loading = ref(false);
 
+const authenticate = () =>
+  httpService.post<any>('auth/external/sign-in', {
+    email: email.value,
+    password: password.value,
+    client: 'PORTAL',
+    portal: 'tpc',
+    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+  });
+
 const handleSubmit = async () => {
   loading.value = true;
   try {
-    const { data } = await httpService.post<any>('auth/external/sign-in', {
-      email: email.value,
-      password: password.value,
-      client: 'PORTAL',
-      portal: 'tpc',
-      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-    });
+    const response = await authenticate();
 
-    console.log({ data });
+    setAuthorization(response);
   } catch (error) {
     console.error('Login failed:', error);
   } finally {

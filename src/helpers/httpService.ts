@@ -52,11 +52,6 @@ class HttpService {
           config.headers.Authorization = `Bearer ${token}`;
         }
 
-        // Log request in development
-        if (import.meta.env.DEV) {
-          console.log('API Request:', config);
-        }
-
         return config;
       },
       error => {
@@ -67,10 +62,6 @@ class HttpService {
     // Response interceptor
     this.api.interceptors.response.use(
       (response: AxiosResponse) => {
-        // Log response in development
-        if (import.meta.env.DEV) {
-          console.log('API Response:', response);
-        }
         return response;
       },
       error => {
