@@ -3,18 +3,17 @@ import type { RouteRecordRaw } from 'vue-router';
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    component: () => import('layouts/BlankLayout.vue'),
-    children: [{ path: '', component: () => import('pages/IndexPage.vue') }],
+    component: () => import('src/layouts/AuthLayout.vue'),
+    children: [{ path: '', component: () => import('src/modules/IndexPage.vue') }],
   },
   {
     path: '/transport-company',
-    component: () => import('layouts/MainLayout.vue'),
+    component: () => import('src/layouts/MainLayout.vue'),
     children: [
       {
         path: 'executive-dashboard',
         name: 'executive-dashboard',
-        component: () =>
-          import('pages/transportCompany/dashboard/ExecutiveDashboard.vue'),
+        component: () => import('src/modules/transportCompany/dashboard/ExecutiveDashboard.vue'),
       },
     ],
   },
@@ -26,17 +25,13 @@ const routes: RouteRecordRaw[] = [
         path: 'dispatch',
         name: 'dispatch',
         component: () =>
-          import(
-            'pages/transportCompany/mobility/dispatch/DispatchListing.vue'
-          ),
+          import('src/modules/transportCompany/mobility/dispatch/DispatchListing.vue'),
       },
       {
         path: 'creation',
         name: 'create-event',
         component: () =>
-          import(
-            'components/transportCompany/mobility/dispatch/creation/CreateNew.vue'
-          ),
+          import('components/transportCompany/mobility/dispatch/creation/CreateNew.vue'),
       },
       {
         path: 'mobility-links',
@@ -58,23 +53,13 @@ const routes: RouteRecordRaw[] = [
         path: 'dispatch-details',
         name: 'dispatch-details',
         component: () =>
-          import(
-            'components/transportCompany/mobility/dispatch/details/DispatchDetails.vue'
-          ),
+          import('components/transportCompany/mobility/dispatch/details/DispatchDetails.vue'),
       },
-      // {
-      //   path: 'live-map',
-      //   name: 'live-map',
-      //   component: () => import('pages/transportCompany/mobility/live-map/LiveMap.vue'),
-      // },
     ],
   },
-
-  // Always leave this as last one,
-  // but you can also remove it
   {
     path: '/:catchAll(.*)*',
-    component: () => import('pages/ErrorNotFound.vue'),
+    component: () => import('src/modules/ErrorNotFound.vue'),
   },
 ];
 
