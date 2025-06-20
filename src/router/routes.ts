@@ -58,6 +58,17 @@ const routes: RouteRecordRaw[] = [
     ],
   },
   {
+    path: '/admin-regulator',
+    component: () => import('src/layouts/AdminLayout.vue'),
+    children: [
+      {
+        path: 'live-map',
+        name: 'live-map',
+        component: () => import('src/pages/adminRegulator/liveMap/LiveMap.vue'),
+      },
+    ],
+  },
+  {
     path: '/:catchAll(.*)*',
     component: () => import('src/modules/ErrorNotFound.vue'),
   },
