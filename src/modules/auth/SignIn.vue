@@ -5,7 +5,7 @@
         <div></div>
         <div class="full-width q-pt-xl">
           <div class="text-center">
-            <q-img src="../assets/wiot_logo.png" style="width: 80px" class="q-mb-md" />
+            <q-img src="assets/wiot_logo.png" style="width: 80px" class="q-mb-md" />
             <div class="text-h4 text-weight-bold">Admin Portal</div>
             <div class="text-subtitle2 text-grey-7 q-mt-sm">
               Enter your username and password to continue.
@@ -90,11 +90,7 @@
         transition-next="slide-left"
         class="carousel-container"
       >
-        <q-carousel-slide
-          name="1"
-          img-src="../assets/slides/slide_one.png"
-          class="carousel-slide"
-        />
+        <q-carousel-slide name="1" img-src="assets/slides/slide_one.png" class="carousel-slide" />
         <q-carousel-slide
           name="2"
           img-src="https://cdn.quasar.dev/img/parallax2.jpg"

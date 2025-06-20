@@ -64,13 +64,13 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'live-map',
         name: 'live-map',
-        component: () => import('src/pages/adminRegulator/liveMap/LiveMap.vue'),
+        component: () => import('src/modules/adminRegulator/liveMap/LiveMap.vue'),
       },
     ],
   },
   {
     path: '/:catchAll(.*)*',
-    component: () => import('src/modules/ErrorNotFound.vue'),
+    component: () => import('src/modules/auth/ErrorNotFound.vue'),
   },
 ];
 

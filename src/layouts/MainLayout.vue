@@ -4,15 +4,10 @@
     <q-header class="bg-white" style="color: var(--fleet-color-text-primary)">
       <q-toolbar>
         <q-btn flat dense round aria-label="Menu" @click="toggleLeftDrawer">
-          <iconify-icon
-            icon="hugeicons:menu-02"
-            width="24px"
-            height="24px"
-            class="text-grey-9"
-          />
+          <iconify-icon icon="hugeicons:menu-02" width="24px" height="24px" class="text-grey-9" />
         </q-btn>
         <div class="flex items-center q-ml-sm">
-          <q-img src="../assets/logo.svg" style="width: 30px; height: 30px" />
+          <q-img src="assets/logo.svg" style="width: 30px; height: 30px" />
           <q-toolbar-title class="gt-xs"> Sunshine Transports </q-toolbar-title>
         </div>
 
@@ -51,9 +46,7 @@
                     </q-item-section>
                     <q-item-section>
                       <q-item-label>New Event</q-item-label>
-                      <q-item-label caption
-                        >Schedule and manage an upcoming event</q-item-label
-                      >
+                      <q-item-label caption>Schedule and manage an upcoming event</q-item-label>
                     </q-item-section>
                   </q-item>
 
@@ -68,9 +61,7 @@
                     </q-item-section>
                     <q-item-section>
                       <q-item-label>New Client</q-item-label>
-                      <q-item-label caption
-                        >Register a new customer profiles</q-item-label
-                      >
+                      <q-item-label caption>Register a new customer profiles</q-item-label>
                     </q-item-section>
                   </q-item>
 
@@ -85,9 +76,7 @@
                     </q-item-section>
                     <q-item-section>
                       <q-item-label>New Staff</q-item-label>
-                      <q-item-label caption
-                        >Register a team member or employee</q-item-label
-                      >
+                      <q-item-label caption>Register a team member or employee</q-item-label>
                     </q-item-section>
                   </q-item>
 
@@ -102,9 +91,7 @@
                     </q-item-section>
                     <q-item-section>
                       <q-item-label>New Vehicle</q-item-label>
-                      <q-item-label caption
-                        >Add details for a new fleet vehicle</q-item-label
-                      >
+                      <q-item-label caption>Add details for a new fleet vehicle</q-item-label>
                     </q-item-section>
                   </q-item>
 
@@ -120,8 +107,7 @@
                     <q-item-section>
                       <q-item-label>New Driver</q-item-label>
                       <q-item-label caption
-                        >Assign a licensed driver to your
-                        operations</q-item-label
+                        >Assign a licensed driver to your operations</q-item-label
                       >
                     </q-item-section>
                   </q-item>
@@ -137,9 +123,7 @@
                     </q-item-section>
                     <q-item-section>
                       <q-item-label>New Assistant</q-item-label>
-                      <q-item-label caption
-                        >Register a support staff or helper</q-item-label
-                      >
+                      <q-item-label caption>Register a support staff or helper</q-item-label>
                     </q-item-section>
                   </q-item>
                 </q-list>
@@ -170,11 +154,7 @@
           </div>
           <div>
             <q-btn flat round>
-              <q-badge
-                color="red"
-                rounded
-                class="absolute-top-right q-mr-xs q-mt-xs"
-              />
+              <q-badge color="red" rounded class="absolute-top-right q-mr-xs q-mt-xs" />
               <q-tooltip>Notifications</q-tooltip>
               <iconify-icon
                 icon="hugeicons:notification-01"
@@ -190,12 +170,8 @@
           <div>
             <q-btn flat class="logged-user flex items-center">
               <div class="q-mr-sm gt-sm">
-                <div class="text-subtitle2 text-weight-bold text-right">
-                  John
-                </div>
-                <div class="text-caption text-right text-grey-7">
-                  Transport Manager
-                </div>
+                <div class="text-subtitle2 text-weight-bold text-right">John</div>
+                <div class="text-caption text-right text-grey-7">Transport Manager</div>
               </div>
               <div>
                 <q-avatar size="48px">
@@ -225,21 +201,11 @@
                     <q-item-section>
                       <div>
                         <span class="text-grey-7 text-caption">Level: </span>
-                        <span class="text-weight-bold text-subtitle2"
-                          >Senior
-                        </span>
+                        <span class="text-weight-bold text-subtitle2">Senior </span>
                       </div>
                       <div class="row items-center">
-                        <div class="text-grey-7 text-caption">
-                          john.doe@email.com
-                        </div>
-                        <q-btn
-                          flat
-                          dense
-                          padding="xs"
-                          class="q-ml-xs"
-                          @click="copyEmail"
-                        >
+                        <div class="text-grey-7 text-caption">john.doe@email.com</div>
+                        <q-btn flat dense padding="xs" class="q-ml-xs" @click="copyEmail">
                           <q-tooltip>Copy email</q-tooltip>
                           <iconify-icon
                             icon="hugeicons:copy-02"
@@ -265,9 +231,7 @@
                     </q-item-section>
                     <q-item-section>
                       <q-item-label>My Profile</q-item-label>
-                      <q-item-label caption
-                        >Manage Personal Details</q-item-label
-                      >
+                      <q-item-label caption>Manage Personal Details</q-item-label>
                     </q-item-section>
                   </q-item>
 
@@ -282,9 +246,7 @@
                     </q-item-section>
                     <q-item-section>
                       <q-item-label>Company Profile</q-item-label>
-                      <q-item-label caption
-                        >Manage Company Details</q-item-label
-                      >
+                      <q-item-label caption>Manage Company Details</q-item-label>
                     </q-item-section>
                   </q-item>
 
@@ -299,9 +261,7 @@
                     </q-item-section>
                     <q-item-section>
                       <q-item-label>Language</q-item-label>
-                      <q-item-label caption
-                        >Choose Preferred Language</q-item-label
-                      >
+                      <q-item-label caption>Choose Preferred Language</q-item-label>
                     </q-item-section>
                   </q-item>
 
@@ -368,9 +328,7 @@
                       v-ripple
                       @click="child.action && child.action()"
                     >
-                      <q-item-section class="text-caption">{{
-                        child.label
-                      }}</q-item-section>
+                      <q-item-section class="text-caption">{{ child.label }}</q-item-section>
                     </q-item>
                   </q-list>
                 </q-expansion-item>
@@ -400,12 +358,7 @@
                 @click="item.action && item.action()"
               >
                 <q-item-section avatar>
-                  <iconify-icon
-                    :icon="item.icon"
-                    width="24px"
-                    height="24px"
-                    class="text-grey-7"
-                  />
+                  <iconify-icon :icon="item.icon" width="24px" height="24px" class="text-grey-7" />
                 </q-item-section>
                 <q-item-section>{{ item.label }}</q-item-section>
               </q-item>
@@ -515,20 +468,12 @@ const menuItems = [
   {
     label: 'Client Management',
     icon: 'hugeicons:user-group',
-    children: [
-      { label: 'Groups' },
-      { label: 'Entities' },
-      { label: 'Individuals' },
-    ],
+    children: [{ label: 'Groups' }, { label: 'Entities' }, { label: 'Individuals' }],
   },
   {
     label: 'Asset Care',
     icon: 'hugeicons:wrench-01',
-    children: [
-      { label: 'Maintenances' },
-      { label: 'Workshops' },
-      { label: 'Warehouses' },
-    ],
+    children: [{ label: 'Maintenances' }, { label: 'Workshops' }, { label: 'Warehouses' }],
   },
   {
     label: 'Places',
