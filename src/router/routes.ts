@@ -23,7 +23,7 @@ const routes: RouteRecordRaw[] = [
     children: [
       {
         path: 'dispatch',
-        name: 'dispatch',
+        name: 'dispatch-listing',
         component: () =>
           import('src/modules/transportCompany/mobility/dispatch/DispatchListing.vue'),
       },

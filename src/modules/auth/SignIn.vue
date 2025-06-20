@@ -110,8 +110,11 @@
 import { ref } from 'vue';
 import { httpService } from 'src/helpers/httpService';
 import { useAuth } from 'src/composables/useAuth';
+import { useRouter } from 'vue-router';
 
 const { setAuthorization } = useAuth();
+
+const router = useRouter();
 
 const email = ref('');
 const password = ref('');
@@ -129,12 +132,14 @@ const authenticate = () =>
     timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
   });
 
-const handleSubmit = async () => {
+const handleSubmit = async (): Promise<void> => {
   loading.value = true;
   try {
     const response = await authenticate();
 
     setAuthorization(response);
+
+    void router.push({ name: 'dispatch-listing' });
   } catch (error) {
     console.error('Login failed:', error);
   } finally {
