@@ -40,22 +40,21 @@ export default defineConfig(ctx => {
           {
             vueTsc: true,
             eslint: {
-              lintCommand:
-                'eslint -c ./eslint.config.js "./src*/**/*.{ts,js,mjs,cjs,vue}"',
+              lintCommand: 'eslint -c ./eslint.config.js "./src*/**/*.{ts,js,mjs,cjs,vue}"',
               useFlatConfig: true,
             },
           },
           { server: false },
         ],
       ],
+    },
 
-      devServer: {
-        proxy: {
-          '/api': {
-            target: 'https://saas-dev.wiotschool.com/',
-            changeOrigin: true,
-            secure: false,
-          },
+    devServer: {
+      proxy: {
+        '/api/': {
+          target: 'https://saas-dev.wiot360.com/',
+          changeOrigin: true,
+          secure: false,
         },
       },
     },

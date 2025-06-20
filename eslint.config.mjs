@@ -21,34 +21,10 @@ export default [
   ...pluginQuasar.configs.recommended(),
   js.configs.recommended,
 
-  /**
-   * https://eslint.vuejs.org
-   *
-   * pluginVue.configs.base
-   *   -> Settings and rules to enable correct ESLint parsing.
-   * pluginVue.configs[ 'flat/essential']
-   *   -> base, plus rules to prevent errors or unintended behavior.
-   * pluginVue.configs["flat/strongly-recommended"]
-   *   -> Above, plus rules to considerably improve code readability and/or dev experience.
-   * pluginVue.configs["flat/recommended"]
-   *   -> Above, plus rules to enforce subjective community defaults to ensure consistency.
-   */
   ...pluginVue.configs['flat/essential'],
 
-  // https://github.com/vuejs/eslint-config-typescript
   ...vueTsEslintConfig({
-    // Optional: extend additional configurations from typescript-eslint'.
-    // Supports all the configurations in
-    // https://typescript-eslint.io/users/configs#recommended-configurations
-    extends: [
-      // By default, only the 'recommendedTypeChecked' rules are enabled.
-      'recommendedTypeChecked',
-      // You can also manually enable the stylistic rules.
-      // "stylistic",
-
-      // Other utility configurations, such as 'eslintRecommended', (note that it's in camelCase)
-      // are also extendable here. But we don't recommend using them directly.
-    ],
+    extends: ['recommendedTypeChecked'],
   }),
 
   {
@@ -68,11 +44,8 @@ export default [
       },
     },
 
-    // add your custom rules here
     rules: {
       'prefer-promise-reject-errors': 'off',
-
-      // allow debugger during development only
       'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     },
   },
@@ -93,31 +66,16 @@ export default [
       quotes: ['error', 'single'],
       semi: ['error', 'always'],
       'brace-style': ['error', '1tbs'],
-
-      // Your custom Vue rule
       'vue/max-attributes-per-line': [
         'warn',
         {
           singleline: 4,
         },
       ],
-
-      // Quasar-specific adjustments
       'vue/multi-word-component-names': 'off',
-      '@typescript-eslint/consistent-type-imports': [
-        'error',
-        { prefer: 'type-imports' },
-      ],
-      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/consistent-type-imports': ['error', { prefer: 'type-imports' }],
+      '@typescript-eslint/no-explicit-any': 'off',
     },
-    // features: {
-    //   stylistic: {
-    //     semi: true,
-    //     indent: 2,
-    //     quotes: 'single',
-    //     braceStyle: '1tbs',
-    //   },
-    // }
   },
 
   prettierSkipFormatting,

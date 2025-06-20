@@ -5,27 +5,23 @@
         <div></div>
         <div class="full-width q-pt-xl">
           <div class="text-center">
-            <q-img
-              src="../assets/wiot_logo.png"
-              style="width: 80px"
-              class="q-mb-md"
-            />
-            <div class="text-h4 text-weight-bold">Customer Portal</div>
+            <q-img src="../assets/wiot_logo.png" style="width: 80px" class="q-mb-md" />
+            <div class="text-h4 text-weight-bold">Admin Portal</div>
             <div class="text-subtitle2 text-grey-7 q-mt-sm">
               Enter your username and password to continue.
             </div>
           </div>
           <div style="max-width: 400px; margin: 0 auto">
-            <q-form class="q-gutter-y-md q-mt-md">
+            <q-form @submit.prevent="handleSubmit" class="q-gutter-y-md q-mt-md">
               <div class="email">
                 <label for="email" class="text-subtitle1">Email</label>
                 <q-input
+                  v-model="email"
                   autofocus
-                  type="email"
                   outlined
                   dense
-                  v-model="email"
                   placeholder="Enter your email"
+                  type="email"
                   :rules="[val => !!val || 'Email is required']"
                 />
               </div>
@@ -50,15 +46,10 @@
               </div>
               <div class="more-options q-mt-xs">
                 <div class="flex justify-between items-center q-mb-sm">
-                  <span
-                    ><q-checkbox
-                      class="text-grey-7"
-                      label="Remember me"
-                      v-model="rememberLogin"
-                  /></span>
-                  <div
-                    class="text-subtitle2 text-grey-7 cursor-pointer q-pr-sm"
-                  >
+                  <span>
+                    <q-checkbox class="text-grey-7" label="Remember me" v-model="rememberLogin" />
+                  </span>
+                  <div class="text-subtitle2 text-grey-7 cursor-pointer q-pr-sm">
                     Forgot Password?
                   </div>
                 </div>
@@ -72,13 +63,12 @@
                 color="black"
                 style="text-transform: none"
                 :loading="loading"
+                :disabled="loading"
               />
             </q-form>
           </div>
         </div>
-        <div
-          class="flex justify-between full-width q-pa-md text-grey-7 text-caption"
-        >
+        <div class="flex justify-between full-width q-pa-md text-grey-7 text-caption">
           <div>© 2025 WioT360.com. All rights reserved.</div>
           <div>
             <a href="#" class="text-grey-7">Privacy Policy</a>
@@ -90,8 +80,8 @@
     </div>
     <div class="col-md-6 gt-sm">
       <q-carousel
-        animated
         v-model="slide"
+        animated
         navigation
         infinite
         autoplay
@@ -122,6 +112,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { httpService } from '../helpers/httpService';
 
 const email = ref('');
 const password = ref('');
@@ -129,6 +120,25 @@ const rememberLogin = ref(false);
 const isPwdVisible = ref(false);
 const slide = ref(1);
 const loading = ref(false);
+
+const handleSubmit = async () => {
+  loading.value = true;
+  try {
+    const { data } = await httpService.post<any>('auth/external/sign-in', {
+      email: email.value,
+      password: password.value,
+      client: 'PORTAL',
+      portal: 'tpc',
+      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    });
+
+    console.log({ data });
+  } catch (error) {
+    console.error('Login failed:', error);
+  } finally {
+    loading.value = false;
+  }
+};
 </script>
 
 <style scoped>
