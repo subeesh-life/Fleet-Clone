@@ -112,7 +112,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { httpService } from '../helpers/httpService';
+import { httpService } from 'src/helpers/httpService';
 
 const email = ref('');
 const password = ref('');
