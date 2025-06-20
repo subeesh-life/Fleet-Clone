@@ -17,6 +17,7 @@
   "dependencies": {
     "@quasar/extras": "^1.16.4",
     "@vue-leaflet/vue-leaflet": "^0.10.1",
+    "apexcharts": "^4.7.0",
     "axios": "^1.2.1",
     "leaflet": "^1.9.4",
     "pinia": "^2.0.11",
