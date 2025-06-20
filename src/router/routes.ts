@@ -64,7 +64,7 @@ const routes: RouteRecordRaw[] = [
 
   {
     path: '/admin-regulator',
-    component: () => import('layouts/MainLayout.vue'),
+    component: () => import('layouts/AdminLayout.vue'),
     children: [
       {
         path: 'live-map',
