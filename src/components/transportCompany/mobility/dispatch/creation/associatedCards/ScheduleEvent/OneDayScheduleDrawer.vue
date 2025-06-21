@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { useQuasar } from 'quasar';
-import TimeRange from 'components/shared/time_range/TimeRange.vue';
+import FleetTimeRange from 'src/components/shared/FleetTimeRange.vue';
 
 const $q = useQuasar();
 const props = defineProps<{
@@ -29,23 +29,15 @@ const gracePeriod = ref(0);
     position="right"
     :full-height="true"
   >
-    <q-card
-      :style="
-        $q.screen.lt.sm ? 'width: 100vw' : 'min-width: 700px; max-width: 60vw'
-      "
-    >
-      <q-card-section
-        :class="$q.screen.lt.sm ? 'q-pa-md q-pb-none' : 'q-pb-none'"
-      >
+    <q-card :style="$q.screen.lt.sm ? 'width: 100vw' : 'min-width: 700px; max-width: 60vw'">
+      <q-card-section :class="$q.screen.lt.sm ? 'q-pa-md q-pb-none' : 'q-pb-none'">
         <div
           class="row items-start justify-between"
           :class="$q.screen.lt.sm ? 'q-col-gutter-y-md' : ''"
         >
           <div :class="$q.screen.lt.sm ? 'col-6' : 'col-6'">
             <div class="text-h6 text-weight-bold">One Day Schedule</div>
-            <div class="text-caption text-grey-7">
-              Efficient for Single-Day Trips.
-            </div>
+            <div class="text-caption text-grey-7">Efficient for Single-Day Trips.</div>
           </div>
           <div
             :class="{ 'col-6 row justify-end': $q.screen.lt.sm }"
@@ -82,19 +74,10 @@ const gracePeriod = ref(0);
               >
                 <template v-slot:append>
                   <q-icon name="event" class="cursor-pointer">
-                    <q-popup-proxy
-                      cover
-                      transition-show="scale"
-                      transition-hide="scale"
-                    >
+                    <q-popup-proxy cover transition-show="scale" transition-hide="scale">
                       <q-date v-model="startDate">
                         <div class="row items-center justify-end">
-                          <q-btn
-                            v-close-popup
-                            label="Close"
-                            color="primary"
-                            flat
-                          />
+                          <q-btn v-close-popup label="Close" color="primary" flat />
                         </div>
                       </q-date>
                     </q-popup-proxy>
@@ -148,8 +131,7 @@ const gracePeriod = ref(0);
           <div class="col-6">
             <div class="text-subtitle2 text-grey-9">Grace Period</div>
             <div class="text-caption text-grey-7">
-              Additional time allowed for the trip to start after the scheduled
-              pickup time.
+              Additional time allowed for the trip to start after the scheduled pickup time.
             </div>
           </div>
           <div class="col-6 flex items-center justify-end q-gutter-x-sm">
@@ -170,13 +152,7 @@ const gracePeriod = ref(0);
               />
             </q-btn>
             <div class="text-subtitle2 text-grey-9">{{ gracePeriod }} min</div>
-            <q-btn
-              outline
-              dense
-              padding="xs"
-              class="q-ml-xs"
-              @click="gracePeriod++"
-            >
+            <q-btn outline dense padding="xs" class="q-ml-xs" @click="gracePeriod++">
               <q-tooltip>Increase</q-tooltip>
               <iconify-icon
                 icon="hugeicons:add-01"
@@ -211,21 +187,17 @@ const gracePeriod = ref(0);
       <q-card-section class="q-pa-md q-pt-sm">
         <div class="row items-center q-col-gutter-md">
           <div class="col-md-6 col-xs-12">
-            <div class="text-subtitle2 text-grey-9 q-pb-sm">
-              Client Schedule Time
-            </div>
+            <div class="text-subtitle2 text-grey-9 q-pb-sm">Client Schedule Time</div>
             <div class="row items-center q-gutter-x-sm">
               <q-btn round color="primary" outline dense label="M" />
-              <TimeRange />
+              <FleetTimeRange />
             </div>
           </div>
           <div class="col-md-6 col-xs-12">
-            <div class="text-subtitle2 text-grey-9 q-pb-sm">
-              Driver Schedule Time
-            </div>
+            <div class="text-subtitle2 text-grey-9 q-pb-sm">Driver Schedule Time</div>
             <div class="row items-center q-gutter-x-sm">
               <q-btn round color="primary" outline dense label="M" />
-              <TimeRange />
+              <FleetTimeRange />
             </div>
           </div>
         </div>

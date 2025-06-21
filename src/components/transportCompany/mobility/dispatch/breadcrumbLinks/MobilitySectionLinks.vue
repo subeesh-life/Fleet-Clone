@@ -7,10 +7,7 @@
           <template v-slot:separator>
             <q-icon size="1.5em" name="chevron_right" color="primary" />
           </template>
-          <q-breadcrumbs-el
-            label="Home"
-            :to="{ name: 'executive-dashboard' }"
-          />
+          <q-breadcrumbs-el label="Home" :to="{ name: 'executive-dashboard' }" />
           <q-breadcrumbs-el label="Mobility" :to="{ name: 'mobility-link' }" />
         </q-breadcrumbs>
       </div>
@@ -27,29 +24,17 @@
             <q-card flat bordered class="cursor-pointer card-gradient">
               <q-card-section>
                 <div class="row items-center no-wrap">
-                  <q-avatar
-                    rounded
-                    size="32px"
-                    color="white"
-                    text-color="white"
-                    class="q-mr-md"
-                  >
+                  <q-avatar rounded size="32px" color="white" text-color="white" class="q-mr-md">
                     <q-img
-                      src="/src/assets/bredcrumbs-links/dispatch/dispatch.svg"
+                      src="assets/bredcrumbs-links/dispatch/dispatch.svg"
                       alt="Dispatch"
                       class="full-width full-height"
                     />
                   </q-avatar>
                   <div class="col">
-                    <div class="text-h6 text-weight-medium text-primary">
-                      Dispatch
-                    </div>
-                    <div
-                      class="text-caption text-grey-9 ellipsis"
-                      style="max-height: 32px"
-                    >
-                      Plan routes, Assign vehicles and drivers, and track events
-                      — all in one place
+                    <div class="text-h6 text-weight-medium text-primary">Dispatch</div>
+                    <div class="text-caption text-grey-9 ellipsis" style="max-height: 32px">
+                      Plan routes, Assign vehicles and drivers, and track events — all in one place
                     </div>
                   </div>
                   <div class="q-ml-sm">
@@ -73,29 +58,18 @@
             <q-card flat bordered class="cursor-pointer card-gradient">
               <q-card-section>
                 <div class="row items-center no-wrap">
-                  <q-avatar
-                    rounded
-                    size="32px"
-                    color="white"
-                    text-color="white"
-                    class="q-mr-md"
-                  >
+                  <q-avatar rounded size="32px" color="white" text-color="white" class="q-mr-md">
                     <q-img
-                      src="/src/assets/bredcrumbs-links/mobility/livemap.svg"
+                      src="assets/bredcrumbs-links/mobility/livemap.svg"
                       alt="Dispatch"
                       class="full-width full-height"
                     />
                   </q-avatar>
                   <div class="col">
-                    <div class="text-h6 text-weight-medium text-primary">
-                      Live Map
-                    </div>
-                    <div
-                      class="text-caption text-grey-9 ellipsis"
-                      style="max-height: 32px"
-                    >
-                      See all vehicles and drivers on a live map for easy
-                      tracking and quick updates.
+                    <div class="text-h6 text-weight-medium text-primary">Live Map</div>
+                    <div class="text-caption text-grey-9 ellipsis" style="max-height: 32px">
+                      See all vehicles and drivers on a live map for easy tracking and quick
+                      updates.
                     </div>
                   </div>
                   <div class="q-ml-sm">
@@ -128,11 +102,7 @@
     content: '';
     position: absolute;
     border-radius: 50%;
-    background: linear-gradient(
-      45deg,
-      rgba(var(--q-primary), 0.05),
-      rgba(var(--q-primary), 0.02)
-    );
+    background: linear-gradient(45deg, rgba(var(--q-primary), 0.05), rgba(var(--q-primary), 0.02));
     z-index: 0;
   }
 

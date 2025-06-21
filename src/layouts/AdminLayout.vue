@@ -7,7 +7,11 @@
           <iconify-icon icon="hugeicons:menu-02" width="24px" height="24px" class="text-grey-9" />
         </q-btn>
         <div class="flex items-center q-ml-sm">
+<<<<<<< HEAD
           <q-img src="../assets/logos/AD_Mobility.png" style="width: 80px; max-height: 30px" />
+=======
+          <q-img src="assets/logos/AD_Mobility.png" style="width: 80px; height: 30px" />
+>>>>>>> d500a789ef3b99e817299c08613abc1756b47d87
           <q-toolbar-title class="gt-xs"> Abu Dhabi Mobility </q-toolbar-title>
         </div>
 

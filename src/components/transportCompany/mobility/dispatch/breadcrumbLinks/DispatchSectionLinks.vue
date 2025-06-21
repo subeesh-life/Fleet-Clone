@@ -7,10 +7,7 @@
           <template v-slot:separator>
             <q-icon size="1.5em" name="chevron_right" color="primary" />
           </template>
-          <q-breadcrumbs-el
-            label="Home"
-            :to="{ name: 'executive-dashboard' }"
-          />
+          <q-breadcrumbs-el label="Home" :to="{ name: 'executive-dashboard' }" />
           <q-breadcrumbs-el label="Mobility" :to="{ name: 'mobility-link' }" />
           <q-breadcrumbs-el label="Dispatch" :to="{ name: 'dispatch-link' }" />
         </q-breadcrumbs>
@@ -28,29 +25,17 @@
             <q-card flat bordered class="cursor-pointer card-gradient">
               <q-card-section>
                 <div class="row items-center no-wrap">
-                  <q-avatar
-                    rounded
-                    size="32px"
-                    color="white"
-                    text-color="white"
-                    class="q-mr-md"
-                  >
+                  <q-avatar rounded size="32px" color="white" text-color="white" class="q-mr-md">
                     <q-img
-                      src="/src/assets/bredcrumbs-links/dispatch/dispatch.svg"
+                      src="assets/bredcrumbs-links/dispatch/dispatch.svg"
                       alt="Dispatch"
                       class="full-width full-height"
                     />
                   </q-avatar>
                   <div class="col">
-                    <div class="text-h6 text-weight-medium text-primary">
-                      Dispatch
-                    </div>
-                    <div
-                      class="text-caption text-grey-9 ellipsis"
-                      style="max-height: 32px"
-                    >
-                      Plan routes, Assign vehicles and drivers, and track events
-                      — all in one place
+                    <div class="text-h6 text-weight-medium text-primary">Dispatch</div>
+                    <div class="text-caption text-grey-9 ellipsis" style="max-height: 32px">
+                      Plan routes, Assign vehicles and drivers, and track events — all in one place
                     </div>
                   </div>
                   <div class="q-ml-sm">
@@ -74,27 +59,16 @@
             <q-card flat bordered class="cursor-pointer card-gradient">
               <q-card-section>
                 <div class="row items-center no-wrap">
-                  <q-avatar
-                    rounded
-                    size="32px"
-                    color="white"
-                    text-color="white"
-                    class="q-mr-md"
-                  >
+                  <q-avatar rounded size="32px" color="white" text-color="white" class="q-mr-md">
                     <q-img
-                      src="/src/assets/bredcrumbs-links/dispatch/draft.svg"
+                      src="assets/bredcrumbs-links/dispatch/draft.svg"
                       alt="Dispatch"
                       class="full-width full-height"
                     />
                   </q-avatar>
                   <div class="col">
-                    <div class="text-h6 text-weight-medium text-primary">
-                      Draft Events
-                    </div>
-                    <div
-                      class="text-caption text-grey-9 ellipsis"
-                      style="max-height: 32px"
-                    >
+                    <div class="text-h6 text-weight-medium text-primary">Draft Events</div>
+                    <div class="text-caption text-grey-9 ellipsis" style="max-height: 32px">
                       Find and edit events saved as drafts.
                     </div>
                   </div>
@@ -119,29 +93,17 @@
             <q-card flat bordered class="cursor-pointer card-gradient">
               <q-card-section>
                 <div class="row items-center no-wrap">
-                  <q-avatar
-                    rounded
-                    size="32px"
-                    color="white"
-                    text-color="white"
-                    class="q-mr-md"
-                  >
+                  <q-avatar rounded size="32px" color="white" text-color="white" class="q-mr-md">
                     <q-img
-                      src="/src/assets/bredcrumbs-links/dispatch/delete.svg"
+                      src="assets/bredcrumbs-links/dispatch/delete.svg"
                       alt="Dispatch"
                       class="full-width full-height"
                     />
                   </q-avatar>
                   <div class="col">
-                    <div class="text-h6 text-weight-medium text-primary">
-                      Deleted Events
-                    </div>
-                    <div
-                      class="text-caption text-grey-9 ellipsis"
-                      style="max-height: 32px"
-                    >
-                      Browse all events that have been removed from the
-                      schedule.
+                    <div class="text-h6 text-weight-medium text-primary">Deleted Events</div>
+                    <div class="text-caption text-grey-9 ellipsis" style="max-height: 32px">
+                      Browse all events that have been removed from the schedule.
                     </div>
                   </div>
                   <div class="q-ml-sm">
@@ -165,27 +127,16 @@
             <q-card flat bordered class="cursor-pointer card-gradient">
               <q-card-section>
                 <div class="row items-center no-wrap">
-                  <q-avatar
-                    rounded
-                    size="32px"
-                    color="white"
-                    text-color="white"
-                    class="q-mr-md"
-                  >
+                  <q-avatar rounded size="32px" color="white" text-color="white" class="q-mr-md">
                     <q-img
-                      src="/src/assets/bredcrumbs-links/dispatch/conflict.svg"
+                      src="assets/bredcrumbs-links/dispatch/conflict.svg"
                       alt="Dispatch"
                       class="full-width full-height"
                     />
                   </q-avatar>
                   <div class="col">
-                    <div class="text-h6 text-weight-medium text-primary">
-                      Conflicted Events
-                    </div>
-                    <div
-                      class="text-caption text-grey-9 ellipsis"
-                      style="max-height: 32px"
-                    >
+                    <div class="text-h6 text-weight-medium text-primary">Conflicted Events</div>
+                    <div class="text-caption text-grey-9 ellipsis" style="max-height: 32px">
                       Review events with scheduling conflicts.
                     </div>
                   </div>
@@ -210,27 +161,16 @@
             <q-card flat bordered class="cursor-pointer card-gradient">
               <q-card-section>
                 <div class="row items-center no-wrap">
-                  <q-avatar
-                    rounded
-                    size="32px"
-                    color="white"
-                    text-color="white"
-                    class="q-mr-md"
-                  >
+                  <q-avatar rounded size="32px" color="white" text-color="white" class="q-mr-md">
                     <q-img
-                      src="/src/assets/bredcrumbs-links/dispatch/driver.svg"
+                      src="assets/bredcrumbs-links/dispatch/driver.svg"
                       alt="Dispatch"
                       class="full-width full-height"
                     />
                   </q-avatar>
                   <div class="col">
-                    <div class="text-h6 text-weight-medium text-primary">
-                      Driver Absent
-                    </div>
-                    <div
-                      class="text-caption text-grey-9 ellipsis"
-                      style="max-height: 32px"
-                    >
+                    <div class="text-h6 text-weight-medium text-primary">Driver Absent</div>
+                    <div class="text-caption text-grey-9 ellipsis" style="max-height: 32px">
                       See the list of drivers marked as absent.
                     </div>
                   </div>
@@ -255,15 +195,9 @@
             <q-card flat bordered class="cursor-pointer card-gradient">
               <q-card-section>
                 <div class="row items-center no-wrap">
-                  <q-avatar
-                    rounded
-                    size="32px"
-                    color="white"
-                    text-color="white"
-                    class="q-mr-md"
-                  >
+                  <q-avatar rounded size="32px" color="white" text-color="white" class="q-mr-md">
                     <q-img
-                      src="/src/assets/bredcrumbs-links/dispatch/pending-event.svg"
+                      src="assets/bredcrumbs-links/dispatch/pending-event.svg"
                       alt="Dispatch"
                       class="full-width full-height"
                     />
@@ -272,10 +206,7 @@
                     <div class="text-h6 text-weight-medium text-primary">
                       Pending Events Approval
                     </div>
-                    <div
-                      class="text-caption text-grey-9 ellipsis"
-                      style="max-height: 32px"
-                    >
+                    <div class="text-caption text-grey-9 ellipsis" style="max-height: 32px">
                       Browse all events that are pending approval.
                     </div>
                   </div>
@@ -309,11 +240,7 @@
     content: '';
     position: absolute;
     border-radius: 50%;
-    background: linear-gradient(
-      45deg,
-      rgba(var(--q-primary), 0.05),
-      rgba(var(--q-primary), 0.02)
-    );
+    background: linear-gradient(45deg, rgba(var(--q-primary), 0.05), rgba(var(--q-primary), 0.02));
     z-index: 0;
   }
 

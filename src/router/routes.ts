@@ -3,17 +3,17 @@ import type { RouteRecordRaw } from 'vue-router';
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    component: () => import('layouts/BlankLayout.vue'),
-    children: [{ path: '', component: () => import('pages/IndexPage.vue') }],
+    component: () => import('src/layouts/AuthLayout.vue'),
+    children: [{ path: '', component: () => import('src/modules/auth/SignIn.vue') }],
   },
   {
     path: '/transport-company',
-    component: () => import('layouts/MainLayout.vue'),
+    component: () => import('src/layouts/MainLayout.vue'),
     children: [
       {
         path: 'executive-dashboard',
         name: 'executive-dashboard',
-        component: () => import('pages/transportCompany/dashboard/ExecutiveDashboard.vue'),
+        component: () => import('src/modules/transportCompany/dashboard/ExecutiveDashboard.vue'),
       },
     ],
   },
@@ -23,8 +23,9 @@ const routes: RouteRecordRaw[] = [
     children: [
       {
         path: 'dispatch',
-        name: 'dispatch',
-        component: () => import('pages/transportCompany/mobility/dispatch/DispatchListing.vue'),
+        name: 'dispatch-listing',
+        component: () =>
+          import('src/modules/transportCompany/mobility/dispatch/DispatchListing.vue'),
       },
       {
         path: 'creation',
@@ -54,30 +55,22 @@ const routes: RouteRecordRaw[] = [
         component: () =>
           import('components/transportCompany/mobility/dispatch/details/DispatchDetails.vue'),
       },
-      // {
-      //   path: 'live-map',
-      //   name: 'live-map',
-      //   component: () => import('pages/transportCompany/mobility/live-map/LiveMap.vue'),
-      // },
     ],
   },
-
   {
     path: '/admin-regulator',
-    component: () => import('layouts/AdminLayout.vue'),
+    component: () => import('src/layouts/AdminLayout.vue'),
     children: [
       {
         path: 'live-map',
         name: 'live-map',
-        component: () => import('pages/adminRegulator/liveMap/LiveMap.vue'),
+        component: () => import('src/modules/adminRegulator/liveMap/LiveMap.vue'),
       },
     ],
   },
-  // Always leave this as last one,
-  // but you can also remove it
   {
     path: '/:catchAll(.*)*',
-    component: () => import('pages/ErrorNotFound.vue'),
+    component: () => import('src/modules/auth/ErrorNotFound.vue'),
   },
 ];
 

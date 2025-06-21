@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import DateRange from 'src/components/shared/date_range/DateRange.vue';
-import TimeRange from 'src/components/shared/time_range/TimeRange.vue';
+import FleetDateRange from 'src/components/shared/FleetDateRange.vue';
+import FleetTimeRange from 'src/components/shared/FleetTimeRange.vue';
 import FleetChips from 'src/components/shared/chips/FleetChips.vue';
 import VehiclePlate from 'src/components/shared/card/VehiclePlate.vue';
+import FleetBreadcrumbs from 'src/components/shared/FleetBreadcrumbs.vue';
 
 interface Schedule {
   startSchedule: string;
@@ -174,6 +175,7 @@ const usageModeOptions = ref([
   { label: 'Internal', value: 'internal' },
 ]);
 const eventType = ref([]);
+
 const eventTypeOptions = ref([
   { label: 'Oneway', value: 'oneway' },
   { label: 'Roundtrip', value: 'roundtrip' },
@@ -182,6 +184,13 @@ const eventTypeOptions = ref([
   { label: 'Office to Home', value: 'officeToHome' },
   { label: 'Office to Office', value: 'officeToOffice' },
   { label: 'Other', value: 'other' },
+]);
+
+const breadcrumbs = ref([
+  { label: 'Home', to: { name: 'executive-dashboard' } },
+  { label: 'Mobility', to: { name: 'mobility-link' } },
+  { label: 'Dispatch', to: { name: 'dispatch-link' } },
+  { label: 'Listing', color: 'text-grey-7' },
 ]);
 
 const showDialog = computed({
@@ -273,7 +282,7 @@ const rows = [
             },
             client: [
               {
-                logo: '../assets/clients/logo-a.svg',
+                logo: 'assets/clients/logo-a.svg',
                 name: 'Al Noor Innovations FZE',
                 phone: '+971 50 123 4567',
                 email: 'b@example.com',
@@ -349,7 +358,7 @@ const rows = [
             },
             client: [
               {
-                logo: '../assets/clients/logo-b.svg',
+                logo: 'assets/clients/logo-b.svg',
                 name: 'Oasis Venture Group',
                 phone: '+971 50 123 4567',
                 email: 'oasis@email.com',
@@ -416,7 +425,7 @@ const rows = [
             },
             client: [
               {
-                logo: '../assets/clients/logo-c.svg',
+                logo: 'assets/clients/logo-c.svg',
                 name: 'Fujairah Logistics',
                 phone: '+971 50 123 4567',
                 email: 'fujairah@logistics.com',
@@ -506,7 +515,7 @@ const rows = [
             },
             client: [
               {
-                logo: '../assets/clients/et.webp',
+                logo: 'assets/clients/et.webp',
                 name: 'Emirates Transport',
                 phone: '+971 50 123 4567',
                 email: 'et@email.com',
@@ -584,7 +593,7 @@ const rows = [
             },
             client: [
               {
-                logo: '../assets/clients/salama.png',
+                logo: 'assets/clients/salama.png',
                 name: 'Salama School Transport',
                 phone: '+971 50 123 4567',
                 email: 'salama@transport.com',
@@ -662,7 +671,7 @@ const rows = [
             },
             client: [
               {
-                logo: '../assets/clients/logo-d.svg',
+                logo: 'assets/clients/logo-d.svg',
                 name: 'Dubai Perfume',
                 phone: '+971 50 123 4567',
                 email: 'dubai.perfume@email.com',
@@ -794,24 +803,18 @@ const clearSearchFilters = () => {
   activeSearchFilters.value = [];
 };
 </script>
+
 <template>
   <q-page class="q-pa-md bg-grey-1" style="border-top: 1px solid #e0e0e0">
     <div class="row flex justify-between items-center q-mb-md">
       <div class="col-md-4">
-        <q-breadcrumbs active-color="secondary">
-          <template v-slot:separator>
-            <q-icon size="1.5em" name="chevron_right" color="primary" />
-          </template>
-          <q-breadcrumbs-el label="Home" :to="{ name: 'executive-dashboard' }" />
-          <q-breadcrumbs-el label="Mobility" :to="{ name: 'mobility-link' }" />
-          <q-breadcrumbs-el label="Dispatch" :to="{ name: 'dispatch-link' }" />
-          <q-breadcrumbs-el label="Listing" color="text-grey-7" />
-        </q-breadcrumbs>
+        <FleetBreadcrumbs :items="breadcrumbs" />
       </div>
 
       <div class="col-md-8 flex justify-end q-gutter-x-md">
-        <DateRange class="gt-sm" />
-        <TimeRange class="gt-sm" />
+        <FleetDateRange class="gt-sm" />
+
+        <FleetTimeRange class="gt-sm" />
 
         <div class="row q-gutter-x-sm">
           <q-btn

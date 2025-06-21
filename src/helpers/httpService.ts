@@ -33,8 +33,7 @@ class HttpService {
 
   constructor() {
     this.api = axios.create({
-      baseURL: import.meta.env.VITE_API_BASE_URL,
-      timeout: 10000, // 10 seconds timeout
+      baseURL: import.meta.env.VITE_APP_API_URL,
       headers: {
         'Content-Type': 'application/json',
       },
@@ -53,11 +52,6 @@ class HttpService {
           config.headers.Authorization = `Bearer ${token}`;
         }
 
-        // Log request in development
-        if (import.meta.env.DEV) {
-          console.log('API Request:', config);
-        }
-
         return config;
       },
       error => {
@@ -68,10 +62,6 @@ class HttpService {
     // Response interceptor
     this.api.interceptors.response.use(
       (response: AxiosResponse) => {
-        // Log response in development
-        if (import.meta.env.DEV) {
-          console.log('API Response:', response);
-        }
         return response;
       },
       error => {
