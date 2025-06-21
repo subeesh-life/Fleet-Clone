@@ -5,6 +5,7 @@ import FleetTimeRange from 'src/components/shared/FleetTimeRange.vue';
 import FleetChips from 'src/components/shared/chips/FleetChips.vue';
 import VehiclePlate from 'src/components/shared/card/VehiclePlate.vue';
 import FleetBreadcrumbs from 'src/components/shared/FleetBreadcrumbs.vue';
+import { LISTING_BREADCRUMBS, TRIP_STATUS_CONFIG } from './constants';
 
 interface Schedule {
   startSchedule: string;
@@ -186,11 +187,28 @@ const eventTypeOptions = ref([
   { label: 'Other', value: 'other' },
 ]);
 
-const breadcrumbs = ref([
-  { label: 'Home', to: { name: 'executive-dashboard' } },
-  { label: 'Mobility', to: { name: 'mobility-link' } },
-  { label: 'Dispatch', to: { name: 'dispatch-link' } },
-  { label: 'Listing', color: 'text-grey-7' },
+const actionButtons = computed(() => [
+  {
+    icon: 'hugeicons:search-02',
+    tooltip: 'Search Events',
+    class: 'gt-sm',
+    onClick: () => (searchEventsDialog.value = true),
+  },
+  {
+    icon: 'hugeicons:filter',
+    tooltip: 'Filter',
+    onClick: () => (dispatchFilterDrawer.value = true),
+  },
+  {
+    icon: 'hugeicons:chart-bar-line',
+    tooltip: 'Statistics',
+    class: 'gt-sm',
+  },
+  {
+    icon: 'hugeicons:add-01',
+    tooltip: 'Add New',
+    to: { name: 'create-event' },
+  },
 ]);
 
 const showDialog = computed({
@@ -806,9 +824,10 @@ const clearSearchFilters = () => {
 
 <template>
   <q-page class="q-pa-md bg-grey-1" style="border-top: 1px solid #e0e0e0">
+    <!-- Action Bar / Header Bar -->
     <div class="row flex justify-between items-center q-mb-md">
       <div class="col-md-4">
-        <FleetBreadcrumbs :items="breadcrumbs" />
+        <FleetBreadcrumbs :items="LISTING_BREADCRUMBS" />
       </div>
 
       <div class="col-md-8 flex justify-end q-gutter-x-md">
@@ -818,50 +837,28 @@ const clearSearchFilters = () => {
 
         <div class="row q-gutter-x-sm">
           <q-btn
+            v-for="action in actionButtons"
+            :key="action.tooltip"
             push
             color="white"
             text-color="grey-9"
             round
-            class="gt-sm"
-            @click="searchEventsDialog = true"
+            :class="action.class"
+            :to="action.to"
+            @click="action.onClick"
           >
             <q-icon>
-              <IconifyIcon icon="hugeicons:search-02" width="16px" height="16px" />
+              <IconifyIcon :icon="action.icon" width="16px" height="16px" />
             </q-icon>
             <q-tooltip>
-              <div class="text-caption">Search Events</div>
-            </q-tooltip>
-          </q-btn>
-          <q-btn push color="white" text-color="grey-9" round @click="dispatchFilterDrawer = true">
-            <q-icon>
-              <IconifyIcon icon="hugeicons:filter" width="16px" height="16px" />
-            </q-icon>
-            <q-tooltip>
-              <div class="text-caption">Filter</div>
-            </q-tooltip>
-          </q-btn>
-          <q-btn push color="white" text-color="grey-9" round class="gt-sm">
-            <q-icon>
-              <IconifyIcon icon="hugeicons:chart-bar-line" width="16px" height="16px" />
-            </q-icon>
-            <q-tooltip>
-              <div class="text-caption">Statistics</div>
-            </q-tooltip>
-          </q-btn>
-          <q-btn push color="white" text-color="grey-9" round :to="{ name: 'create-event' }">
-            <q-icon>
-              <IconifyIcon icon="hugeicons:add-01" width="16px" height="16px" />
-            </q-icon>
-            <q-tooltip>
-              <div class="text-caption">Add New</div>
+              <div class="text-caption">{{ action.tooltip }}</div>
             </q-tooltip>
           </q-btn>
         </div>
       </div>
     </div>
 
-    <!--Tabs & Table Data for All Events-->
-
+    <!-- Trip Status Tabs -->
     <div class="row">
       <div class="col-12 bg-white rounded-borders q-pa-md">
         <q-tabs
@@ -874,85 +871,21 @@ const clearSearchFilters = () => {
           narrow-indicator
           style="border-bottom: 1px solid #e0e0e0"
         >
-          <q-tab name="all" class="flex">
-            <template v-slot:default>
+          <q-tab
+            v-for="status in TRIP_STATUS_CONFIG"
+            :key="status.name"
+            :name="status.name"
+            class="flex"
+          >
+            <template #default>
               <div class="row items-center">
-                All
+                {{ status.label }}
                 <FleetChips
-                  text="32"
-                  color="success"
+                  :text="status.count.toString()"
+                  :color="status.color"
                   :iconVisibility="false"
                   class="q-ml-sm gt-sm"
                 />
-              </div>
-            </template>
-          </q-tab>
-
-          <q-tab name="upcoming" class="flex">
-            <template v-slot:default>
-              <div class="row items-center">
-                Upcoming
-                <FleetChips
-                  text="219"
-                  color="purple"
-                  :iconVisibility="false"
-                  class="q-ml-sm gt-sm"
-                />
-              </div>
-            </template>
-          </q-tab>
-
-          <q-tab name="missed" class="flex">
-            <template v-slot:default>
-              <div class="row items-center">
-                Missed
-                <FleetChips text="17" color="error" :iconVisibility="false" class="q-ml-sm gt-sm" />
-              </div>
-            </template>
-          </q-tab>
-
-          <q-tab name="live" class="flex">
-            <template v-slot:default>
-              <div class="row items-center">
-                Live
-                <FleetChips
-                  text="173"
-                  color="success"
-                  :iconVisibility="false"
-                  class="q-ml-sm gt-sm"
-                />
-              </div>
-            </template>
-          </q-tab>
-
-          <q-tab name="delayed" class="flex">
-            <template v-slot:default>
-              <div class="row items-center">
-                Delayed
-                <FleetChips
-                  text="35"
-                  color="warning"
-                  :iconVisibility="false"
-                  class="q-ml-sm gt-sm"
-                />
-              </div>
-            </template>
-          </q-tab>
-
-          <q-tab name="completed" class="flex">
-            <template v-slot:default>
-              <div class="row items-center">
-                Completed
-                <FleetChips text="651" color="grey" :iconVisibility="false" class="q-ml-sm gt-sm" />
-              </div>
-            </template>
-          </q-tab>
-
-          <q-tab name="canceled" class="flex">
-            <template v-slot:default>
-              <div class="row items-center">
-                Canceled
-                <FleetChips text="19" color="error" :iconVisibility="false" class="q-ml-sm gt-sm" />
               </div>
             </template>
           </q-tab>

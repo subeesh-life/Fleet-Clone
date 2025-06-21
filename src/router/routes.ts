@@ -13,7 +13,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'executive-dashboard',
         name: 'executive-dashboard',
-        component: () => import('src/modules/transportCompany/dashboard/ExecutiveDashboard.vue'),
+        component: () => import('src/modules/dashboard/ExecutiveDashboard.vue'),
       },
     ],
   },
@@ -24,8 +24,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'dispatch',
         name: 'dispatch-listing',
-        component: () =>
-          import('src/modules/transportCompany/mobility/dispatch/DispatchListing.vue'),
+        component: () => import('src/modules/tripDispatch/DispatchListing.vue'),
       },
       {
         path: 'creation',
