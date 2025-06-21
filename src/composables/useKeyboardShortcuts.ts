@@ -8,7 +8,7 @@ export function useKeyboardShortcuts(router: Router) {
     if (event.metaKey && event.shiftKey && event.key.toLowerCase() === 'd') {
       event.preventDefault(); // Prevent default browser behavior
       void router
-        .push({ name: 'dispatch' })
+        .push({ name: 'dispatch-listing' })
         .then(() => {
           Notify.create({
             message: 'Navigating to Dispatch',
