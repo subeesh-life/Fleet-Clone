@@ -8,6 +8,7 @@ export const LISTING_BREADCRUMBS = [
   { label: 'Listing', color: 'text-grey-7' },
 ];
 
+/* Trip Status Types */
 export const TRIP_STATUS_CONFIG: TripStatusConfig[] = [
   {
     name: TripStatus.ALL,

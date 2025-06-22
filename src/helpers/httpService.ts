@@ -33,7 +33,7 @@ class HttpService {
 
   constructor() {
     this.api = axios.create({
-      baseURL: import.meta.env.VITE_APP_API_URL,
+      baseURL: import.meta.env.VITE_API_URL,
       headers: {
         'Content-Type': 'application/json',
       },
@@ -47,7 +47,7 @@ class HttpService {
     this.api.interceptors.request.use(
       config => {
         // Add auth token if available
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('access_token');
         if (token) {
           config.headers.Authorization = `Bearer ${token}`;
         }

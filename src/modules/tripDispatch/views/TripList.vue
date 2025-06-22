@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
 import FleetDateRange from 'src/components/shared/FleetDateRange.vue';
 import FleetTimeRange from 'src/components/shared/FleetTimeRange.vue';
 import FleetChips from 'src/components/shared/chips/FleetChips.vue';
 import VehiclePlate from 'src/components/shared/card/VehiclePlate.vue';
 import FleetBreadcrumbs from 'src/components/shared/FleetBreadcrumbs.vue';
-import { LISTING_BREADCRUMBS, TRIP_STATUS_CONFIG } from './constants';
+import { ref, computed, onMounted } from 'vue';
+import { LISTING_BREADCRUMBS, TRIP_STATUS_CONFIG } from '../constants';
+import { useTripsStore } from '../store/trips';
 
 interface Schedule {
   startSchedule: string;
@@ -115,6 +116,8 @@ interface QTableColumn {
   sort?: (a: unknown, b: unknown, rowA: FlattenedRow, rowB: FlattenedRow) => number;
   headerClasses?: string;
 }
+
+const store = useTripsStore();
 
 const eventStatus = ref('all');
 const selectedEvents = ref<number[]>([]);
@@ -820,6 +823,11 @@ const clearSearchFilters = () => {
   selectedFilter.value = '';
   activeSearchFilters.value = [];
 };
+
+onMounted((): void => {
+  void store.fetchTripStats();
+  void store.fetchTrips();
+});
 </script>
 
 <template>
@@ -1025,6 +1033,7 @@ const clearSearchFilters = () => {
                     </td>
                     <td>
                       <FleetChips
+                        class="full-width"
                         :text="event.eventStatus.status + ' - ' + event.eventStatus.time"
                         :color="
                           event.eventStatus.status === 'Upcoming'
