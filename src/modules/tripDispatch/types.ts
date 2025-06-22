@@ -1,18 +1,22 @@
+import type { BrandColor, Color, DetailedColor } from 'quasar';
+
 export enum TripStatus {
   ALL = 'all',
   UPCOMING = 'upcoming',
-  MISSED = 'missed',
-  LIVE = 'live',
-  DELAYED = 'delayed',
-  COMPLETED = 'completed',
+  ABSENT = 'absent',
+  APPROVAL_PENDING = 'approval_pending',
   CANCELED = 'canceled',
+  COMPLETED = 'completed',
+  CONFIRMED = 'confirmed',
+  DELAYED = 'delayed',
+  DELETED = 'deleted',
+  LIVE = 'live',
+  MISSED = 'missed',
 }
-
-export type TripColor = 'success' | 'purple' | 'error' | 'warning' | 'grey';
 
 export interface TripStatusConfig {
   name: TripStatus;
-  color: TripColor;
+  color: BrandColor | Color | DetailedColor;
   label: string;
   count: number;
 }

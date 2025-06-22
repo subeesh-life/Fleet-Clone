@@ -886,7 +886,7 @@ onMounted((): void => {
             class="flex"
           >
             <template #default>
-              <div class="row items-center">
+              <div class="row no-wrap q-px-lg">
                 {{ status.label }}
                 <FleetChips
                   :text="status.count.toString()"
