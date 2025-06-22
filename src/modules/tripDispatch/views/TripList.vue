@@ -760,6 +760,39 @@ onMounted((): void => {
               </div>
             </div>
           </template>
+
+          <template #cell-route="{ row }">
+            <div class="column">
+              <div class="row items-center q-mb-sm">
+                <IconifyIcon
+                  icon="hugeicons:play"
+                  width="16px"
+                  height="16px"
+                  class="text-grey-7 gt-md"
+                />
+                <span class="q-ml-xs text-grey-9 ellipsis" style="max-width: 264px">
+                  {{ row.timing.start_location.address }}
+                </span>
+                <q-tooltip>{{ row.timing.start_location.address }}</q-tooltip>
+              </div>
+              <q-chip dense class="bg-blue-1 text-blue" square>
+                {{ row.timing.total_stops }} Stops • {{ row.timing.total_distance }} •
+                {{ row.timing.total_duration }}
+              </q-chip>
+              <div class="row items-center q-mt-sm">
+                <IconifyIcon
+                  icon="hugeicons:stop"
+                  width="16px"
+                  height="16px"
+                  class="text-grey-7 gt-md"
+                />
+                <span class="q-ml-xs text-grey-9 ellipsis" style="max-width: 264px">
+                  {{ row.timing.end_location.address }}
+                </span>
+                <q-tooltip>{{ row.timing.end_location.address }}</q-tooltip>
+              </div>
+            </div>
+          </template>
         </FleetTable>
 
         <q-table
@@ -787,58 +820,7 @@ onMounted((): void => {
                 <td>
                   <q-checkbox v-model="selectedEvents" :val="event.uniqueId" dense />
                 </td>
-                <td>
-                  <div class="row items-start q-gutter-x-sm flex items-center full-height">
-                    <div class="column gt-md">
-                      <IconifyIcon
-                        :icon="event.activity.icon"
-                        width="24px"
-                        height="24px"
-                        class="text-grey-7"
-                      />
-                    </div>
-                    <div class="column">
-                      <div class="row items-center">
-                        <span class="text-caption">{{ event.activity.subscribedService }}</span>
-                      </div>
-                      <div class="row items-center">
-                        <span class="text-caption">{{ event.activity.eventType }}</span>
-                      </div>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <div class="column">
-                    <div class="row items-center q-mb-sm">
-                      <IconifyIcon
-                        icon="hugeicons:play"
-                        width="16px"
-                        height="16px"
-                        class="text-grey-7 gt-md"
-                      />
-                      <span class="q-ml-xs text-grey-9 ellipsis" style="max-width: 264px">{{
-                        event.route.start
-                      }}</span>
-                      <q-tooltip>{{ event.route.start }}</q-tooltip>
-                    </div>
-                    <q-chip dense class="bg-blue-1 text-blue" square>
-                      {{ event.route.stops }} Stops • {{ event.route.distance }} •
-                      {{ event.route.duration }}
-                    </q-chip>
-                    <div class="row items-center q-mt-sm">
-                      <IconifyIcon
-                        icon="hugeicons:stop"
-                        width="16px"
-                        height="16px"
-                        class="text-grey-7 gt-md"
-                      />
-                      <span class="q-ml-xs text-grey-9 ellipsis" style="max-width: 264px">{{
-                        event.route.end
-                      }}</span>
-                      <q-tooltip>{{ event.route.end }}</q-tooltip>
-                    </div>
-                  </div>
-                </td>
+                <td></td>
                 <td>
                   <div class="row items-center q-gutter-x-sm">
                     <div>

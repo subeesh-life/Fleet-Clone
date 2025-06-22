@@ -19,7 +19,7 @@ export const useTripsStore = defineStore('trips', () => {
    ** Getters - using computed for derived state
    */
   const tripsPayloadHttp = computed(() => {
-    const started_at = moment.utc().subtract(1, 'day');
+    const started_at = moment.utc().subtract(30, 'day');
     const ended_at = moment.utc().add(1, 'day');
     return {
       started_at,
