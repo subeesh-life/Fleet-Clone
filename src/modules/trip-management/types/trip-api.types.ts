@@ -1,4 +1,4 @@
-import type { TripStatus } from './trips.options';
+import type { TripStatus } from './trip-config.types';
 
 export interface TripResponse {
   id: string;

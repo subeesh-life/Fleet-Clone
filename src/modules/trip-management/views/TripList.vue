@@ -7,9 +7,13 @@ import FleetBreadcrumbs from 'src/components/shared/FleetBreadcrumbs.vue';
 import FleetTable from 'src/components/shared/FleetTable.vue';
 import moment from 'moment';
 import { ref, computed, onMounted } from 'vue';
-import { LISTING_BREADCRUMBS, TRIP_STATUS_CONFIG, TRIP_MODE_CONFIG } from '../trip.constants';
-import { useTripsStore } from '../store/trips.store';
-import type { TripMode, TripStatus } from '../types/trips.options';
+import {
+  LISTING_BREADCRUMBS,
+  TRIP_STATUS_CONFIG,
+  TRIP_MODE_CONFIG,
+} from '../constants/trip.constants';
+import { useTripsStore } from '../store/trip.store';
+import type { TripMode, TripStatus } from '../types/trip-config.types';
 import type { Moment } from 'moment';
 
 interface Schedule {

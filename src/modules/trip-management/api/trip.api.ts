@@ -1,5 +1,5 @@
 import { HttpService } from 'src/helpers/httpService';
-import type { TripResponse, TripStatsResponse } from '../types/trips.api';
+import type { TripResponse, TripStatsResponse } from '../types/trip-api.types';
 
 class TripApi extends HttpService {
   constructor() {

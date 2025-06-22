@@ -1,8 +1,8 @@
 import moment from 'moment';
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
-import { tripApi } from '../api';
-import type { TripResponse, TripStatsResponse } from '../types/trips.api';
+import { tripApi } from '../api/trip.api';
+import type { TripResponse, TripStatsResponse } from '../types/trip-api.types';
 
 export const useTripsStore = defineStore('trips', () => {
   /*
