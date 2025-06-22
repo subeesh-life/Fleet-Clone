@@ -23,6 +23,18 @@ export const TRIP_STATUS_CONFIG: TripStatusConfig[] = [
     color: 'purple',
   },
   {
+    name: TripStatus.CONFIRMED,
+    label: 'Confirmed',
+    count: 145,
+    color: 'blue-9',
+  },
+  {
+    name: TripStatus.COMPLETED,
+    label: 'Completed',
+    count: 651,
+    color: 'green-10',
+  },
+  {
     name: TripStatus.ABSENT,
     label: 'Absent',
     count: 8,
@@ -39,18 +51,6 @@ export const TRIP_STATUS_CONFIG: TripStatusConfig[] = [
     label: 'Canceled',
     count: 19,
     color: 'grey',
-  },
-  {
-    name: TripStatus.COMPLETED,
-    label: 'Completed',
-    count: 651,
-    color: 'green-10',
-  },
-  {
-    name: TripStatus.CONFIRMED,
-    label: 'Confirmed',
-    count: 145,
-    color: 'blue-9',
   },
   {
     name: TripStatus.DELAYED,
