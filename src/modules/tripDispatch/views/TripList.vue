@@ -6,7 +6,7 @@ import VehiclePlate from 'src/components/shared/card/VehiclePlate.vue';
 import FleetBreadcrumbs from 'src/components/shared/FleetBreadcrumbs.vue';
 import { ref, computed, onMounted } from 'vue';
 import { LISTING_BREADCRUMBS, TRIP_STATUS_CONFIG } from '../constants';
-import { useTripsStore } from '../store/trips';
+import { useTripsStore } from '../store/trips.store';
 
 interface Schedule {
   startSchedule: string;

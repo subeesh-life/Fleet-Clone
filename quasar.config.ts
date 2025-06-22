@@ -52,7 +52,7 @@ export default defineConfig(ctx => {
     devServer: {
       proxy: {
         '/api/': {
-          target: 'https://saas-dev.wiot360.com/',
+          target: 'https://saas-stage.wiot360.com/',
           changeOrigin: true,
           secure: false,
         },

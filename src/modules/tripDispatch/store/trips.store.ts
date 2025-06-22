@@ -1,12 +1,15 @@
 import moment from 'moment';
 import { defineStore } from 'pinia';
-import { httpService } from 'src/helpers/httpService';
+import { tripApi } from '../api';
+import type { TripResponse, TripStatsResponse } from '../types/trips.api';
 
 export const useTripsStore = defineStore('trips', {
   state: () => ({
     currentPage: 1,
-    trips: [],
+    trips: [] as TripResponse[],
     tripsLoader: false,
+    tripsTotal: 0,
+    tripStats: {} as TripStatsResponse,
     tripStatsLoader: false,
   }),
 
@@ -42,13 +45,15 @@ export const useTripsStore = defineStore('trips', {
         this.startLoader();
 
         const params = this.tripsPayloadHttp;
+        const queryParams = {
+          page: params.page,
+          limit: params.limit,
+        };
 
-        const response = await httpService.post(
-          `/trip-dispatcher/trip-instance/web-list?page=${params.page}&limit=${params.limit}`,
-          this.tripsPayloadHttp
-        );
+        const response = await tripApi.getTrips(params, queryParams);
 
-        console.log({ response });
+        this.trips = response.list;
+        this.tripsTotal = response.total;
       } catch (error) {
         console.error('Error fetching trips:', error);
       } finally {
@@ -59,12 +64,9 @@ export const useTripsStore = defineStore('trips', {
       try {
         this.startTripStatsLoader();
 
-        const response = await httpService.post(
-          '/trip-dispatcher/trip-instance/web-stats',
-          this.tripsPayloadHttp
-        );
+        const response = await tripApi.getTripStats(this.tripsPayloadHttp);
 
-        console.log('stats', { response });
+        this.tripStats = response;
       } catch (error) {
         console.error('Error fetching trip status:', error);
       } finally {

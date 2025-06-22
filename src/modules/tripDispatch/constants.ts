@@ -1,5 +1,5 @@
-import type { TripStatusConfig } from './types';
-import { TripStatus } from './types';
+import type { TripStatusConfig } from './types/trips.options';
+import { TripStatus } from './types/trips.options';
 
 export const LISTING_BREADCRUMBS = [
   { label: 'Home', to: { name: 'executive-dashboard' } },
