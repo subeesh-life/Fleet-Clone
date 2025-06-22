@@ -1,3 +1,5 @@
+import type { TripStatus } from './trips.options';
+
 export interface TripResponse {
   id: string;
   trip_id: string;
@@ -309,15 +311,4 @@ export interface TripResponse {
   is_vip: boolean;
 }
 
-export interface TripStatsResponse {
-  absent: number;
-  all: number;
-  approvalpending: number;
-  cancelled: number;
-  completed: number;
-  confirmed: number;
-  delayed: number;
-  deleted: number;
-  live: number;
-  missed: number;
-}
+export type TripStatsResponse = Partial<Record<TripStatus, number>>;

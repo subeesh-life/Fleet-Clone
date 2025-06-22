@@ -4,7 +4,7 @@ export enum TripStatus {
   ALL = 'all',
   UPCOMING = 'upcoming',
   ABSENT = 'absent',
-  APPROVAL_PENDING = 'approval_pending',
+  APPROVAL_PENDING = 'approvalpending',
   CANCELED = 'canceled',
   COMPLETED = 'completed',
   CONFIRMED = 'confirmed',
@@ -18,5 +18,4 @@ export interface TripStatusConfig {
   name: TripStatus;
   color: BrandColor | Color | DetailedColor;
   label: string;
-  count: number;
 }

@@ -5,7 +5,7 @@ import FleetChips from 'src/components/shared/chips/FleetChips.vue';
 import VehiclePlate from 'src/components/shared/card/VehiclePlate.vue';
 import FleetBreadcrumbs from 'src/components/shared/FleetBreadcrumbs.vue';
 import { ref, computed, onMounted } from 'vue';
-import { LISTING_BREADCRUMBS, TRIP_STATUS_CONFIG } from '../constants';
+import { LISTING_BREADCRUMBS, TRIP_STATUS_CONFIG } from '../trip.constants';
 import { useTripsStore } from '../store/trips.store';
 
 interface Schedule {
@@ -537,7 +537,7 @@ onMounted((): void => {
               <div class="row no-wrap items-center q-px-lg">
                 {{ status.label }}
                 <FleetChips
-                  :text="status.count.toString()"
+                  :text="(store.tripStats[status.name] ?? 0).toLocaleString()"
                   :color="status.color"
                   :iconVisibility="false"
                   class="q-ml-sm gt-sm"
