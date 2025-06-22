@@ -14,7 +14,7 @@ import { useRouter } from 'vue-router';
 
 const showCancelConfirmationModal = ref(false);
 const confirmCancellation = async () => {
-  await router.push({ name: 'dispatch' });
+  await router.push({ name: 'dispatch-listing' });
 };
 const showDraftConfirmationModal = ref(false);
 
@@ -26,13 +26,10 @@ onMounted(() => {
     const map = L.map('map').setView([24.4539, 54.3773], 4);
 
     // Using CartoDB's light (grayscale) map with English labels
-    L.tileLayer(
-      'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
-      {
-        subdomains: 'abcd',
-        maxZoom: 20,
-      }
-    ).addTo(map);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      subdomains: 'abcd',
+      maxZoom: 20,
+    }).addTo(map);
 
     map.invalidateSize();
   }, 100);
@@ -83,40 +80,13 @@ const updateEventReferenceId = () => {
           <span class="text-h6 text-weight-bold">{{
             $q.screen.gt.sm ? 'Event Reference ID' : 'Event ID'
           }}</span>
-          <q-input
-            filled
-            dense
-            v-model="eventReferenceId"
-            class="q-ml-xs"
-            style="width: 100px"
-          />
-          <q-btn
-            flat
-            dense
-            padding="xs"
-            class="q-ml-xs"
-            @click="copyEventReferenceId"
-          >
+          <q-input filled dense v-model="eventReferenceId" class="q-ml-xs" style="width: 100px" />
+          <q-btn flat dense padding="xs" class="q-ml-xs" @click="copyEventReferenceId">
             <q-tooltip>Copy</q-tooltip>
-            <iconify-icon
-              icon="hugeicons:copy-02"
-              width="16px"
-              height="16px"
-              class="text-grey-7"
-            />
+            <iconify-icon icon="hugeicons:copy-02" width="16px" height="16px" class="text-grey-7" />
           </q-btn>
-          <q-btn
-            flat
-            dense
-            padding="xs"
-            class="q-ml-xs"
-            @click="showPopupEdit = true"
-          >
-            <q-popup-edit
-              v-model="showPopupEdit"
-              :cover="false"
-              :offset="[0, 10]"
-            >
+          <q-btn flat dense padding="xs" class="q-ml-xs" @click="showPopupEdit = true">
+            <q-popup-edit v-model="showPopupEdit" :cover="false" :offset="[0, 10]">
               <div style="max-width: 300px" class="q-pa-sm">
                 <div>
                   <div class="text-subtitle2">Modify Event Reference ID</div>
@@ -140,22 +110,12 @@ const updateEventReferenceId = () => {
                 </div>
                 <q-card-actions align="right">
                   <q-btn flat label="Cancel" color="grey-7" v-close-popup />
-                  <q-btn
-                    flat
-                    label="Update"
-                    color="primary"
-                    @click="updateEventReferenceId"
-                  />
+                  <q-btn flat label="Update" color="primary" @click="updateEventReferenceId" />
                 </q-card-actions>
               </div>
             </q-popup-edit>
             <q-tooltip>Add Prefix or Suffix</q-tooltip>
-            <iconify-icon
-              icon="hugeicons:edit-02"
-              width="16px"
-              height="16px"
-              class="text-grey-7"
-            />
+            <iconify-icon icon="hugeicons:edit-02" width="16px" height="16px" class="text-grey-7" />
           </q-btn>
         </div>
         <div class="row items-center">
@@ -179,11 +139,7 @@ const updateEventReferenceId = () => {
               class="gt-sm"
             >
               <q-icon>
-                <IconifyIcon
-                  icon="hugeicons:sorting-05"
-                  width="12px"
-                  height="12px"
-                />
+                <IconifyIcon icon="hugeicons:sorting-05" width="12px" height="12px" />
               </q-icon>
               <q-tooltip>
                 <div class="text-caption">Set Threshold</div>
@@ -199,11 +155,7 @@ const updateEventReferenceId = () => {
               @click="showCancelConfirmationModal = true"
             >
               <template v-if="!$q.screen.gt.sm">
-                <iconify-icon
-                  icon="hugeicons:cancel-01"
-                  width="20px"
-                  height="20px"
-                />
+                <iconify-icon icon="hugeicons:cancel-01" width="20px" height="20px" />
               </template>
             </q-btn>
             <q-btn
@@ -214,11 +166,7 @@ const updateEventReferenceId = () => {
               @click="showDraftConfirmationModal = true"
             >
               <template v-if="!$q.screen.gt.sm">
-                <iconify-icon
-                  icon="hugeicons:hard-drive"
-                  width="20px"
-                  height="20px"
-                />
+                <iconify-icon icon="hugeicons:hard-drive" width="20px" height="20px" />
               </template>
             </q-btn>
             <q-btn
