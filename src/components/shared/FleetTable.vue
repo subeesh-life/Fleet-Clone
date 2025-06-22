@@ -1,20 +1,5 @@
 <template>
-  <div class="reusable-table">
-    <!-- Search Bar -->
-    <q-input
-      v-if="searchable"
-      v-model="search"
-      :placeholder="searchPlaceholder"
-      dense
-      outlined
-      class="q-mb-md"
-      clearable
-    >
-      <template v-slot:prepend>
-        <q-icon name="search" />
-      </template>
-    </q-input>
-
+  <div>
     <!-- Table -->
     <q-table
       v-model:selected="selectedRows"
@@ -37,6 +22,8 @@
       @row-click="(evt, row, index) => emit('row-click', evt, row, index)"
       @row-dblclick="(evt, row, index) => emit('row-dblclick', evt, row, index)"
     >
+      <slot></slot>
+
       <!-- Dynamic Column Rendering -->
       <template
         v-for="col in processedColumns"
@@ -46,9 +33,9 @@
         <q-td :props="props">
           <!-- Text Column -->
           <template v-if="col.type === 'text' || !col.type">
-            <span :class="col.textClass">{{
-              formatValue(getFieldValue(props.row, col.field), col)
-            }}</span>
+            <span :class="col.textClass">
+              {{ formatValue(getFieldValue(props.row, col.field), col) }}
+            </span>
           </template>
 
           <!-- Number Column -->
@@ -185,8 +172,8 @@
           <!-- Slot Override -->
           <slot
             v-if="$slots[`cell-${col.name}`]"
+            v-bind="props"
             :name="`cell-${col.name}`"
-            :props="props"
             :column="col"
           />
         </q-td>
@@ -655,8 +642,4 @@ defineExpose({
 });
 </script>
 
-<style scoped>
-.reusable-table {
-  width: 100%;
-}
-</style>
+<style scoped></style>

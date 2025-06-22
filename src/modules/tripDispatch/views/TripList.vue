@@ -4,9 +4,13 @@ import FleetTimeRange from 'src/components/shared/FleetTimeRange.vue';
 import FleetChips from 'src/components/shared/chips/FleetChips.vue';
 import VehiclePlate from 'src/components/shared/card/VehiclePlate.vue';
 import FleetBreadcrumbs from 'src/components/shared/FleetBreadcrumbs.vue';
+import FleetTable from 'src/components/shared/FleetTable.vue';
+import moment from 'moment';
 import { ref, computed, onMounted } from 'vue';
 import { LISTING_BREADCRUMBS, TRIP_STATUS_CONFIG } from '../trip.constants';
 import { useTripsStore } from '../store/trips.store';
+import type { TripStatus } from '../types/trips.options';
+import type { Moment } from 'moment';
 
 interface Schedule {
   startSchedule: string;
@@ -384,6 +388,74 @@ const handleSelectAll = (newSelected: readonly number[]) => {
   selectAll.value = newSelected.length === rows.length;
 };
 
+const tableColumns: QTableColumn[] = [
+  {
+    name: 'select',
+    label: '',
+    field: 'select',
+    align: 'left',
+    headerClasses: 'bg-grey-2',
+  },
+  {
+    name: 'schedule-actual',
+    label: 'Schedule / Actual',
+    field: 'scheduleActual',
+    align: 'left',
+    headerClasses: 'bg-grey-2',
+  },
+  {
+    name: 'trip-status',
+    label: 'Event Status',
+    field: 'eventStatus',
+    align: 'left',
+    sortable: true,
+    headerClasses: 'bg-grey-2',
+  },
+  {
+    name: 'activity',
+    label: 'Activity',
+    field: 'activity',
+    align: 'left',
+    sortable: true,
+    headerClasses: 'bg-grey-2',
+  },
+  {
+    name: 'route',
+    label: 'Route',
+    field: 'route',
+    align: 'left',
+    headerClasses: 'bg-grey-2',
+  },
+  {
+    name: 'assetsStatus',
+    label: 'Assets Status',
+    field: 'assetsStatus',
+    align: 'left',
+    headerClasses: 'bg-grey-2',
+  },
+  {
+    name: 'client',
+    label: 'Client',
+    field: 'client',
+    align: 'left',
+    headerClasses: 'bg-grey-2',
+  },
+  {
+    name: 'status',
+    label: 'Approval Status',
+    field: 'status',
+    align: 'left',
+    headerClasses: 'bg-grey-2',
+  },
+  {
+    name: 'actions',
+    label: 'Actions',
+    field: 'actions',
+    align: 'left',
+    headerClasses: 'bg-grey-2',
+  },
+];
+
 const columns: QTableColumn[] = [
   {
     name: 'select',
@@ -451,6 +523,46 @@ const columns: QTableColumn[] = [
     headerClasses: 'bg-grey-2',
   },
 ];
+
+const formatDuration = (start: string | Moment, end: string | Moment = '') => {
+  const startTime = moment.utc(start).local();
+  const endTime = end ? moment.utc(end).local() : moment();
+  const duration = moment.duration(endTime.diff(startTime));
+
+  const days = Math.floor(duration.asDays());
+  const hours = duration.hours();
+  const minutes = duration.minutes();
+
+  if (days > 0) return `${days}d ${hours}h`;
+  if (hours > 0) return `${hours}h ${minutes}m`;
+  if (minutes > 0) return `${minutes}m`;
+  return 'Just now';
+};
+
+const getStatusDisplay = (item: any): string => {
+  const { timing, actual, updated_at } = item;
+  const now = moment();
+  const startTime = timing?.start_at ? moment.utc(timing.start_at).local() : null;
+
+  const configs: Partial<Record<TripStatus, string>> = {
+    completed: `Completed in ${formatDuration(timing?.start_at, timing?.end_at)}`,
+    live: `Live for ${formatDuration(actual?.started_at)}`,
+    delayed: `Delayed by ${formatDuration(timing?.start_at)}`,
+    missed: `Delayed by ${formatDuration(timing?.start_at)}`,
+    confirmed:
+      startTime && now.isBefore(startTime)
+        ? `In ${formatDuration(now, timing.start_at)}`
+        : `Delayed by ${formatDuration(timing?.start_at)}`,
+    cancelled: `Cancelled ${formatDuration(updated_at)} ago`,
+  };
+
+  return configs[item.status as TripStatus] as string;
+};
+
+const getStatusColor = (status: TripStatus): string => {
+  const statusConfig = TRIP_STATUS_CONFIG.find(s => s.name === status);
+  return statusConfig ? statusConfig.color : 'grey-3';
+};
 
 const addSearchFilter = () => {
   if (searchText.value && selectedFilter.value) {
@@ -580,7 +692,46 @@ onMounted((): void => {
           </q-card-section>
         </q-card>
 
-        <!-- <q-table flat bordered> </q-table> -->
+        <FleetTable :columns="tableColumns" :rows="store.trips">
+          <template #cell-schedule-actual="{ row }">
+            <div class="row items-start q-gutter-x-sm flex items-center full-height">
+              <div class="column gt-md">
+                <q-badge color="secondary" text-color="white">S</q-badge>
+              </div>
+              <div class="column">
+                <div class="row items-center">
+                  <IconifyIcon
+                    icon="hugeicons:clock-01"
+                    width="16px"
+                    height="16px"
+                    class="text-grey-7"
+                  />
+                  <span class="q-ml-sm text-caption">{{ row.timing.start_at }}</span>
+                </div>
+                <div class="text-grey-5 text-center">—————</div>
+                <div class="row items-center">
+                  <IconifyIcon
+                    icon="hugeicons:clock-01"
+                    width="16px"
+                    height="16px"
+                    class="text-grey-7"
+                  />
+                  <span class="q-ml-sm text-caption">{{ row.timing.end_at }}</span>
+                </div>
+              </div>
+            </div>
+          </template>
+
+          <template #cell-trip-status="{ row }">
+            <FleetChips
+              class="full-width text-weight-medium"
+              :text="getStatusDisplay(row)"
+              :color="getStatusColor(row.status)"
+              :iconVisibility="false"
+            />
+          </template>
+        </FleetTable>
+
         <q-table
           v-model:selected="selectedEvents"
           flat
@@ -606,54 +757,8 @@ onMounted((): void => {
                 <td>
                   <q-checkbox v-model="selectedEvents" :val="event.uniqueId" dense />
                 </td>
-                <td>
-                  <div class="row items-start q-gutter-x-sm flex items-center full-height">
-                    <div class="column gt-md">
-                      <q-badge color="secondary" text-color="white">S</q-badge>
-                    </div>
-                    <div class="column">
-                      <div class="row items-center">
-                        <IconifyIcon
-                          icon="hugeicons:clock-01"
-                          width="16px"
-                          height="16px"
-                          class="text-grey-7"
-                        />
-                        <span class="q-ml-sm text-caption">{{ event.schedule.startSchedule }}</span>
-                      </div>
-                      <div class="text-grey-5 text-center">—————</div>
-                      <div class="row items-center">
-                        <IconifyIcon
-                          icon="hugeicons:clock-01"
-                          width="16px"
-                          height="16px"
-                          class="text-grey-7"
-                        />
-                        <span class="q-ml-sm text-caption">{{ event.schedule.startActual }}</span>
-                      </div>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <FleetChips
-                    class="full-width"
-                    :text="event.eventStatus.status + ' - ' + event.eventStatus.time"
-                    :color="
-                      event.eventStatus.status === 'Upcoming'
-                        ? 'purple'
-                        : event.eventStatus.status === 'Live'
-                          ? 'success'
-                          : event.eventStatus.status === 'Delayed'
-                            ? 'warning'
-                            : event.eventStatus.status === 'Completed'
-                              ? 'grey'
-                              : event.eventStatus.status === 'Canceled'
-                                ? 'error'
-                                : 'secondary'
-                    "
-                    :iconVisibility="false"
-                  />
-                </td>
+                <td></td>
+                <td></td>
                 <td>
                   <div class="row items-start q-gutter-x-sm flex items-center full-height">
                     <div class="column gt-md">

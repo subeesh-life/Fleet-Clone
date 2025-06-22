@@ -5,7 +5,7 @@ export enum TripStatus {
   UPCOMING = 'upcoming',
   ABSENT = 'absent',
   APPROVAL_PENDING = 'approvalpending',
-  CANCELED = 'canceled',
+  CANCELED = 'cancelled',
   COMPLETED = 'completed',
   CONFIRMED = 'confirmed',
   DELAYED = 'delayed',

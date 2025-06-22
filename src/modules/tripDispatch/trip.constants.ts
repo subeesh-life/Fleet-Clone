@@ -13,7 +13,7 @@ export const TRIP_STATUS_CONFIG: TripStatusConfig[] = [
   {
     name: TripStatus.ALL,
     label: 'All',
-    color: 'green',
+    color: 'green-10',
   },
   {
     name: TripStatus.UPCOMING,
@@ -28,7 +28,7 @@ export const TRIP_STATUS_CONFIG: TripStatusConfig[] = [
   {
     name: TripStatus.COMPLETED,
     label: 'Completed',
-    color: 'green-10',
+    color: 'green',
   },
   {
     name: TripStatus.ABSENT,
