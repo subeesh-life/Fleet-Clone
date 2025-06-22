@@ -214,6 +214,34 @@ const actionButtons = computed(() => [
   },
 ]);
 
+const toolbarActions = computed(() => [
+  {
+    name: 'threshold',
+    icon: 'hugeicons:filter-horizontal',
+    label: 'Threshold',
+    disabled: false,
+  },
+  {
+    name: 'clone',
+    icon: 'hugeicons:flip-left',
+    label: 'Clone',
+    disabled: selectedEvents.value.length > 1,
+    tooltip: selectedEvents.value.length > 1 ? 'You can only clone one event at a time.' : null,
+  },
+  {
+    name: 'apply-policy',
+    icon: 'hugeicons:security-check',
+    label: 'Apply Policy',
+    disabled: false,
+  },
+  {
+    name: 'merge',
+    icon: 'hugeicons:filter-horizontal',
+    label: 'Merge',
+    disabled: false,
+  },
+]);
+
 const showDialog = computed({
   get: () => selectedVehicleEvent.value !== null,
   set: (value: boolean) => {
@@ -506,7 +534,7 @@ onMounted((): void => {
             class="flex"
           >
             <template #default>
-              <div class="row no-wrap q-px-lg">
+              <div class="row no-wrap items-center q-px-lg">
                 {{ status.label }}
                 <FleetChips
                   :text="status.count.toString()"
@@ -520,63 +548,32 @@ onMounted((): void => {
         </q-tabs>
       </div>
 
-      <div class="col-12">
+      <div class="col-12 q-px-md bg-white q-pb-md">
         <q-card v-if="selectedEvents.length > 0" flat bordered class="q-px-xs q-mb-md full-width">
           <q-card-section class="q-pa-none">
             <div class="row">
-              <div class="col flex items-center">
-                <q-btn flat dense class="q-px-sm full-width" color="primary">
-                  <IconifyIcon
-                    icon="hugeicons:filter-horizontal"
-                    width="24px"
-                    height="24px"
-                    class="text-grey-7 q-mr-sm gt-sm"
-                  />
-                  <span>Threshold</span>
-                </q-btn>
-              </div>
-
-              <div class="col flex items-center">
+              <div
+                v-for="button in toolbarActions"
+                :key="button.name"
+                class="col flex items-center"
+              >
                 <q-btn
                   flat
                   dense
                   class="q-px-sm full-width"
                   color="primary"
-                  :disabled="selectedEvents.length > 1"
+                  :disabled="button.disabled"
                 >
                   <IconifyIcon
-                    icon="hugeicons:flip-left"
+                    :icon="button.icon"
                     width="24px"
                     height="24px"
                     class="text-grey-7 q-mr-sm gt-sm"
                   />
-                  <span>Clone</span>
-                  <q-tooltip v-if="selectedEvents.length > 1">
-                    <div class="text-caption">You can only clone one event at a time.</div>
+                  <span>{{ button.label }}</span>
+                  <q-tooltip v-if="button.tooltip">
+                    <div class="text-caption">{{ button.tooltip }}</div>
                   </q-tooltip>
-                </q-btn>
-              </div>
-              <div class="col flex items-center">
-                <q-btn flat dense class="q-px-sm full-width" color="primary">
-                  <IconifyIcon
-                    icon="hugeicons:security-check"
-                    width="24px"
-                    height="24px"
-                    class="text-grey-7 q-mr-sm gt-sm"
-                  />
-                  <span>Apply Policy</span>
-                </q-btn>
-              </div>
-
-              <div class="col flex items-center">
-                <q-btn flat dense class="q-px-sm full-width" color="primary">
-                  <IconifyIcon
-                    icon="hugeicons:filter-horizontal"
-                    width="24px"
-                    height="24px"
-                    class="text-grey-7 q-mr-sm gt-sm"
-                  />
-                  <span>Merge</span>
                 </q-btn>
               </div>
             </div>
@@ -584,368 +581,364 @@ onMounted((): void => {
         </q-card>
 
         <!-- <q-table flat bordered> </q-table> -->
-        <div class="q-px-md bg-white">
-          <q-table
-            v-model:selected="selectedEvents"
-            flat
-            bordered
-            row-key="eventDetails?.id"
-            :columns="columns"
-            :rows="groupedRows"
-            :pagination="{ rowsPerPage: 7 }"
-            :rows-per-page-options="[5, 7, 10]"
-            @update:selected="handleSelectAll"
-          >
-            <template v-slot:body="props">
-              <tr v-if="props.row.isGroupHeader">
-                <td
-                  :colspan="columns.length"
-                  class="bg-grey-1 text-body2 text-primary text-weight-bold"
-                >
-                  {{ props.row.date }}
+        <q-table
+          v-model:selected="selectedEvents"
+          flat
+          bordered
+          row-key="eventDetails?.id"
+          :columns="columns"
+          :rows="groupedRows"
+          :pagination="{ rowsPerPage: 7 }"
+          :rows-per-page-options="[5, 7, 10]"
+          @update:selected="handleSelectAll"
+        >
+          <template v-slot:body="props">
+            <tr v-if="props.row.isGroupHeader">
+              <td
+                :colspan="columns.length"
+                class="bg-grey-1 text-body2 text-primary text-weight-bold"
+              >
+                {{ props.row.date }}
+              </td>
+            </tr>
+            <template v-else>
+              <tr v-for="(event, index) in props.row.eventDetails.eventDate.events" :key="index">
+                <td>
+                  <q-checkbox v-model="selectedEvents" :val="event.uniqueId" dense />
                 </td>
-              </tr>
-              <template v-else>
-                <tr v-for="(event, index) in props.row.eventDetails.eventDate.events" :key="index">
-                  <td>
-                    <q-checkbox v-model="selectedEvents" :val="event.uniqueId" dense />
-                  </td>
-                  <td>
-                    <div class="row items-start q-gutter-x-sm flex items-center full-height">
-                      <div class="column gt-md">
-                        <q-badge color="secondary" text-color="white">S</q-badge>
-                      </div>
-                      <div class="column">
-                        <div class="row items-center">
-                          <IconifyIcon
-                            icon="hugeicons:clock-01"
-                            width="16px"
-                            height="16px"
-                            class="text-grey-7"
-                          />
-                          <span class="q-ml-sm text-caption">{{
-                            event.schedule.startSchedule
-                          }}</span>
-                        </div>
-                        <div class="text-grey-5 text-center">—————</div>
-                        <div class="row items-center">
-                          <IconifyIcon
-                            icon="hugeicons:clock-01"
-                            width="16px"
-                            height="16px"
-                            class="text-grey-7"
-                          />
-                          <span class="q-ml-sm text-caption">{{ event.schedule.startActual }}</span>
-                        </div>
-                      </div>
+                <td>
+                  <div class="row items-start q-gutter-x-sm flex items-center full-height">
+                    <div class="column gt-md">
+                      <q-badge color="secondary" text-color="white">S</q-badge>
                     </div>
-                  </td>
-                  <td>
-                    <FleetChips
-                      class="full-width"
-                      :text="event.eventStatus.status + ' - ' + event.eventStatus.time"
-                      :color="
-                        event.eventStatus.status === 'Upcoming'
-                          ? 'purple'
-                          : event.eventStatus.status === 'Live'
-                            ? 'success'
-                            : event.eventStatus.status === 'Delayed'
-                              ? 'warning'
-                              : event.eventStatus.status === 'Completed'
-                                ? 'grey'
-                                : event.eventStatus.status === 'Canceled'
-                                  ? 'error'
-                                  : 'secondary'
-                      "
-                      :iconVisibility="false"
-                    />
-                  </td>
-                  <td>
-                    <div class="row items-start q-gutter-x-sm flex items-center full-height">
-                      <div class="column gt-md">
+                    <div class="column">
+                      <div class="row items-center">
                         <IconifyIcon
-                          :icon="event.activity.icon"
-                          width="24px"
-                          height="24px"
+                          icon="hugeicons:clock-01"
+                          width="16px"
+                          height="16px"
                           class="text-grey-7"
                         />
+                        <span class="q-ml-sm text-caption">{{ event.schedule.startSchedule }}</span>
                       </div>
-                      <div class="column">
-                        <div class="row items-center">
-                          <span class="text-caption">{{ event.activity.subscribedService }}</span>
-                        </div>
-                        <div class="row items-center">
-                          <span class="text-caption">{{ event.activity.eventType }}</span>
-                        </div>
+                      <div class="text-grey-5 text-center">—————</div>
+                      <div class="row items-center">
+                        <IconifyIcon
+                          icon="hugeicons:clock-01"
+                          width="16px"
+                          height="16px"
+                          class="text-grey-7"
+                        />
+                        <span class="q-ml-sm text-caption">{{ event.schedule.startActual }}</span>
                       </div>
                     </div>
-                  </td>
-                  <td>
+                  </div>
+                </td>
+                <td>
+                  <FleetChips
+                    class="full-width"
+                    :text="event.eventStatus.status + ' - ' + event.eventStatus.time"
+                    :color="
+                      event.eventStatus.status === 'Upcoming'
+                        ? 'purple'
+                        : event.eventStatus.status === 'Live'
+                          ? 'success'
+                          : event.eventStatus.status === 'Delayed'
+                            ? 'warning'
+                            : event.eventStatus.status === 'Completed'
+                              ? 'grey'
+                              : event.eventStatus.status === 'Canceled'
+                                ? 'error'
+                                : 'secondary'
+                    "
+                    :iconVisibility="false"
+                  />
+                </td>
+                <td>
+                  <div class="row items-start q-gutter-x-sm flex items-center full-height">
+                    <div class="column gt-md">
+                      <IconifyIcon
+                        :icon="event.activity.icon"
+                        width="24px"
+                        height="24px"
+                        class="text-grey-7"
+                      />
+                    </div>
                     <div class="column">
-                      <div class="row items-center q-mb-sm">
-                        <IconifyIcon
-                          icon="hugeicons:play"
-                          width="16px"
-                          height="16px"
-                          class="text-grey-7 gt-md"
-                        />
-                        <span class="q-ml-xs text-grey-9 ellipsis" style="max-width: 264px">{{
-                          event.route.start
-                        }}</span>
-                        <q-tooltip>{{ event.route.start }}</q-tooltip>
+                      <div class="row items-center">
+                        <span class="text-caption">{{ event.activity.subscribedService }}</span>
                       </div>
-                      <q-chip dense class="bg-blue-1 text-blue" square>
-                        {{ event.route.stops }} Stops • {{ event.route.distance }} •
-                        {{ event.route.duration }}
-                      </q-chip>
-                      <div class="row items-center q-mt-sm">
-                        <IconifyIcon
-                          icon="hugeicons:stop"
-                          width="16px"
-                          height="16px"
-                          class="text-grey-7 gt-md"
-                        />
-                        <span class="q-ml-xs text-grey-9 ellipsis" style="max-width: 264px">{{
-                          event.route.end
-                        }}</span>
-                        <q-tooltip>{{ event.route.end }}</q-tooltip>
+                      <div class="row items-center">
+                        <span class="text-caption">{{ event.activity.eventType }}</span>
                       </div>
                     </div>
-                  </td>
-                  <td>
-                    <div class="row items-center q-gutter-x-sm">
-                      <div>
-                        <q-btn
-                          outline
-                          round
-                          dense
+                  </div>
+                </td>
+                <td>
+                  <div class="column">
+                    <div class="row items-center q-mb-sm">
+                      <IconifyIcon
+                        icon="hugeicons:play"
+                        width="16px"
+                        height="16px"
+                        class="text-grey-7 gt-md"
+                      />
+                      <span class="q-ml-xs text-grey-9 ellipsis" style="max-width: 264px">{{
+                        event.route.start
+                      }}</span>
+                      <q-tooltip>{{ event.route.start }}</q-tooltip>
+                    </div>
+                    <q-chip dense class="bg-blue-1 text-blue" square>
+                      {{ event.route.stops }} Stops • {{ event.route.distance }} •
+                      {{ event.route.duration }}
+                    </q-chip>
+                    <div class="row items-center q-mt-sm">
+                      <IconifyIcon
+                        icon="hugeicons:stop"
+                        width="16px"
+                        height="16px"
+                        class="text-grey-7 gt-md"
+                      />
+                      <span class="q-ml-xs text-grey-9 ellipsis" style="max-width: 264px">{{
+                        event.route.end
+                      }}</span>
+                      <q-tooltip>{{ event.route.end }}</q-tooltip>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="row items-center q-gutter-x-sm">
+                    <div>
+                      <q-btn
+                        outline
+                        round
+                        dense
+                        :color="
+                          event.assetsStatus.assignedVehicle
+                            ? event.assetsStatus.assignedColor
+                            : event.assetsStatus.notAssignedColor
+                        "
+                        @click="showVehicleDetails(event)"
+                        :disable="!event.assetsStatus.assignedVehicle"
+                      >
+                        <IconifyIcon
+                          :icon="event.assetsStatus.assignedVehicleIcon"
+                          width="24px"
+                          height="24px"
+                        />
+                        <q-badge
+                          floating
+                          rounded
                           :color="
                             event.assetsStatus.assignedVehicle
                               ? event.assetsStatus.assignedColor
                               : event.assetsStatus.notAssignedColor
                           "
-                          @click="showVehicleDetails(event)"
-                          :disable="!event.assetsStatus.assignedVehicle"
+                          text-color="white"
+                          class="q-ml-sm"
                         >
                           <IconifyIcon
-                            :icon="event.assetsStatus.assignedVehicleIcon"
-                            width="24px"
-                            height="24px"
-                          />
-                          <q-badge
-                            floating
-                            rounded
-                            :color="
+                            :icon="
                               event.assetsStatus.assignedVehicle
-                                ? event.assetsStatus.assignedColor
-                                : event.assetsStatus.notAssignedColor
+                                ? 'hugeicons:tick-01'
+                                : 'hugeicons:cancel-01'
                             "
-                            text-color="white"
-                            class="q-ml-sm"
-                          >
-                            <IconifyIcon
-                              :icon="
-                                event.assetsStatus.assignedVehicle
-                                  ? 'hugeicons:tick-01'
-                                  : 'hugeicons:cancel-01'
-                              "
-                              width="12px"
-                              height="12px"
-                            />
-                          </q-badge>
-                          <q-tooltip
-                            >Vehicle
-                            {{
-                              event.assetsStatus.assignedVehicle ? 'Assigned' : 'Not Assigned'
-                            }}</q-tooltip
-                          >
-                        </q-btn>
-                      </div>
-                      <div>
-                        <q-btn
-                          outline
-                          round
-                          dense
+                            width="12px"
+                            height="12px"
+                          />
+                        </q-badge>
+                        <q-tooltip
+                          >Vehicle
+                          {{
+                            event.assetsStatus.assignedVehicle ? 'Assigned' : 'Not Assigned'
+                          }}</q-tooltip
+                        >
+                      </q-btn>
+                    </div>
+                    <div>
+                      <q-btn
+                        outline
+                        round
+                        dense
+                        :color="
+                          event.assetsStatus.assignedDriver
+                            ? event.assetsStatus.assignedColor
+                            : event.assetsStatus.notAssignedColor
+                        "
+                        @click="showDriverDetails(event)"
+                        :disable="!event.assetsStatus.assignedDriver"
+                      >
+                        <IconifyIcon
+                          :icon="event.assetsStatus.assignedDriverIcon"
+                          width="24px"
+                          height="24px"
+                        />
+                        <q-badge
+                          floating
+                          rounded
                           :color="
                             event.assetsStatus.assignedDriver
                               ? event.assetsStatus.assignedColor
                               : event.assetsStatus.notAssignedColor
                           "
-                          @click="showDriverDetails(event)"
-                          :disable="!event.assetsStatus.assignedDriver"
+                          text-color="white"
+                          class="q-ml-sm"
                         >
                           <IconifyIcon
-                            :icon="event.assetsStatus.assignedDriverIcon"
+                            :icon="
+                              event.assetsStatus.assignedDriver
+                                ? 'hugeicons:tick-01'
+                                : 'hugeicons:cancel-01'
+                            "
+                            width="12px"
+                            height="12px"
+                          />
+                        </q-badge>
+                        <q-tooltip
+                          >Driver
+                          {{
+                            event.assetsStatus.assignedDriver ? 'Assigned' : 'Not Assigned'
+                          }}</q-tooltip
+                        >
+                      </q-btn>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="row items-center q-gutter-x-sm">
+                    <q-btn flat round dense>
+                      <q-avatar size="24px">
+                        <img :src="event.client[0].logo" />
+                      </q-avatar>
+                      <q-tooltip>{{ event.client[0].name }}</q-tooltip>
+                    </q-btn>
+                    <q-btn
+                      v-if="event.client.length > 1"
+                      round
+                      dense
+                      flat
+                      class="bg-grey-3 text-grey-9"
+                    >
+                      +{{ event.client.length - 1 }}
+                      <q-tooltip> {{ event.client.length - 1 }} more client(s) </q-tooltip>
+                    </q-btn>
+                  </div>
+                </td>
+                <td>
+                  <div
+                    class="text-body2 text-weight-medium q-pl-sm"
+                    :class="{
+                      'text-positive': event.status === 'Approved',
+                      'text-warning': event.status === 'Pending',
+                      'text-negative': event.status === 'Declined',
+                    }"
+                  >
+                    {{ event.status }}
+                  </div>
+                </td>
+                <td>
+                  <q-btn flat round @click="activeMoreMenu = event.uniqueId">
+                    <IconifyIcon
+                      icon="hugeicons:more-vertical-circle-01"
+                      width="24px"
+                      height="24px"
+                      class="text-grey-7"
+                    />
+                  </q-btn>
+                  <q-menu
+                    :model-value="activeMoreMenu === event.uniqueId"
+                    @update:model-value="val => (activeMoreMenu = val ? event.uniqueId : null)"
+                    transition-show="jump-down"
+                    transition-hide="jump-up"
+                    anchor="center right"
+                    self="top left"
+                    :offset="[-15, 0]"
+                    class="animated-menu"
+                  >
+                    <q-list style="min-width: 300px" padding>
+                      <q-item clickable v-ripple :to="{ name: 'dispatch-details' }">
+                        <q-item-section avatar>
+                          <IconifyIcon
+                            icon="hugeicons:route-02"
                             width="24px"
                             height="24px"
+                            class="text-grey-7"
                           />
-                          <q-badge
-                            floating
-                            rounded
-                            :color="
-                              event.assetsStatus.assignedDriver
-                                ? event.assetsStatus.assignedColor
-                                : event.assetsStatus.notAssignedColor
-                            "
-                            text-color="white"
-                            class="q-ml-sm"
-                          >
-                            <IconifyIcon
-                              :icon="
-                                event.assetsStatus.assignedDriver
-                                  ? 'hugeicons:tick-01'
-                                  : 'hugeicons:cancel-01'
-                              "
-                              width="12px"
-                              height="12px"
-                            />
-                          </q-badge>
-                          <q-tooltip
-                            >Driver
-                            {{
-                              event.assetsStatus.assignedDriver ? 'Assigned' : 'Not Assigned'
-                            }}</q-tooltip
-                          >
-                        </q-btn>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="row items-center q-gutter-x-sm">
-                      <q-btn flat round dense>
-                        <q-avatar size="24px">
-                          <img :src="event.client[0].logo" />
-                        </q-avatar>
-                        <q-tooltip>{{ event.client[0].name }}</q-tooltip>
-                      </q-btn>
-                      <q-btn
-                        v-if="event.client.length > 1"
-                        round
-                        dense
-                        flat
-                        class="bg-grey-3 text-grey-9"
-                      >
-                        +{{ event.client.length - 1 }}
-                        <q-tooltip> {{ event.client.length - 1 }} more client(s) </q-tooltip>
-                      </q-btn>
-                    </div>
-                  </td>
-                  <td>
-                    <div
-                      class="text-body2 text-weight-medium q-pl-sm"
-                      :class="{
-                        'text-positive': event.status === 'Approved',
-                        'text-warning': event.status === 'Pending',
-                        'text-negative': event.status === 'Declined',
-                      }"
-                    >
-                      {{ event.status }}
-                    </div>
-                  </td>
-                  <td>
-                    <q-btn flat round @click="activeMoreMenu = event.uniqueId">
-                      <IconifyIcon
-                        icon="hugeicons:more-vertical-circle-01"
-                        width="24px"
-                        height="24px"
-                        class="text-grey-7"
-                      />
-                    </q-btn>
-                    <q-menu
-                      :model-value="activeMoreMenu === event.uniqueId"
-                      @update:model-value="val => (activeMoreMenu = val ? event.uniqueId : null)"
-                      transition-show="jump-down"
-                      transition-hide="jump-up"
-                      anchor="center right"
-                      self="top left"
-                      :offset="[-15, 0]"
-                      class="animated-menu"
-                    >
-                      <q-list style="min-width: 300px" padding>
-                        <q-item clickable v-ripple :to="{ name: 'dispatch-details' }">
-                          <q-item-section avatar>
-                            <IconifyIcon
-                              icon="hugeicons:route-02"
-                              width="24px"
-                              height="24px"
-                              class="text-grey-7"
-                            />
-                          </q-item-section>
-                          <q-item-section>
-                            <q-item-label>View Details</q-item-label>
-                            <q-item-label caption>View the details of this event</q-item-label>
-                          </q-item-section>
-                        </q-item>
+                        </q-item-section>
+                        <q-item-section>
+                          <q-item-label>View Details</q-item-label>
+                          <q-item-label caption>View the details of this event</q-item-label>
+                        </q-item-section>
+                      </q-item>
 
-                        <q-item clickable v-ripple>
-                          <q-item-section avatar>
-                            <IconifyIcon
-                              icon="hugeicons:edit-01"
-                              width="24px"
-                              height="24px"
-                              class="text-grey-7"
-                            />
-                          </q-item-section>
-                          <q-item-section>
-                            <q-item-label>Edit Event</q-item-label>
-                            <q-item-label caption>Modify event details</q-item-label>
-                          </q-item-section>
-                        </q-item>
+                      <q-item clickable v-ripple>
+                        <q-item-section avatar>
+                          <IconifyIcon
+                            icon="hugeicons:edit-01"
+                            width="24px"
+                            height="24px"
+                            class="text-grey-7"
+                          />
+                        </q-item-section>
+                        <q-item-section>
+                          <q-item-label>Edit Event</q-item-label>
+                          <q-item-label caption>Modify event details</q-item-label>
+                        </q-item-section>
+                      </q-item>
 
-                        <q-item clickable v-ripple>
-                          <q-item-section avatar>
-                            <IconifyIcon
-                              icon="hugeicons:flip-left"
-                              width="24px"
-                              height="24px"
-                              class="text-grey-7"
-                            />
-                          </q-item-section>
-                          <q-item-section>
-                            <q-item-label>Clone Event</q-item-label>
-                            <q-item-label caption>Create a copy of this event</q-item-label>
-                          </q-item-section>
-                        </q-item>
+                      <q-item clickable v-ripple>
+                        <q-item-section avatar>
+                          <IconifyIcon
+                            icon="hugeicons:flip-left"
+                            width="24px"
+                            height="24px"
+                            class="text-grey-7"
+                          />
+                        </q-item-section>
+                        <q-item-section>
+                          <q-item-label>Clone Event</q-item-label>
+                          <q-item-label caption>Create a copy of this event</q-item-label>
+                        </q-item-section>
+                      </q-item>
 
-                        <q-item clickable v-ripple>
-                          <q-item-section avatar>
-                            <IconifyIcon
-                              icon="hugeicons:cancel-01"
-                              width="24px"
-                              height="24px"
-                              class="text-grey-7"
-                            />
-                          </q-item-section>
-                          <q-item-section>
-                            <q-item-label>Cancel Event</q-item-label>
-                            <q-item-label caption>Cancel this event</q-item-label>
-                          </q-item-section>
-                        </q-item>
+                      <q-item clickable v-ripple>
+                        <q-item-section avatar>
+                          <IconifyIcon
+                            icon="hugeicons:cancel-01"
+                            width="24px"
+                            height="24px"
+                            class="text-grey-7"
+                          />
+                        </q-item-section>
+                        <q-item-section>
+                          <q-item-label>Cancel Event</q-item-label>
+                          <q-item-label caption>Cancel this event</q-item-label>
+                        </q-item-section>
+                      </q-item>
 
-                        <q-separator />
+                      <q-separator />
 
-                        <q-item clickable v-ripple class="text-negative">
-                          <q-item-section avatar>
-                            <IconifyIcon
-                              icon="hugeicons:delete-02"
-                              width="24px"
-                              height="24px"
-                              class="text-negative"
-                            />
-                          </q-item-section>
-                          <q-item-section>
-                            <q-item-label>Delete Event</q-item-label>
-                            <q-item-label caption>Remove this event permanently</q-item-label>
-                          </q-item-section>
-                        </q-item>
-                      </q-list>
-                    </q-menu>
-                  </td>
-                </tr>
-              </template>
+                      <q-item clickable v-ripple class="text-negative">
+                        <q-item-section avatar>
+                          <IconifyIcon
+                            icon="hugeicons:delete-02"
+                            width="24px"
+                            height="24px"
+                            class="text-negative"
+                          />
+                        </q-item-section>
+                        <q-item-section>
+                          <q-item-label>Delete Event</q-item-label>
+                          <q-item-label caption>Remove this event permanently</q-item-label>
+                        </q-item-section>
+                      </q-item>
+                    </q-list>
+                  </q-menu>
+                </td>
+              </tr>
             </template>
-          </q-table>
-        </div>
+          </template>
+        </q-table>
 
         <q-dialog v-model="showDialog" backdrop-filter="blur(2px)">
           <q-card style="width: 500px; max-width: 80vw">

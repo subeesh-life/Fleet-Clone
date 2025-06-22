@@ -192,30 +192,6 @@
         </q-td>
       </template>
 
-      <!-- Actions Column -->
-      <template v-slot:body-cell-actions="props" v-if="hasActions">
-        <q-td :props="props">
-          <slot name="actions" :row="props.row">
-            <q-btn
-              v-for="action in getRowActions(props.row)"
-              :key="action.name"
-              :icon="action.icon"
-              :color="action.color || 'primary'"
-              :size="action.size || 'sm'"
-              :flat="action.flat !== false"
-              :round="action.round !== false"
-              :dense="action.dense !== false"
-              @click="action.handler(props.row)"
-              class="q-ml-xs"
-            >
-              <q-tooltip v-if="action.tooltip">
-                {{ action.tooltip }}
-              </q-tooltip>
-            </q-btn>
-          </slot>
-        </q-td>
-      </template>
-
       <!-- Loading Slot -->
       <template v-slot:loading>
         <q-inner-loading showing color="primary" />
@@ -233,8 +209,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, PropType, Component } from 'vue';
-import { date, QTableColumn } from 'quasar';
+import { ref, computed, watch } from 'vue';
+import { date } from 'quasar';
+import type { PropType, Component } from 'vue';
+import type { QTableColumn } from 'quasar';
 
 interface ExtendedColumn extends Partial<QTableColumn> {
   name: string;
@@ -462,10 +440,6 @@ const props = defineProps({
     type: Function as PropType<(row: any) => boolean>,
     default: null,
   },
-  $slots: {
-    type: Object as PropType<any>,
-    default: () => ({}),
-  },
 });
 
 // Emits
@@ -490,7 +464,7 @@ const paginationState = ref<PaginationState>({
 });
 
 // Computed
-const hasActions = computed(() => props.actions.length > 0 || !!props.$slots.actions);
+const hasActions = computed(() => props.actions.length > 0);
 
 const processedColumns = computed(() => {
   const cols = [...props.columns];
@@ -638,19 +612,6 @@ const getButtonColor = (row: any, col: ExtendedColumn): string => {
     return col.buttonColor(row);
   }
   return col.buttonColor || 'primary';
-};
-
-// Select helpers
-const getSelectOptions = (row: any, col: ExtendedColumn): any[] => {
-  if (typeof col.selectOptions === 'function') {
-    return col.selectOptions(row);
-  }
-  return col.selectOptions || [];
-};
-
-// Action helpers
-const getRowActions = (row: any): TableAction[] => {
-  return props.actions;
 };
 
 // Watchers
