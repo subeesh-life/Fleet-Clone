@@ -1,4 +1,4 @@
-import type { TripStatusConfig } from './types/trips.options';
+import type { TripMode, TripStatusConfig } from './types/trips.options';
 import { TripStatus } from './types/trips.options';
 
 export const LISTING_BREADCRUMBS = [
@@ -7,6 +7,20 @@ export const LISTING_BREADCRUMBS = [
   { label: 'Dispatch', to: { name: 'dispatch-link' } },
   { label: 'Listing', color: 'text-grey-7' },
 ];
+
+/* Trip Modes */
+export const TRIP_MODE_OPTIONS: { name: TripMode; label: string }[] = [
+  { name: 'standardoneway', label: 'One Way' },
+  { name: 'standardroundtrip', label: 'Round Trip' },
+];
+
+export const TRIP_MODE_CONFIG = TRIP_MODE_OPTIONS.reduce(
+  (acc, option) => {
+    acc[option.name] = option;
+    return acc;
+  },
+  {} as Record<TripMode, { label: string; name: TripMode }>
+);
 
 /* Trip Status Types */
 export const TRIP_STATUS_CONFIG: TripStatusConfig[] = [

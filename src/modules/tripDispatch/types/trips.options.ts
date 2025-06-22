@@ -1,5 +1,7 @@
 import type { BrandColor, Color, DetailedColor } from 'quasar';
 
+export type TripMode = 'standardoneway' | 'standardroundtrip';
+
 export enum TripStatus {
   ALL = 'all',
   UPCOMING = 'upcoming',

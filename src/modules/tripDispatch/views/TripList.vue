@@ -7,9 +7,9 @@ import FleetBreadcrumbs from 'src/components/shared/FleetBreadcrumbs.vue';
 import FleetTable from 'src/components/shared/FleetTable.vue';
 import moment from 'moment';
 import { ref, computed, onMounted } from 'vue';
-import { LISTING_BREADCRUMBS, TRIP_STATUS_CONFIG } from '../trip.constants';
+import { LISTING_BREADCRUMBS, TRIP_STATUS_CONFIG, TRIP_MODE_CONFIG } from '../trip.constants';
 import { useTripsStore } from '../store/trips.store';
-import type { TripStatus } from '../types/trips.options';
+import type { TripMode, TripStatus } from '../types/trips.options';
 import type { Moment } from 'moment';
 
 interface Schedule {
@@ -564,6 +564,11 @@ const getStatusColor = (status: TripStatus): string => {
   return statusConfig ? statusConfig.color : 'grey-3';
 };
 
+const getTripMode = (mode: TripMode): string => {
+  const tripModeConfig = TRIP_MODE_CONFIG[mode];
+  return tripModeConfig ? tripModeConfig.label : 'Unknown';
+};
+
 const addSearchFilter = () => {
   if (searchText.value && selectedFilter.value) {
     activeSearchFilters.value.push({
@@ -730,6 +735,31 @@ onMounted((): void => {
               :iconVisibility="false"
             />
           </template>
+
+          <template #cell-activity="{ row }">
+            <div class="row items-start q-gutter-x-sm flex items-center full-height">
+              <div class="column gt-md">
+                <IconifyIcon
+                  icon="heroicons:truck"
+                  width="24px"
+                  height="24px"
+                  class="text-grey-7"
+                />
+              </div>
+              <div class="column">
+                <div class="row items-center">
+                  <span class="text-caption">
+                    {{ row.event_association.service.service_name }}
+                  </span>
+                </div>
+                <div class="row items-center">
+                  <span class="text-caption">
+                    {{ getTripMode(row.event_association.standardshuttle_type) }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </template>
         </FleetTable>
 
         <q-table
@@ -757,8 +787,6 @@ onMounted((): void => {
                 <td>
                   <q-checkbox v-model="selectedEvents" :val="event.uniqueId" dense />
                 </td>
-                <td></td>
-                <td></td>
                 <td>
                   <div class="row items-start q-gutter-x-sm flex items-center full-height">
                     <div class="column gt-md">
