@@ -34,6 +34,8 @@
       :square="square"
       :separator="separator"
       binary-state-sort
+      @row-click="(evt, row, index) => emit('row-click', evt, row, index)"
+      @row-dblclick="(evt, row, index) => emit('row-dblclick', evt, row, index)"
     >
       <!-- Dynamic Column Rendering -->
       <template
@@ -44,35 +46,37 @@
         <q-td :props="props">
           <!-- Text Column -->
           <template v-if="col.type === 'text' || !col.type">
-            <span :class="col.textClass">{{ formatValue(props.row[col.field], col) }}</span>
+            <span :class="col.textClass">{{
+              formatValue(getFieldValue(props.row, col.field), col)
+            }}</span>
           </template>
 
           <!-- Number Column -->
           <template v-else-if="col.type === 'number'">
             <span :class="[col.textClass, 'text-right']">
-              {{ formatNumber(props.row[col.field], col) }}
+              {{ formatNumber(getFieldValue(props.row, col.field), col) }}
             </span>
           </template>
 
           <!-- Currency Column -->
           <template v-else-if="col.type === 'currency'">
             <span :class="[col.textClass, 'text-right']">
-              {{ formatCurrency(props.row[col.field], col) }}
+              {{ formatCurrency(getFieldValue(props.row, col.field), col) }}
             </span>
           </template>
 
           <!-- Date Column -->
           <template v-else-if="col.type === 'date'">
             <span :class="col.textClass">
-              {{ formatDate(props.row[col.field], col) }}
+              {{ formatDate(getFieldValue(props.row, col.field), col) }}
             </span>
           </template>
 
           <!-- Badge Column -->
           <template v-else-if="col.type === 'badge'">
             <q-badge
-              :color="getBadgeColor(props.row[col.field], col)"
-              :label="formatValue(props.row[col.field], col)"
+              :color="getBadgeColor(getFieldValue(props.row, col.field), col)"
+              :label="formatValue(getFieldValue(props.row, col.field), col)"
               :outline="col.badgeOutline"
             />
           </template>
@@ -82,14 +86,14 @@
             <div class="flex items-center">
               <q-icon
                 v-if="col.showStatusIcon"
-                :name="getStatusIcon(props.row[col.field], col)"
-                :color="getStatusColor(props.row[col.field], col)"
+                :name="getStatusIcon(getFieldValue(props.row, col.field), col)"
+                :color="getStatusColor(getFieldValue(props.row, col.field), col)"
                 size="xs"
                 class="q-mr-xs"
               />
               <q-badge
-                :color="getStatusColor(props.row[col.field], col)"
-                :label="formatValue(props.row[col.field], col)"
+                :color="getStatusColor(getFieldValue(props.row, col.field), col)"
+                :label="formatValue(getFieldValue(props.row, col.field), col)"
                 :outline="col.statusOutline"
               />
             </div>
@@ -99,15 +103,15 @@
           <template v-else-if="col.type === 'progress'">
             <div class="flex items-center">
               <q-linear-progress
-                :value="props.row[col.field] / (col.maxValue || 100)"
-                :color="getProgressColor(props.row[col.field], col)"
+                :value="getFieldValue(props.row, col.field) / (col.maxValue || 100)"
+                :color="getProgressColor(getFieldValue(props.row, col.field), col)"
                 :stripe="col.progressStripe"
                 :rounded="col.progressRounded"
                 class="q-mr-sm"
                 style="width: 100px"
               />
               <span class="text-caption"
-                >{{ props.row[col.field] }}{{ col.progressSuffix || '%' }}</span
+                >{{ getFieldValue(props.row, col.field) }}{{ col.progressSuffix || '%' }}</span
               >
             </div>
           </template>
@@ -115,7 +119,10 @@
           <!-- Avatar Column -->
           <template v-else-if="col.type === 'avatar'">
             <q-avatar :size="col.avatarSize || '32px'">
-              <img v-if="props.row[col.field]" :src="props.row[col.field]" />
+              <img
+                v-if="getFieldValue(props.row, col.field)"
+                :src="getFieldValue(props.row, col.field)"
+              />
               <q-icon v-else :name="col.avatarIcon || 'person'" />
             </q-avatar>
           </template>
@@ -123,14 +130,14 @@
           <!-- Chip Column -->
           <template v-else-if="col.type === 'chip'">
             <q-chip
-              :color="getChipColor(props.row[col.field], col)"
+              :color="getChipColor(getFieldValue(props.row, col.field), col)"
               :text-color="col.chipTextColor || 'white'"
-              :icon="getChipIcon(props.row[col.field], col)"
+              :icon="getChipIcon(getFieldValue(props.row, col.field), col)"
               :dense="col.chipDense !== false"
               :outline="col.chipOutline"
               :square="col.chipSquare"
             >
-              {{ formatValue(props.row[col.field], col) }}
+              {{ formatValue(getFieldValue(props.row, col.field), col) }}
             </q-chip>
           </template>
 
@@ -142,7 +149,7 @@
               :class="['text-primary', col.linkClass]"
               @click="col.linkHandler && col.linkHandler(props.row, $event)"
             >
-              {{ formatValue(props.row[col.field], col) }}
+              {{ formatValue(getFieldValue(props.row, col.field), col) }}
             </a>
           </template>
 
@@ -161,43 +168,17 @@
             />
           </template>
 
-          <!-- Select Column -->
-          <template v-else-if="col.type === 'select'">
-            <q-select
-              :model-value="props.row[col.field]"
-              :options="getSelectOptions(props.row, col)"
-              :disable="col.readonly || isRowDisabled(props.row)"
-              :dense="true"
-              :options-dense="true"
-              outlined
-              @update:model-value="val => updateCellValue(props.row, col.field, val)"
-            />
-          </template>
-
-          <!-- Input Column -->
-          <template v-else-if="col.type === 'input'">
-            <q-input
-              :model-value="props.row[col.field]"
-              :type="col.inputType || 'text'"
-              :disable="col.readonly || isRowDisabled(props.row)"
-              :dense="true"
-              outlined
-              @update:model-value="val => updateCellValue(props.row, col.field, val)"
-            />
-          </template>
-
           <!-- Custom Column -->
           <template v-else-if="col.type === 'custom'">
             <component
               v-if="col.component"
               :is="col.component"
               :row="props.row"
-              :value="props.row[col.field]"
+              :value="getFieldValue(props.row, col.field)"
               :column="col"
-              @update:value="val => updateCellValue(props.row, col.field, val)"
             />
             <span v-else-if="col.formatter">
-              {{ col.formatter(props.row[col.field], props.row, col) }}
+              {{ col.formatter(getFieldValue(props.row, col.field), props.row, col) }}
             </span>
           </template>
 
@@ -252,10 +233,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, PropType } from 'vue';
-import { date } from 'quasar';
+import { ref, computed, watch, PropType, Component } from 'vue';
+import { date, QTableColumn } from 'quasar';
 
-interface ExtendedColumn {
+interface ExtendedColumn extends Partial<QTableColumn> {
   name: string;
   label: string;
   field: string | ((row: any) => any);
@@ -372,7 +353,7 @@ interface ExtendedColumn {
   inputType?: string;
 
   // Custom options
-  component?: any;
+  component?: Component;
   formatter?: (val: any, row: any, col: any) => string;
 
   // Common options
@@ -481,6 +462,10 @@ const props = defineProps({
     type: Function as PropType<(row: any) => boolean>,
     default: null,
   },
+  $slots: {
+    type: Object as PropType<any>,
+    default: () => ({}),
+  },
 });
 
 // Emits
@@ -540,9 +525,12 @@ const isRowDisabled = (row: any): boolean => {
   return props.disableRow ? props.disableRow(row) : false;
 };
 
-const updateCellValue = (row: any, field: string, value: any) => {
-  row[field] = value;
-  emit('cell-update', row, field, value);
+// Helper to get field value
+const getFieldValue = (row: any, field: string | ((row: any) => any)): any => {
+  if (typeof field === 'function') {
+    return field(row);
+  }
+  return row[field];
 };
 
 // Formatting functions
@@ -662,17 +650,7 @@ const getSelectOptions = (row: any, col: ExtendedColumn): any[] => {
 
 // Action helpers
 const getRowActions = (row: any): TableAction[] => {
-  return props.actions
-    .filter(action => {
-      if (typeof action.visible === 'function') {
-        return action.visible(row);
-      }
-      return action.visible !== false;
-    })
-    .map(action => ({
-      ...action,
-      disabled: typeof action.disabled === 'function' ? action.disabled(row) : action.disabled,
-    }));
+  return props.actions;
 };
 
 // Watchers
