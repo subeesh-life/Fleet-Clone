@@ -52,29 +52,29 @@ export function useKeyboardShortcuts(router: Router) {
         });
     }
 
-    // //Command/Meta + Shift + L for Live Map
-    // if (event.metaKey && event.shiftKey && event.key.toLowerCase() === 'l') {
-    //   event.preventDefault() // Prevent default browser behavior
-    //   void router
-    //     .push({ name: 'live-map' })
-    //     .then(() => {
-    //       Notify.create({
-    //         message: 'Navigating to Live Map',
-    //         color: 'primary',
-    //         position: 'top',
-    //         timeout: 2000,
-    //       })
-    //     })
-    //     .catch((error) => {
-    //       console.error('Navigation failed:', error)
-    //       Notify.create({
-    //         message: 'Navigation failed',
-    //         color: 'negative',
-    //         position: 'top',
-    //         timeout: 2000,
-    //       })
-    //     })
-    // }
+    //Command/Meta + Shift + L for Live Map
+    if (event.metaKey && event.shiftKey && event.key.toLowerCase() === 'l') {
+      event.preventDefault(); // Prevent default browser behavior
+      void router
+        .push({ name: 'live-map' })
+        .then(() => {
+          Notify.create({
+            message: 'Navigating to Live Map',
+            color: 'primary',
+            position: 'top',
+            timeout: 2000,
+          });
+        })
+        .catch(error => {
+          console.error('Navigation failed:', error);
+          Notify.create({
+            message: 'Navigation failed',
+            color: 'negative',
+            position: 'top',
+            timeout: 2000,
+          });
+        });
+    }
   };
 
   onMounted(() => {
