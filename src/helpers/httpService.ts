@@ -28,17 +28,18 @@ class CustomApiError extends Error {
   }
 }
 
-class HttpService {
-  private api: AxiosInstance;
+export class HttpService {
+  protected api: AxiosInstance; // Changed to protected
+  protected basePath: string;
 
-  constructor() {
+  constructor(basePath: string = '') {
+    this.basePath = basePath;
     this.api = axios.create({
-      baseURL: import.meta.env.VITE_APP_API_URL,
+      baseURL: import.meta.env.VITE_API_URL,
       headers: {
         'Content-Type': 'application/json',
       },
     });
-
     this.setupInterceptors();
   }
 
@@ -47,7 +48,7 @@ class HttpService {
     this.api.interceptors.request.use(
       config => {
         // Add auth token if available
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('access_token');
         if (token) {
           config.headers.Authorization = `Bearer ${token}`;
         }
@@ -90,33 +91,38 @@ class HttpService {
     );
   }
 
+  // Utility method for building paths
+  protected buildPath(path: string): string {
+    return `${this.basePath}${path}`;
+  }
+
   // GET request
   async get<T = unknown>(url: string, config?: AxiosRequestConfig): Promise<T> {
-    const response = await this.api.get<T>(url, config);
+    const response = await this.api.get<T>(this.buildPath(url), config);
     return response.data;
   }
 
   // POST request
   async post<T = unknown>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<T> {
-    const response = await this.api.post<T>(url, data, config);
+    const response = await this.api.post<T>(this.buildPath(url), data, config);
     return response.data;
   }
 
   // PUT request
   async put<T = unknown>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<T> {
-    const response = await this.api.put<T>(url, data, config);
+    const response = await this.api.put<T>(this.buildPath(url), data, config);
     return response.data;
   }
 
   // PATCH request
   async patch<T = unknown>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<T> {
-    const response = await this.api.patch<T>(url, data, config);
+    const response = await this.api.patch<T>(this.buildPath(url), data, config);
     return response.data;
   }
 
   // DELETE request
   async delete<T = unknown>(url: string, config?: AxiosRequestConfig): Promise<T> {
-    const response = await this.api.delete<T>(url, config);
+    const response = await this.api.delete<T>(this.buildPath(url), config);
     return response.data;
   }
 

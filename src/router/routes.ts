@@ -24,7 +24,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'dispatch',
         name: 'dispatch-listing',
-        component: () => import('src/modules/tripDispatch/DispatchListing.vue'),
+        component: () => import('src/modules/trip-management/views/TripList.vue'),
       },
       {
         path: 'creation',
