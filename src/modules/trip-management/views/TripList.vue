@@ -40,7 +40,6 @@ const searchEvents = ref<string[]>([
 const selectedFilter = ref<string>('Event Type');
 const activeSearchFilters = ref<{ type: string; value: string }[]>([]);
 const dispatchFilterDrawer = ref(false);
-const activeMoreMenu = ref<string | number | null>(null);
 // Filter Drawer
 const organization = ref([]);
 const organizationOptions = ref([
@@ -212,17 +211,9 @@ const fleetTableColumns = computed(() => [
   {
     name: 'status',
     label: 'Status',
-    field: 'status',
+    field: 'id', // Use a simple field since we have custom template
     align: 'left' as const,
     headerClasses: 'bg-grey-2',
-    type: 'chip' as const,
-    chipColors: TRIP_STATUS_CONFIG.reduce(
-      (acc, status) => {
-        acc[status.name] = status.color;
-        return acc;
-      },
-      {} as Record<string, string>
-    ),
   },
   {
     name: 'actions',
@@ -275,6 +266,11 @@ const getStatusDisplay = (item: any): string => {
 const getStatusColor = (status: TripStatus): string => {
   const statusConfig = TRIP_STATUS_CONFIG.find(s => s.name === status);
   return statusConfig ? statusConfig.color : 'grey-3';
+};
+
+const getStatusLabel = (status: TripStatus): string => {
+  const statusConfig = TRIP_STATUS_CONFIG.find(s => s.name === status);
+  return statusConfig ? statusConfig.label : 'Unknown';
 };
 
 const getTripMode = (mode: TripMode): string => {
@@ -594,104 +590,108 @@ onMounted((): void => {
             </div>
           </template>
 
-          <template #cell-actions="{ row }">
-            <q-btn flat round @click="activeMoreMenu = row.id">
+          <template #cell-status="{ row }">
+            <span :class="`text-${getStatusColor(row.status as TripStatus)} text-weight-medium`">
+              {{ getStatusLabel(row.status as TripStatus) }}
+            </span>
+          </template>
+
+          <template #cell-actions>
+            <q-btn flat round>
               <IconifyIcon
                 icon="hugeicons:more-vertical-circle-01"
                 width="24px"
                 height="24px"
                 class="text-grey-7"
               />
+              <q-menu
+                transition-show="jump-down"
+                transition-hide="jump-up"
+                anchor="center right"
+                self="top left"
+                :offset="[-15, 0]"
+                class="animated-menu"
+              >
+                <q-list style="min-width: 300px" padding>
+                  <q-item clickable v-ripple :to="{ name: 'dispatch-details' }">
+                    <q-item-section avatar>
+                      <IconifyIcon
+                        icon="hugeicons:route-02"
+                        width="24px"
+                        height="24px"
+                        class="text-grey-7"
+                      />
+                    </q-item-section>
+                    <q-item-section>
+                      <q-item-label>View Details</q-item-label>
+                      <q-item-label caption>View the details of this trip</q-item-label>
+                    </q-item-section>
+                  </q-item>
+
+                  <q-item clickable v-ripple>
+                    <q-item-section avatar>
+                      <IconifyIcon
+                        icon="hugeicons:edit-01"
+                        width="24px"
+                        height="24px"
+                        class="text-grey-7"
+                      />
+                    </q-item-section>
+                    <q-item-section>
+                      <q-item-label>Edit Trip</q-item-label>
+                      <q-item-label caption>Modify trip details</q-item-label>
+                    </q-item-section>
+                  </q-item>
+
+                  <q-item clickable v-ripple>
+                    <q-item-section avatar>
+                      <IconifyIcon
+                        icon="hugeicons:flip-left"
+                        width="24px"
+                        height="24px"
+                        class="text-grey-7"
+                      />
+                    </q-item-section>
+                    <q-item-section>
+                      <q-item-label>Clone Trip</q-item-label>
+                      <q-item-label caption>Create a copy of this trip</q-item-label>
+                    </q-item-section>
+                  </q-item>
+
+                  <q-item clickable v-ripple>
+                    <q-item-section avatar>
+                      <IconifyIcon
+                        icon="hugeicons:cancel-01"
+                        width="24px"
+                        height="24px"
+                        class="text-grey-7"
+                      />
+                    </q-item-section>
+                    <q-item-section>
+                      <q-item-label>Cancel Trip</q-item-label>
+                      <q-item-label caption>Cancel this trip</q-item-label>
+                    </q-item-section>
+                  </q-item>
+
+                  <q-separator />
+
+                  <q-item clickable v-ripple class="text-negative">
+                    <q-item-section avatar>
+                      <IconifyIcon
+                        icon="hugeicons:delete-02"
+                        width="24px"
+                        height="24px"
+                        class="text-negative"
+                      />
+                    </q-item-section>
+                    <q-item-section>
+                      <q-item-label>Delete Trip</q-item-label>
+                      <q-item-label caption>Remove this trip permanently</q-item-label>
+                    </q-item-section>
+                  </q-item>
+                </q-list>
+              </q-menu>
             </q-btn>
-            <q-menu
-              :model-value="activeMoreMenu === row.id"
-              @update:model-value="val => (activeMoreMenu = val ? row.id : null)"
-              transition-show="jump-down"
-              transition-hide="jump-up"
-              anchor="center right"
-              self="top left"
-              :offset="[-15, 0]"
-              class="animated-menu"
-            >
-              <q-list style="min-width: 300px" padding>
-                <q-item clickable v-ripple :to="{ name: 'dispatch-details' }">
-                  <q-item-section avatar>
-                    <IconifyIcon
-                      icon="hugeicons:route-02"
-                      width="24px"
-                      height="24px"
-                      class="text-grey-7"
-                    />
-                  </q-item-section>
-                  <q-item-section>
-                    <q-item-label>View Details</q-item-label>
-                    <q-item-label caption>View the details of this trip</q-item-label>
-                  </q-item-section>
-                </q-item>
-
-                <q-item clickable v-ripple>
-                  <q-item-section avatar>
-                    <IconifyIcon
-                      icon="hugeicons:edit-01"
-                      width="24px"
-                      height="24px"
-                      class="text-grey-7"
-                    />
-                  </q-item-section>
-                  <q-item-section>
-                    <q-item-label>Edit Trip</q-item-label>
-                    <q-item-label caption>Modify trip details</q-item-label>
-                  </q-item-section>
-                </q-item>
-
-                <q-item clickable v-ripple>
-                  <q-item-section avatar>
-                    <IconifyIcon
-                      icon="hugeicons:flip-left"
-                      width="24px"
-                      height="24px"
-                      class="text-grey-7"
-                    />
-                  </q-item-section>
-                  <q-item-section>
-                    <q-item-label>Clone Trip</q-item-label>
-                    <q-item-label caption>Create a copy of this trip</q-item-label>
-                  </q-item-section>
-                </q-item>
-
-                <q-item clickable v-ripple>
-                  <q-item-section avatar>
-                    <IconifyIcon
-                      icon="hugeicons:cancel-01"
-                      width="24px"
-                      height="24px"
-                      class="text-grey-7"
-                    />
-                  </q-item-section>
-                  <q-item-section>
-                    <q-item-label>Cancel Trip</q-item-label>
-                    <q-item-label caption>Cancel this trip</q-item-label>
-                  </q-item-section>
-                </q-item>
-
-                <q-separator />
-
-                <q-item clickable v-ripple class="text-negative">
-                  <q-item-section avatar>
-                    <IconifyIcon
-                      icon="hugeicons:delete-02"
-                      width="24px"
-                      height="24px"
-                      class="text-negative"
-                    />
-                  </q-item-section>
-                  <q-item-section>
-                    <q-item-label>Delete Trip</q-item-label>
-                    <q-item-label caption>Remove this trip permanently</q-item-label>
-                  </q-item-section>
-                </q-item>
-              </q-list>
-            </q-menu>
           </template>
         </FleetTable>
 
