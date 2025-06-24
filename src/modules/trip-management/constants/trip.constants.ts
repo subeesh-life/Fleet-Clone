@@ -72,7 +72,7 @@ export const TRIP_STATUS_CONFIG: TripStatusConfig[] = [
   {
     name: TripStatus.LIVE,
     label: 'Live',
-    color: 'cyan',
+    color: 'cyan-9',
   },
   {
     name: TripStatus.MISSED,
