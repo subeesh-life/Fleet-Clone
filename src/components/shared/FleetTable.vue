@@ -173,6 +173,7 @@
           <slot
             v-if="$slots[`cell-${col.name}`]"
             v-bind="props"
+            :row="props.row as T"
             :name="`cell-${col.name}`"
             :column="col"
           />
@@ -195,10 +196,10 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts" generic="T">
 import { ref, computed, watch } from 'vue';
 import { date } from 'quasar';
-import type { PropType, Component } from 'vue';
+import type { Component } from 'vue';
 import type { QTableColumn } from 'quasar';
 
 interface ExtendedColumn extends Partial<QTableColumn> {
@@ -347,86 +348,45 @@ interface PaginationState {
   rowsNumber?: number;
 }
 
+interface TableProps {
+  rows: T[];
+  columns: ExtendedColumn[];
+  rowKey?: string;
+  loading?: boolean;
+  searchable?: boolean;
+  searchPlaceholder?: string;
+  selection?: 'none' | 'single' | 'multiple';
+  pagination?: PaginationState;
+  rowsPerPageOptions?: number[];
+  flat?: boolean;
+  bordered?: boolean;
+  square?: boolean;
+  separator?: 'horizontal' | 'vertical' | 'cell' | 'none';
+  tableClass?: string;
+  actions?: TableAction[];
+  noDataLabel?: string;
+  serverSide?: boolean;
+  disableRow?: (row: any) => boolean;
+}
+
 // Props
-const props = defineProps({
-  rows: {
-    type: Array as PropType<any[]>,
-    required: true,
-  },
-  columns: {
-    type: Array as PropType<ExtendedColumn[]>,
-    required: true,
-  },
-  rowKey: {
-    type: String,
-    default: 'id',
-  },
-  loading: {
-    type: Boolean,
-    default: false,
-  },
-  searchable: {
-    type: Boolean,
-    default: true,
-  },
-  searchPlaceholder: {
-    type: String,
-    default: 'Search...',
-  },
-  selection: {
-    type: String as PropType<'none' | 'single' | 'multiple'>,
-    default: 'none',
-  },
-  pagination: {
-    type: Object as PropType<PaginationState>,
-    default: () => ({
-      sortBy: null,
-      descending: false,
-      page: 1,
-      rowsPerPage: 10,
-      rowsNumber: 0,
-    }),
-  },
-  rowsPerPageOptions: {
-    type: Array as PropType<number[]>,
-    default: () => [5, 10, 15, 20, 25, 50, 100],
-  },
-  flat: {
-    type: Boolean,
-    default: false,
-  },
-  bordered: {
-    type: Boolean,
-    default: false,
-  },
-  square: {
-    type: Boolean,
-    default: false,
-  },
-  separator: {
-    type: String as PropType<'horizontal' | 'vertical' | 'cell' | 'none'>,
-    default: 'horizontal',
-  },
-  tableClass: {
-    type: String,
-    default: '',
-  },
-  actions: {
-    type: Array as PropType<TableAction[]>,
-    default: () => [],
-  },
-  noDataLabel: {
-    type: String,
-    default: 'No data available',
-  },
-  serverSide: {
-    type: Boolean,
-    default: false,
-  },
-  disableRow: {
-    type: Function as PropType<(row: any) => boolean>,
-    default: null,
-  },
+const props = withDefaults(defineProps<TableProps>(), {
+  rowKey: 'id',
+  searchable: true,
+  searchPlaceholder: 'Search...',
+  selection: 'none',
+  separator: 'horizontal',
+  tableClass: '',
+  noDataLabel: 'No data available',
+  actions: () => [],
+  rowsPerPageOptions: () => [5, 10, 15, 20, 25, 50, 100],
+  pagination: () => ({
+    sortBy: null,
+    descending: false,
+    page: 1,
+    rowsPerPage: 10,
+    rowsNumber: 0,
+  }),
 });
 
 // Emits

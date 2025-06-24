@@ -7,131 +7,22 @@ import FleetBreadcrumbs from 'src/components/shared/FleetBreadcrumbs.vue';
 import FleetTable from 'src/components/shared/FleetTable.vue';
 import moment from 'moment';
 import { ref, computed, onMounted } from 'vue';
+import { useTripsStore } from '../store/trip.store';
+import type { TripMode, TripStatus } from '../types/trip-config.types';
+import type { TripResponse } from '../types/trip-api.types';
+import type { Moment } from 'moment';
 import {
   LISTING_BREADCRUMBS,
   TRIP_STATUS_CONFIG,
   TRIP_MODE_CONFIG,
 } from '../constants/trip.constants';
-import { useTripsStore } from '../store/trip.store';
-import type { TripMode, TripStatus } from '../types/trip-config.types';
-import type { Moment } from 'moment';
-
-interface Schedule {
-  startSchedule: string;
-  endSchedule: string;
-  startActual: string;
-  endActual: string;
-}
-
-interface EventStatus {
-  status: string;
-  time: string;
-}
-
-interface Activity {
-  icon: string;
-  eventType: string;
-  subscribedService: string;
-}
-
-interface Route {
-  start: string;
-  end: string;
-  distance: string;
-  duration: string;
-  stops: number;
-}
-
-interface Client {
-  logo: string;
-  name: string;
-  phone: string;
-  email: string;
-}
-
-interface Event {
-  uniqueId: number;
-  schedule: Schedule;
-  eventStatus: EventStatus;
-  activity: Activity;
-  route: Route;
-  assetsStatus: {
-    assignedVehicle: boolean;
-    assignedDriver: boolean;
-    assignedVehicleIcon: string;
-    assignedDriverIcon: string;
-    assignedVehicleFloatingIcon: string;
-    assignedDriverFloatingIcon: string;
-    assignedColor: string;
-    notAssignedColor: string;
-    assetDetails: {
-      vehicle: {
-        plate: {
-          plateColor: string;
-          seriesCode: string;
-          seriesNumber: string;
-          uniqueNumber: string;
-        };
-        year: string;
-        type: string;
-        make: string;
-        model: string;
-        seats: number;
-      };
-      driver: {
-        id: string;
-        firstName: string;
-        lastName: string;
-        image: string;
-        phone: string;
-        email: string;
-      };
-    };
-  };
-  client: Client[];
-  status: string;
-}
-
-interface EventDate {
-  date: string;
-  displayDate: string;
-  events: Event[];
-}
-
-interface EventDetails {
-  id: number;
-  eventDate: EventDate;
-}
-
-interface Group {
-  date: string;
-  rows: { eventDetails: EventDetails }[];
-}
-
-interface FlattenedRow {
-  isGroupHeader?: boolean;
-  date?: string;
-  eventDetails?: EventDetails;
-}
-
-interface QTableColumn {
-  name: string;
-  label: string;
-  field: string | ((row: FlattenedRow) => unknown);
-  required?: boolean;
-  align?: 'left' | 'center' | 'right';
-  sortable?: boolean;
-  sort?: (a: unknown, b: unknown, rowA: FlattenedRow, rowB: FlattenedRow) => number;
-  headerClasses?: string;
-}
 
 const store = useTripsStore();
 
 const eventStatus = ref('all');
 const selectedEvents = ref<number[]>([]);
-const selectAll = ref(false);
-const selectedVehicleEvent = ref<Event | null>(null);
-const selectedDriverEvent = ref<Event | null>(null);
+const selectedVehicleEvent = ref<TripResponse | null>(null);
+const selectedDriverEvent = ref<TripResponse | null>(null);
 const searchEventsDialog = ref(false);
 const searchText = ref('');
 const searchEvents = ref<string[]>([
@@ -149,7 +40,7 @@ const searchEvents = ref<string[]>([
 const selectedFilter = ref<string>('Event Type');
 const activeSearchFilters = ref<{ type: string; value: string }[]>([]);
 const dispatchFilterDrawer = ref(false);
-const activeMoreMenu = ref<number | null>(null);
+const activeMoreMenu = ref<string | number | null>(null);
 // Filter Drawer
 const organization = ref([]);
 const organizationOptions = ref([
@@ -264,271 +155,89 @@ const showDriverDialog = computed({
   },
 });
 
-const showVehicleDetails = (event: Event) => {
-  selectedVehicleEvent.value = event;
+const showVehicleDetails = (trip: TripResponse) => {
+  selectedVehicleEvent.value = trip;
 };
 
-const showDriverDetails = (event: Event) => {
-  selectedDriverEvent.value = event;
+const showDriverDetails = (trip: TripResponse) => {
+  selectedDriverEvent.value = trip;
 };
-
-const rows = [
-  {
-    eventDetails: {
-      id: 1,
-      eventDate: {
-        date: '2025-06-10',
-        displayDate: 'Today Tue - Jun 10, 2025',
-        events: [
-          {
-            uniqueId: 1,
-            schedule: {
-              startSchedule: '7:30 AM',
-              endSchedule: '8:15 AM',
-              startActual: '7:45 AM',
-              endActual: '8:30 AM',
-            },
-            eventStatus: {
-              status: 'Upcoming',
-              time: '7 M',
-            },
-            activity: {
-              icon: 'hugeicons:delivery-truck-02',
-              eventType: 'Oneway',
-              subscribedService: 'Gas Delivery',
-            },
-            route: {
-              start: 'Yas Island Zone B - C67-04 - Abu Dhabi, UAE',
-              end: 'Zone 1 - C67-04 - Saadiyat Island',
-              distance: '103.5 km',
-              duration: '1 H 43 M',
-              stops: 3,
-            },
-            assetsStatus: {
-              assignedVehicle: true,
-              assignedDriver: true,
-              assignedVehicleIcon: 'hugeicons:car-05',
-              assignedDriverIcon: 'healthicons:truck-driver-outline',
-              assignedVehicleFloatingIcon: 'hugeicons:tick-01',
-              assignedDriverFloatingIcon: 'hugeicons:tick-01',
-              assignedColor: 'positive',
-              notAssignedColor: 'negative',
-              assetDetails: {
-                vehicle: {
-                  plate: {
-                    plateColor: '#D92D20',
-                    seriesCode: 'AD',
-                    seriesNumber: '10',
-                    uniqueNumber: '38475',
-                  },
-                  year: '2020',
-                  type: 'Truck',
-                  make: 'MAN',
-                  model: 'CX-5',
-                  seats: 2,
-                },
-                driver: {
-                  firstName: 'Jane',
-                  lastName: 'Smith',
-                  id: '#7G76F9',
-                  phone: '+971 50 123 4568',
-                  email: 'jane.smith@example.com',
-                  image: 'https://i.pravatar.cc/150?img=52',
-                },
-              },
-            },
-            client: [
-              {
-                logo: 'assets/clients/logo-a.svg',
-                name: 'Al Noor Innovations FZE',
-                phone: '+971 50 123 4567',
-                email: 'b@example.com',
-                clientType: 'Group',
-                totalPax: 10,
-                totalPaxIcon: 'hugeicons:user-01',
-                malePax: 5,
-                malePaxIcon: 'hugeicons:user-01',
-                femalePax: 5,
-                femalePaxIcon: 'hugeicons:user-01',
-                disabledPax: 0,
-                disabledPaxIcon: 'hugeicons:user-01',
-              },
-            ],
-            status: 'Approved',
-          },
-        ],
-      },
-    },
-  },
-];
 
 // Step 1: Group and Flatten
-const groupedRows = computed(() => {
-  const groups: Group[] = [];
-
-  for (const row of rows) {
-    const date = row.eventDetails.eventDate.displayDate;
-    const group = groups.find(g => g.date === date);
-
-    if (!group) {
-      groups.push({ date, rows: [row] });
-    } else {
-      group.rows.push(row);
-    }
-  }
-
-  const flattened: FlattenedRow[] = [];
-  groups.forEach(group => {
-    flattened.push({ isGroupHeader: true, date: group.date });
-    group.rows.forEach(r => flattened.push(r));
-  });
-
-  return flattened;
-});
-
-// Step 2: Select All Handler
-const handleSelectAll = (newSelected: readonly number[]) => {
-  selectedEvents.value = [...newSelected];
-  selectAll.value = newSelected.length === rows.length;
-};
-
-const tableColumns: QTableColumn[] = [
-  {
-    name: 'select',
-    label: '',
-    field: 'select',
-    align: 'left',
-    headerClasses: 'bg-grey-2',
-  },
+const fleetTableColumns = computed(() => [
   {
     name: 'schedule-actual',
     label: 'Schedule / Actual',
-    field: 'scheduleActual',
-    align: 'left',
+    field: 'id', // Use a simple field since we have custom template
+    align: 'left' as const,
     headerClasses: 'bg-grey-2',
   },
   {
     name: 'trip-status',
-    label: 'Event Status',
-    field: 'eventStatus',
-    align: 'left',
+    label: 'Trip Status',
+    field: 'id', // Use a simple field since we have custom template
+    align: 'left' as const,
     sortable: true,
     headerClasses: 'bg-grey-2',
   },
   {
     name: 'activity',
     label: 'Activity',
-    field: 'activity',
-    align: 'left',
+    field: 'id', // Use a simple field since we have custom template
+    align: 'left' as const,
     sortable: true,
     headerClasses: 'bg-grey-2',
   },
   {
     name: 'route',
     label: 'Route',
-    field: 'route',
-    align: 'left',
+    field: 'id', // Use a simple field since we have custom template
+    align: 'left' as const,
     headerClasses: 'bg-grey-2',
   },
   {
-    name: 'assetsStatus',
+    name: 'asset-status',
     label: 'Assets Status',
-    field: 'assetsStatus',
-    align: 'left',
+    field: 'id', // Use a simple field since we have custom template
+    align: 'left' as const,
     headerClasses: 'bg-grey-2',
   },
   {
     name: 'client',
     label: 'Client',
-    field: 'client',
-    align: 'left',
+    field: 'id', // Use a simple field since we have custom template
+    align: 'left' as const,
     headerClasses: 'bg-grey-2',
   },
   {
     name: 'status',
-    label: 'Approval Status',
+    label: 'Status',
     field: 'status',
-    align: 'left',
+    align: 'left' as const,
     headerClasses: 'bg-grey-2',
+    type: 'chip' as const,
+    chipColors: TRIP_STATUS_CONFIG.reduce(
+      (acc, status) => {
+        acc[status.name] = status.color;
+        return acc;
+      },
+      {} as Record<string, string>
+    ),
   },
   {
     name: 'actions',
     label: 'Actions',
-    field: 'actions',
-    align: 'left',
+    field: 'id', // Use a simple field since we have custom template
+    align: 'left' as const,
     headerClasses: 'bg-grey-2',
   },
-];
+]);
 
-const columns: QTableColumn[] = [
-  {
-    name: 'select',
-    label: '',
-    field: 'select',
-    align: 'left',
-    headerClasses: 'bg-grey-2',
-  },
-  {
-    name: 'scheduleActual',
-    label: 'Schedule / Actual',
-    field: 'scheduleActual',
-    align: 'left',
-    headerClasses: 'bg-grey-2',
-  },
-  {
-    name: 'eventStatus',
-    label: 'Event Status',
-    field: 'eventStatus',
-    align: 'left',
-    sortable: true,
-    headerClasses: 'bg-grey-2',
-  },
-  {
-    name: 'activity',
-    label: 'Activity',
-    field: 'activity',
-    align: 'left',
-    sortable: true,
-    headerClasses: 'bg-grey-2',
-  },
-  {
-    name: 'route',
-    label: 'Route',
-    field: 'route',
-    align: 'left',
-    headerClasses: 'bg-grey-2',
-  },
-  {
-    name: 'assetsStatus',
-    label: 'Assets Status',
-    field: 'assetsStatus',
-    align: 'left',
-    headerClasses: 'bg-grey-2',
-  },
-  {
-    name: 'client',
-    label: 'Client',
-    field: 'client',
-    align: 'left',
-    headerClasses: 'bg-grey-2',
-  },
-  {
-    name: 'status',
-    label: 'Approval Status',
-    field: 'status',
-    align: 'left',
-    headerClasses: 'bg-grey-2',
-  },
-  {
-    name: 'actions',
-    label: 'Actions',
-    field: 'actions',
-    align: 'left',
-    headerClasses: 'bg-grey-2',
-  },
-];
+const formatDateTime = (dateTime: string | Moment): string => {
+  return moment.utc(dateTime).local().format('hh:mm A');
+};
 
-const formatDuration = (start: string | Moment, end: string | Moment = '') => {
+const formatDuration = (start: number | string | Moment, end: number | string | Moment = '') => {
   const startTime = moment.utc(start).local();
   const endTime = end ? moment.utc(end).local() : moment();
   const duration = moment.duration(endTime.diff(startTime));
@@ -701,7 +410,7 @@ onMounted((): void => {
           </q-card-section>
         </q-card>
 
-        <FleetTable :columns="tableColumns" :rows="store.trips">
+        <FleetTable :columns="fleetTableColumns" :rows="store.trips" row-key="id">
           <template #cell-schedule-actual="{ row }">
             <div class="row items-start q-gutter-x-sm flex items-center full-height">
               <div class="column gt-md">
@@ -715,7 +424,9 @@ onMounted((): void => {
                     height="16px"
                     class="text-grey-7"
                   />
-                  <span class="q-ml-sm text-caption">{{ row.timing.start_at }}</span>
+                  <span class="q-ml-sm text-caption">
+                    {{ formatDateTime(row.timing.start_at) }}
+                  </span>
                 </div>
                 <div class="text-grey-5 text-center">—————</div>
                 <div class="row items-center">
@@ -725,7 +436,9 @@ onMounted((): void => {
                     height="16px"
                     class="text-grey-7"
                   />
-                  <span class="q-ml-sm text-caption">{{ row.timing.end_at }}</span>
+                  <span class="q-ml-sm text-caption">
+                    {{ formatDateTime(row.timing.end_at) }}
+                  </span>
                 </div>
               </div>
             </div>
@@ -735,7 +448,7 @@ onMounted((): void => {
             <FleetChips
               class="full-width text-weight-medium"
               :text="getStatusDisplay(row)"
-              :color="getStatusColor(row.status)"
+              :color="getStatusColor(row.status as TripStatus)"
               :iconVisibility="false"
             />
           </template>
@@ -758,7 +471,7 @@ onMounted((): void => {
                 </div>
                 <div class="row items-center">
                   <span class="text-caption">
-                    {{ getTripMode(row.event_association.standardshuttle_type) }}
+                    {{ getTripMode(row.event_association.standardshuttle_type as TripMode) }}
                   </span>
                 </div>
               </div>
@@ -780,8 +493,8 @@ onMounted((): void => {
                 <q-tooltip>{{ row.timing.start_location.address }}</q-tooltip>
               </div>
               <q-chip dense class="bg-blue-1 text-blue" square>
-                {{ row.timing.total_stops }} Stops • {{ row.timing.total_distance }} •
-                {{ row.timing.total_duration }}
+                {{ row.timing.total_stops }} Stops • {{ row.timing.total_distance }} km •
+                {{ formatDuration(row.timing.total_duration) }}
               </q-chip>
               <div class="row items-center q-mt-sm">
                 <IconifyIcon
@@ -797,267 +510,185 @@ onMounted((): void => {
               </div>
             </div>
           </template>
-        </FleetTable>
 
-        <q-table
-          v-model:selected="selectedEvents"
-          flat
-          bordered
-          row-key="eventDetails?.id"
-          :columns="columns"
-          :rows="groupedRows"
-          :pagination="{ rowsPerPage: 7 }"
-          :rows-per-page-options="[5, 7, 10]"
-          @update:selected="handleSelectAll"
-        >
-          <template v-slot:body="props">
-            <tr v-if="props.row.isGroupHeader">
-              <td
-                :colspan="columns.length"
-                class="bg-grey-1 text-body2 text-primary text-weight-bold"
-              >
-                {{ props.row.date }}
-              </td>
-            </tr>
-            <template v-else>
-              <tr v-for="(event, index) in props.row.eventDetails.eventDate.events" :key="index">
-                <td>
-                  <q-checkbox v-model="selectedEvents" :val="event.uniqueId" dense />
-                </td>
-                <td></td>
-                <td>
-                  <div class="row items-center q-gutter-x-sm">
-                    <div>
-                      <q-btn
-                        outline
-                        round
-                        dense
-                        :color="
-                          event.assetsStatus.assignedVehicle
-                            ? event.assetsStatus.assignedColor
-                            : event.assetsStatus.notAssignedColor
-                        "
-                        @click="showVehicleDetails(event)"
-                        :disable="!event.assetsStatus.assignedVehicle"
-                      >
-                        <IconifyIcon
-                          :icon="event.assetsStatus.assignedVehicleIcon"
-                          width="24px"
-                          height="24px"
-                        />
-                        <q-badge
-                          floating
-                          rounded
-                          :color="
-                            event.assetsStatus.assignedVehicle
-                              ? event.assetsStatus.assignedColor
-                              : event.assetsStatus.notAssignedColor
-                          "
-                          text-color="white"
-                          class="q-ml-sm"
-                        >
-                          <IconifyIcon
-                            :icon="
-                              event.assetsStatus.assignedVehicle
-                                ? 'hugeicons:tick-01'
-                                : 'hugeicons:cancel-01'
-                            "
-                            width="12px"
-                            height="12px"
-                          />
-                        </q-badge>
-                        <q-tooltip
-                          >Vehicle
-                          {{
-                            event.assetsStatus.assignedVehicle ? 'Assigned' : 'Not Assigned'
-                          }}</q-tooltip
-                        >
-                      </q-btn>
-                    </div>
-                    <div>
-                      <q-btn
-                        outline
-                        round
-                        dense
-                        :color="
-                          event.assetsStatus.assignedDriver
-                            ? event.assetsStatus.assignedColor
-                            : event.assetsStatus.notAssignedColor
-                        "
-                        @click="showDriverDetails(event)"
-                        :disable="!event.assetsStatus.assignedDriver"
-                      >
-                        <IconifyIcon
-                          :icon="event.assetsStatus.assignedDriverIcon"
-                          width="24px"
-                          height="24px"
-                        />
-                        <q-badge
-                          floating
-                          rounded
-                          :color="
-                            event.assetsStatus.assignedDriver
-                              ? event.assetsStatus.assignedColor
-                              : event.assetsStatus.notAssignedColor
-                          "
-                          text-color="white"
-                          class="q-ml-sm"
-                        >
-                          <IconifyIcon
-                            :icon="
-                              event.assetsStatus.assignedDriver
-                                ? 'hugeicons:tick-01'
-                                : 'hugeicons:cancel-01'
-                            "
-                            width="12px"
-                            height="12px"
-                          />
-                        </q-badge>
-                        <q-tooltip
-                          >Driver
-                          {{
-                            event.assetsStatus.assignedDriver ? 'Assigned' : 'Not Assigned'
-                          }}</q-tooltip
-                        >
-                      </q-btn>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <div class="row items-center q-gutter-x-sm">
-                    <q-btn flat round dense>
-                      <q-avatar size="24px">
-                        <img :src="event.client[0].logo" />
-                      </q-avatar>
-                      <q-tooltip>{{ event.client[0].name }}</q-tooltip>
-                    </q-btn>
-                    <q-btn
-                      v-if="event.client.length > 1"
-                      round
-                      dense
-                      flat
-                      class="bg-grey-3 text-grey-9"
-                    >
-                      +{{ event.client.length - 1 }}
-                      <q-tooltip> {{ event.client.length - 1 }} more client(s) </q-tooltip>
-                    </q-btn>
-                  </div>
-                </td>
-                <td>
-                  <div
-                    class="text-body2 text-weight-medium q-pl-sm"
-                    :class="{
-                      'text-positive': event.status === 'Approved',
-                      'text-warning': event.status === 'Pending',
-                      'text-negative': event.status === 'Declined',
-                    }"
+          <template #cell-asset-status="{ row }">
+            <div class="row items-center q-gutter-x-sm">
+              <div>
+                <q-btn
+                  outline
+                  round
+                  dense
+                  :color="row.asset ? 'positive' : 'negative'"
+                  @click="showVehicleDetails(row)"
+                  :disable="!row.asset"
+                >
+                  <IconifyIcon icon="hugeicons:car-05" width="24px" height="24px" />
+                  <q-badge
+                    floating
+                    rounded
+                    :color="row.asset ? 'positive' : 'negative'"
+                    text-color="white"
+                    class="q-ml-sm"
                   >
-                    {{ event.status }}
-                  </div>
-                </td>
-                <td>
-                  <q-btn flat round @click="activeMoreMenu = event.uniqueId">
                     <IconifyIcon
-                      icon="hugeicons:more-vertical-circle-01"
+                      :icon="row.asset ? 'hugeicons:tick-01' : 'hugeicons:cancel-01'"
+                      width="12px"
+                      height="12px"
+                    />
+                  </q-badge>
+                  <q-tooltip> Vehicle {{ row.asset?.id ? 'Assigned' : 'Not Assigned' }} </q-tooltip>
+                </q-btn>
+              </div>
+              <div>
+                <q-btn
+                  outline
+                  round
+                  dense
+                  :color="row.driver ? 'positive' : 'negative'"
+                  @click="showDriverDetails(row)"
+                  :disable="!row.driver"
+                >
+                  <IconifyIcon icon="healthicons:truck-driver-outline" width="24px" height="24px" />
+                  <q-badge
+                    floating
+                    rounded
+                    :color="row.driver ? 'positive' : 'negative'"
+                    text-color="white"
+                    class="q-ml-sm"
+                  >
+                    <IconifyIcon
+                      :icon="row.driver ? 'hugeicons:tick-01' : 'hugeicons:cancel-01'"
+                      width="12px"
+                      height="12px"
+                    />
+                  </q-badge>
+                  <q-tooltip> Driver {{ row.driver?.id ? 'Assigned' : 'Not Assigned' }} </q-tooltip>
+                </q-btn>
+              </div>
+            </div>
+          </template>
+
+          <template #cell-client="{ row }">
+            <div class="row items-center q-gutter-x-sm">
+              <q-btn flat round dense v-if="row.timing.list_view.length > 0">
+                <q-avatar size="24px">
+                  <img :src="row.timing.list_view?.[0]?.client.logo as string" />
+                </q-avatar>
+                <q-tooltip>{{ row.timing.list_view?.[0]?.client.name }}</q-tooltip>
+              </q-btn>
+              <q-btn
+                v-if="row.timing.list_view.length > 1"
+                round
+                dense
+                flat
+                class="bg-grey-3 text-grey-9"
+              >
+                +{{ row.timing.list_view.length - 1 }}
+                <q-tooltip>{{ row.timing.list_view.length - 1 }} more client(s)</q-tooltip>
+              </q-btn>
+            </div>
+          </template>
+
+          <template #cell-actions="{ row }">
+            <q-btn flat round @click="activeMoreMenu = row.id">
+              <IconifyIcon
+                icon="hugeicons:more-vertical-circle-01"
+                width="24px"
+                height="24px"
+                class="text-grey-7"
+              />
+            </q-btn>
+            <q-menu
+              :model-value="activeMoreMenu === row.id"
+              @update:model-value="val => (activeMoreMenu = val ? row.id : null)"
+              transition-show="jump-down"
+              transition-hide="jump-up"
+              anchor="center right"
+              self="top left"
+              :offset="[-15, 0]"
+              class="animated-menu"
+            >
+              <q-list style="min-width: 300px" padding>
+                <q-item clickable v-ripple :to="{ name: 'dispatch-details' }">
+                  <q-item-section avatar>
+                    <IconifyIcon
+                      icon="hugeicons:route-02"
                       width="24px"
                       height="24px"
                       class="text-grey-7"
                     />
-                  </q-btn>
-                  <q-menu
-                    :model-value="activeMoreMenu === event.uniqueId"
-                    @update:model-value="val => (activeMoreMenu = val ? event.uniqueId : null)"
-                    transition-show="jump-down"
-                    transition-hide="jump-up"
-                    anchor="center right"
-                    self="top left"
-                    :offset="[-15, 0]"
-                    class="animated-menu"
-                  >
-                    <q-list style="min-width: 300px" padding>
-                      <q-item clickable v-ripple :to="{ name: 'dispatch-details' }">
-                        <q-item-section avatar>
-                          <IconifyIcon
-                            icon="hugeicons:route-02"
-                            width="24px"
-                            height="24px"
-                            class="text-grey-7"
-                          />
-                        </q-item-section>
-                        <q-item-section>
-                          <q-item-label>View Details</q-item-label>
-                          <q-item-label caption>View the details of this event</q-item-label>
-                        </q-item-section>
-                      </q-item>
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label>View Details</q-item-label>
+                    <q-item-label caption>View the details of this trip</q-item-label>
+                  </q-item-section>
+                </q-item>
 
-                      <q-item clickable v-ripple>
-                        <q-item-section avatar>
-                          <IconifyIcon
-                            icon="hugeicons:edit-01"
-                            width="24px"
-                            height="24px"
-                            class="text-grey-7"
-                          />
-                        </q-item-section>
-                        <q-item-section>
-                          <q-item-label>Edit Event</q-item-label>
-                          <q-item-label caption>Modify event details</q-item-label>
-                        </q-item-section>
-                      </q-item>
+                <q-item clickable v-ripple>
+                  <q-item-section avatar>
+                    <IconifyIcon
+                      icon="hugeicons:edit-01"
+                      width="24px"
+                      height="24px"
+                      class="text-grey-7"
+                    />
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label>Edit Trip</q-item-label>
+                    <q-item-label caption>Modify trip details</q-item-label>
+                  </q-item-section>
+                </q-item>
 
-                      <q-item clickable v-ripple>
-                        <q-item-section avatar>
-                          <IconifyIcon
-                            icon="hugeicons:flip-left"
-                            width="24px"
-                            height="24px"
-                            class="text-grey-7"
-                          />
-                        </q-item-section>
-                        <q-item-section>
-                          <q-item-label>Clone Event</q-item-label>
-                          <q-item-label caption>Create a copy of this event</q-item-label>
-                        </q-item-section>
-                      </q-item>
+                <q-item clickable v-ripple>
+                  <q-item-section avatar>
+                    <IconifyIcon
+                      icon="hugeicons:flip-left"
+                      width="24px"
+                      height="24px"
+                      class="text-grey-7"
+                    />
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label>Clone Trip</q-item-label>
+                    <q-item-label caption>Create a copy of this trip</q-item-label>
+                  </q-item-section>
+                </q-item>
 
-                      <q-item clickable v-ripple>
-                        <q-item-section avatar>
-                          <IconifyIcon
-                            icon="hugeicons:cancel-01"
-                            width="24px"
-                            height="24px"
-                            class="text-grey-7"
-                          />
-                        </q-item-section>
-                        <q-item-section>
-                          <q-item-label>Cancel Event</q-item-label>
-                          <q-item-label caption>Cancel this event</q-item-label>
-                        </q-item-section>
-                      </q-item>
+                <q-item clickable v-ripple>
+                  <q-item-section avatar>
+                    <IconifyIcon
+                      icon="hugeicons:cancel-01"
+                      width="24px"
+                      height="24px"
+                      class="text-grey-7"
+                    />
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label>Cancel Trip</q-item-label>
+                    <q-item-label caption>Cancel this trip</q-item-label>
+                  </q-item-section>
+                </q-item>
 
-                      <q-separator />
+                <q-separator />
 
-                      <q-item clickable v-ripple class="text-negative">
-                        <q-item-section avatar>
-                          <IconifyIcon
-                            icon="hugeicons:delete-02"
-                            width="24px"
-                            height="24px"
-                            class="text-negative"
-                          />
-                        </q-item-section>
-                        <q-item-section>
-                          <q-item-label>Delete Event</q-item-label>
-                          <q-item-label caption>Remove this event permanently</q-item-label>
-                        </q-item-section>
-                      </q-item>
-                    </q-list>
-                  </q-menu>
-                </td>
-              </tr>
-            </template>
+                <q-item clickable v-ripple class="text-negative">
+                  <q-item-section avatar>
+                    <IconifyIcon
+                      icon="hugeicons:delete-02"
+                      width="24px"
+                      height="24px"
+                      class="text-negative"
+                    />
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label>Delete Trip</q-item-label>
+                    <q-item-label caption>Remove this trip permanently</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-menu>
           </template>
-        </q-table>
+        </FleetTable>
 
         <q-dialog v-model="showDialog" backdrop-filter="blur(2px)">
           <q-card style="width: 500px; max-width: 80vw">
@@ -1066,22 +697,16 @@ onMounted((): void => {
               <q-space />
               <q-btn flat dense icon="close" @click="selectedVehicleEvent = null" />
             </q-bar>
-            <q-card-section v-if="selectedVehicleEvent">
+            <q-card-section v-if="selectedVehicleEvent && selectedVehicleEvent.asset">
               <div class="text-subtitle2 text-grey-7">Primary Vehicle</div>
               <div class="q-mt-sm row items-center justify-between q-gutter-x-md">
                 <div>
                   <VehiclePlate
-                    :plateColor="
-                      selectedVehicleEvent.assetsStatus.assetDetails.vehicle.plate.plateColor
-                    "
-                    :seriesCode="
-                      selectedVehicleEvent.assetsStatus.assetDetails.vehicle.plate.seriesCode
-                    "
-                    :seriesNumber="
-                      selectedVehicleEvent.assetsStatus.assetDetails.vehicle.plate.seriesNumber
-                    "
+                    :plateColor="selectedVehicleEvent.asset.vehicle_plate_color"
+                    :seriesCode="selectedVehicleEvent.asset.vehicle_plate.split(' ')[0] || 'AD'"
+                    :seriesNumber="selectedVehicleEvent.asset.vehicle_plate.split(' ')[1] || '10'"
                     :uniqueNumber="
-                      selectedVehicleEvent.assetsStatus.assetDetails.vehicle.plate.uniqueNumber
+                      selectedVehicleEvent.asset.vehicle_plate.split(' ')[2] || '12345'
                     "
                   />
                 </div>
@@ -1092,15 +717,15 @@ onMounted((): void => {
                       rounded
                       class="bg-grey-3 text-grey-7 text-weight-bold text-caption"
                     >
-                      {{ selectedVehicleEvent.assetsStatus.assetDetails.vehicle.year }}
+                      {{ selectedVehicleEvent.asset.year }}
                       <q-chip class="text-grey-9 text-caption text-weight-medium">
-                        {{ selectedVehicleEvent.assetsStatus.assetDetails.vehicle.type }}
+                        {{ selectedVehicleEvent.asset.asset_type_name }}
                       </q-chip>
                     </q-badge>
                   </div>
                   <div class="text-caption text-weight-medium q-pl-sm q-mt-xs">
-                    {{ selectedVehicleEvent.assetsStatus.assetDetails.vehicle.make }},
-                    {{ selectedVehicleEvent.assetsStatus.assetDetails.vehicle.model }}
+                    {{ selectedVehicleEvent.asset.make_name }},
+                    {{ selectedVehicleEvent.asset.model_name }}
                   </div>
                 </div>
                 <div class="row items-center">
@@ -1115,10 +740,9 @@ onMounted((): void => {
                   <div class="text-caption text-weight-medium q-pl-sm">
                     <q-chip>
                       <q-avatar size="24px" color="primary" text-color="white">
-                        {{
-                          selectedVehicleEvent.assetsStatus.assetDetails.vehicle.seats
-                        }} </q-avatar
-                      >Seats
+                        {{ selectedVehicleEvent.asset.seats }}
+                      </q-avatar>
+                      Seats
                     </q-chip>
                   </div>
                 </div>
@@ -1147,27 +771,31 @@ onMounted((): void => {
               <q-space />
               <q-btn flat dense icon="close" @click="selectedDriverEvent = null" />
             </q-bar>
-            <q-card-section v-if="selectedDriverEvent">
+            <q-card-section v-if="selectedDriverEvent && selectedDriverEvent.driver">
               <div class="text-subtitle2 text-grey-7">Primary Driver</div>
               <div class="q-mt-sm row items-center justify-between q-gutter-x-md">
                 <div class="row items-center">
                   <q-avatar size="40px" color="primary" text-color="white">
-                    <img :src="selectedDriverEvent.assetsStatus.assetDetails.driver.image" />
+                    <span
+                      >{{ selectedDriverEvent.driver.first_name[0]
+                      }}{{ selectedDriverEvent.driver.last_name[0] }}</span
+                    >
                   </q-avatar>
                   <div class="column">
                     <div class="text-body2 text-weight-medium q-pl-sm">
-                      {{ selectedDriverEvent.assetsStatus.assetDetails.driver.firstName }}
-                      {{ selectedDriverEvent.assetsStatus.assetDetails.driver.lastName }}
+                      {{ selectedDriverEvent.driver.first_name }}
+                      {{ selectedDriverEvent.driver.last_name }}
                     </div>
                     <div class="row items-center q-pl-sm">
                       <q-chip class="bg-blue-1 text-blue text-caption" dense square>
-                        {{ selectedDriverEvent.assetsStatus.assetDetails.driver.id }}
+                        #{{ selectedDriverEvent.driver.id }}
                       </q-chip>
                       <q-chip
                         dense
                         rounded
                         style="height: 24px; width: 24px; border: 1px solid #0000001f"
                         class="q-mr-sm bg-white"
+                        v-if="selectedDriverEvent.driver.phone.length > 0"
                       >
                         <IconifyIcon
                           icon="hugeicons:call"
@@ -1175,15 +803,14 @@ onMounted((): void => {
                           height="16px"
                           class="text-grey-8"
                         />
-                        <q-tooltip>{{
-                          selectedDriverEvent.assetsStatus.assetDetails.driver.phone
-                        }}</q-tooltip>
+                        <q-tooltip>{{ selectedDriverEvent.driver.phone[0] }}</q-tooltip>
                       </q-chip>
                       <q-chip
                         dense
                         rounded
                         style="height: 24px; width: 24px; border: 1px solid #0000001f"
                         class="q-mr-sm bg-white"
+                        v-if="selectedDriverEvent.driver.email.length > 0"
                       >
                         <IconifyIcon
                           icon="hugeicons:mail-01"
@@ -1191,28 +818,27 @@ onMounted((): void => {
                           height="16px"
                           class="text-grey-8"
                         />
-                        <q-tooltip>{{
-                          selectedDriverEvent.assetsStatus.assetDetails.driver.email
-                        }}</q-tooltip>
+                        <q-tooltip>{{ selectedDriverEvent.driver.email[0] }}</q-tooltip>
                       </q-chip>
                     </div>
                   </div>
                 </div>
                 <div class="row items-center">
                   <div class="column">
-                    <div class="text-caption text-grey-7">HOS Remaining Hrs</div>
+                    <div class="text-caption text-grey-7">Driver Status</div>
                     <div class="text-body2 text-weight-medium text-grey-9">
-                      3 H 17 M <br />
+                      {{ selectedDriverEvent.driver.is_active_driver ? 'Active' : 'Inactive' }}
+                      <br />
                       &nbsp;
                     </div>
                   </div>
                 </div>
                 <div class="row items-center">
                   <div class="column">
-                    <div class="text-caption text-grey-7 ellipsis">Position & Level</div>
+                    <div class="text-caption text-grey-7 ellipsis">Gender</div>
                     <div class="text-body2 text-weight-medium text-grey-9 ellipsis">
-                      Intermediate driver <br />
-                      Level 2
+                      {{ selectedDriverEvent.driver.gender === 1 ? 'Male' : 'Female' }} <br />
+                      Primary Driver
                     </div>
                   </div>
                 </div>
