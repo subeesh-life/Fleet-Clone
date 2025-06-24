@@ -31,8 +31,17 @@
         v-slot:[`body-cell-${col.name}`]="props"
       >
         <q-td :props="props">
+          <!-- Slot Override - Check first -->
+          <slot
+            v-if="$slots[`cell-${col.name}`]"
+            v-bind="props"
+            :row="props.row as T"
+            :name="`cell-${col.name}`"
+            :column="col"
+          />
+
           <!-- Text Column -->
-          <template v-if="col.type === 'text' || !col.type">
+          <template v-else-if="col.type === 'text' || !col.type">
             <span :class="col.textClass">
               {{ formatValue(getFieldValue(props.row, col.field), col) }}
             </span>
@@ -168,26 +177,20 @@
               {{ col.formatter(getFieldValue(props.row, col.field), props.row, col) }}
             </span>
           </template>
-
-          <!-- Slot Override -->
-          <slot
-            v-if="$slots[`cell-${col.name}`]"
-            v-bind="props"
-            :row="props.row as T"
-            :name="`cell-${col.name}`"
-            :column="col"
-          />
         </q-td>
       </template>
 
       <!-- Loading Slot -->
       <template v-slot:loading>
-        <q-inner-loading showing color="primary" />
+        <q-inner-loading :showing="loading" color="primary" />
       </template>
 
       <!-- No Data Slot -->
       <template v-slot:no-data="{ message }">
-        <div class="full-width row flex-center text-grey-6 q-gutter-sm">
+        <div
+          v-if="!loading && rows?.length === 0"
+          class="full-width row flex-center text-grey-6 q-gutter-sm"
+        >
           <q-icon size="2em" name="sentiment_dissatisfied" />
           <span>{{ message }}</span>
         </div>

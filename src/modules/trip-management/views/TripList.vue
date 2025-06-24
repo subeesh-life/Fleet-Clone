@@ -410,7 +410,12 @@ onMounted((): void => {
           </q-card-section>
         </q-card>
 
-        <FleetTable :columns="fleetTableColumns" :rows="store.trips" row-key="id">
+        <FleetTable
+          :columns="fleetTableColumns"
+          :rows="store.trips"
+          :loading="store.tripsLoader"
+          row-key="id"
+        >
           <template #cell-schedule-actual="{ row }">
             <div class="row items-start q-gutter-x-sm flex items-center full-height">
               <div class="column gt-md">
@@ -570,21 +575,21 @@ onMounted((): void => {
 
           <template #cell-client="{ row }">
             <div class="row items-center q-gutter-x-sm">
-              <q-btn flat round dense v-if="row.timing.list_view.length > 0">
+              <q-btn flat round dense v-if="row.timing?.list_view?.length > 0">
                 <q-avatar size="24px">
                   <img :src="row.timing.list_view?.[0]?.client.logo as string" />
                 </q-avatar>
                 <q-tooltip>{{ row.timing.list_view?.[0]?.client.name }}</q-tooltip>
               </q-btn>
               <q-btn
-                v-if="row.timing.list_view.length > 1"
+                v-if="row.timing.list_view?.length > 1"
                 round
                 dense
                 flat
                 class="bg-grey-3 text-grey-9"
               >
-                +{{ row.timing.list_view.length - 1 }}
-                <q-tooltip>{{ row.timing.list_view.length - 1 }} more client(s)</q-tooltip>
+                +{{ row.timing.list_view?.length - 1 }}
+                <q-tooltip>{{ row.timing.list_view?.length - 1 }} more client(s)</q-tooltip>
               </q-btn>
             </div>
           </template>
