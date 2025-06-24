@@ -424,6 +424,7 @@ onMounted((): void => {
           :rows="store.trips"
           :loading="store.tripsLoader"
           :height="tableHeight"
+          selection="multiple"
           row-key="id"
         >
           <template #cell-schedule-actual="{ row }">
