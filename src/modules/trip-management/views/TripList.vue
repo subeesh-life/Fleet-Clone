@@ -305,6 +305,32 @@ const handleClearSearch = () => {
   console.log('Search cleared');
 };
 
+// Handle refresh from table
+const handleRefresh = () => {
+  void store.fetchTripStats();
+  void store.fetchTrips();
+  console.log('Data refreshed');
+};
+
+// Handle clear filters from table
+const handleClearFilters = () => {
+  // Reset all filters to default state
+  store.clearTripStatuses();
+  store.clearSearch();
+  // Reset date/time to today
+  store.dateTimeRange = {
+    dateRange: {
+      from: new Date().toISOString().split('T')[0] || '',
+      to: new Date().toISOString().split('T')[0] || '',
+    },
+    timeRange: {
+      min: 0, // 12:00 AM
+      max: 23.983, // 11:59 PM
+    },
+  };
+  console.log('All filters cleared');
+};
+
 // Debounce timer for API calls
 let debounceTimer: NodeJS.Timeout | null = null;
 
@@ -450,6 +476,8 @@ onUnmounted((): void => {
           :height="tableHeight"
           selection="multiple"
           row-key="id"
+          @refresh="handleRefresh"
+          @clear-filters="handleClearFilters"
         >
           <template #cell-schedule-actual="{ row }">
             <div class="row items-start q-gutter-x-sm flex items-center full-height">
@@ -734,6 +762,25 @@ onUnmounted((): void => {
                 </q-list>
               </q-menu>
             </q-btn>
+          </template>
+
+          <!-- Custom No Data Actions -->
+          <template #no-data-actions>
+            <q-btn 
+              outline 
+              color="primary" 
+              icon="refresh" 
+              label="Refresh Data" 
+              @click="handleRefresh"
+              class="q-mr-sm"
+            />
+            <q-btn 
+              flat 
+              color="grey-7" 
+              icon="filter_list_off" 
+              label="Clear All Filters" 
+              @click="handleClearFilters"
+            />
           </template>
         </FleetTable>
 
