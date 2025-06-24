@@ -1,9 +1,31 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 
-const dateRange = ref({
-  from: new Date().toISOString().split('T')[0],
-  to: new Date().toISOString().split('T')[0],
+interface DateRange {
+  from: string;
+  to: string;
+}
+
+interface Props {
+  modelValue?: DateRange;
+}
+
+interface Emits {
+  (e: 'update:modelValue', value: DateRange): void;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  modelValue: (): DateRange => ({
+    from: new Date().toISOString().split('T')[0] || '',
+    to: new Date().toISOString().split('T')[0] || '',
+  }),
+});
+
+const emit = defineEmits<Emits>();
+
+const dateRange = computed({
+  get: () => props.modelValue,
+  set: (value: DateRange) => emit('update:modelValue', value),
 });
 
 const showDate = ref(false);

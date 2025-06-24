@@ -1,8 +1,31 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-const timeRange = ref({
-  min: 0,
-  max: 23.983, // 23 hours and 59 minutes (23 + 59/60)
+
+interface TimeRange {
+  min: number;
+  max: number;
+}
+
+interface Props {
+  modelValue?: TimeRange;
+}
+
+interface Emits {
+  (e: 'update:modelValue', value: TimeRange): void;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  modelValue: (): TimeRange => ({
+    min: 0,
+    max: 23.983, // 23 hours and 59 minutes (23 + 59/60)
+  }),
+});
+
+const emit = defineEmits<Emits>();
+
+const timeRange = computed({
+  get: () => props.modelValue,
+  set: (value: TimeRange) => emit('update:modelValue', value),
 });
 
 const formatTime = (hour: number) => {
@@ -22,7 +45,7 @@ const showEndTime = ref(false);
 const updateTimeFromQTime = (
   time: string | null | undefined,
   isStart: boolean
-) => {
+): void => {
   if (!time) return;
 
   const [hours = '0', minutes = '0'] = time.split(':');
@@ -52,7 +75,7 @@ const updateTimeFromQTime = (
         <q-time
           v-model="startTime"
           landscape
-          @update:model-value="time => updateTimeFromQTime(time, true)"
+          @update:model-value="(time: string | null) => updateTimeFromQTime(time, true)"
         />
         <q-card-actions align="right">
           <q-btn flat label="Close" color="primary" v-close-popup />
@@ -82,7 +105,7 @@ const updateTimeFromQTime = (
         <q-time
           v-model="endTime"
           landscape
-          @update:model-value="time => updateTimeFromQTime(time, false)"
+          @update:model-value="(time: string | null) => updateTimeFromQTime(time, false)"
         />
         <q-card-actions align="right">
           <q-btn flat label="Close" color="primary" v-close-popup />

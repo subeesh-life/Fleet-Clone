@@ -21,6 +21,7 @@
       :height="height"
       :style="{ height: typeof height === 'number' ? `${height}px` : height }"
       binary-state-sort
+      table-header-class="bg-grey-2"
       @row-click="(evt, row, index) => emit('row-click', evt, row, index)"
       @row-dblclick="(evt, row, index) => emit('row-dblclick', evt, row, index)"
     >

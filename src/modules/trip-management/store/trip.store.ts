@@ -10,16 +10,45 @@ export const useTripsStore = defineStore('trips', () => {
    ** States - using refs for reactive state
    */
   const currentPage = ref(1);
+  
+  // Date range state
+  const dateRange = ref({
+    from: new Date().toISOString().split('T')[0] || '',
+    to: new Date().toISOString().split('T')[0] || '',
+  });
+  
+  // Time range state (in decimal hours)
+  const timeRange = ref({
+    min: 0, // 12:00 AM
+    max: 23.983, // 11:59 PM
+  });
 
   /*
    ** Getters - using computed for derived state
    */
+  
+  // Helper function to convert decimal hours to hours and minutes
+  const decimalToHoursMinutes = (decimal: number) => {
+    const hours = Math.floor(decimal);
+    const minutes = Math.round((decimal - hours) * 60);
+    return { hours, minutes };
+  };
+  
+  // Computed properties for start and end datetime in UTC
+  const startAt = computed(() => {
+    const { hours, minutes } = decimalToHoursMinutes(timeRange.value.min);
+    return moment.utc(`${dateRange.value.from} ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:00`);
+  });
+  
+  const endAt = computed(() => {
+    const { hours, minutes } = decimalToHoursMinutes(timeRange.value.max);
+    return moment.utc(`${dateRange.value.to} ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:59`);
+  });
+  
   const tripsPayloadHttp = computed(() => {
-    const started_at = moment.utc().subtract(2, 'day');
-    const ended_at = moment.utc().add(1, 'day');
     return {
-      started_at,
-      ended_at,
+      started_at: startAt.value,
+      ended_at: endAt.value,
       page: currentPage.value,
       limit: import.meta.env.VITE_PAGINATION_LIMIT || 10,
     };
@@ -88,6 +117,8 @@ export const useTripsStore = defineStore('trips', () => {
   return {
     // States
     currentPage,
+    dateRange,
+    timeRange,
 
     // Data from API
     trips,
@@ -102,7 +133,9 @@ export const useTripsStore = defineStore('trips', () => {
     tripsError,
     tripStatsError,
 
-    // Getters
+    // Computed getters
+    startAt,
+    endAt,
     tripsPayloadHttp,
 
     // Actions

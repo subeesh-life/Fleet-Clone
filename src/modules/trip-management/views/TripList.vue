@@ -7,7 +7,7 @@ import FleetBreadcrumbs from 'src/components/shared/FleetBreadcrumbs.vue';
 import FleetTable from 'src/components/shared/FleetTable.vue';
 import FleetAvatar from 'src/components/shared/FleetAvatar.vue';
 import moment from 'moment';
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { useTripsStore } from '../store/trip.store';
 import { useAutoHeight } from 'src/composables/useAutoHeight';
 import type { TripMode, TripStatus } from '../types/trip-config.types';
@@ -310,9 +310,39 @@ const clearSearchFilters = () => {
   activeSearchFilters.value = [];
 };
 
+// Debounce timer for API calls
+let debounceTimer: NodeJS.Timeout | null = null;
+
+// Debounced function to fetch data
+const debouncedFetchData = () => {
+  if (debounceTimer) {
+    clearTimeout(debounceTimer);
+  }
+  debounceTimer = setTimeout(() => {
+    void store.fetchTripStats();
+    void store.fetchTrips();
+  }, 500); // 500ms delay
+};
+
+// Watch for changes in date/time range and trigger debounced API calls
+watch(
+  [() => store.dateRange, () => store.timeRange],
+  () => {
+    debouncedFetchData();
+  },
+  { deep: true }
+);
+
 onMounted((): void => {
   void store.fetchTripStats();
   void store.fetchTrips();
+});
+
+onUnmounted((): void => {
+  if (debounceTimer) {
+    clearTimeout(debounceTimer);
+    debounceTimer = null;
+  }
 });
 </script>
 
@@ -325,9 +355,9 @@ onMounted((): void => {
       </div>
 
       <div class="col-md-8 flex justify-end q-gutter-x-md">
-        <FleetDateRange class="gt-sm" />
+        <FleetDateRange class="gt-sm" v-model="store.dateRange" />
 
-        <FleetTimeRange class="gt-sm" />
+        <FleetTimeRange class="gt-sm" v-model="store.timeRange" />
 
         <div class="row q-gutter-x-sm">
           <q-btn
