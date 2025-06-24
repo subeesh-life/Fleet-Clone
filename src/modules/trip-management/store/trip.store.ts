@@ -4,6 +4,7 @@ import { ref, computed } from 'vue';
 import { tripApi } from '../api/trip.api';
 import { useApi, useApiList } from 'src/composables/useApi';
 import type { TripStatsResponse } from '../types/trip-api.types';
+import { TripStatus } from '../types/trip-config.types';
 
 export const useTripsStore = defineStore('trips', () => {
   /*
@@ -22,6 +23,12 @@ export const useTripsStore = defineStore('trips', () => {
       max: 23.983, // 11:59 PM
     },
   });
+
+  // Trip status selection state
+  const selectedTripStatuses = ref<TripStatus[]>([]);
+
+  // Current active status filter (for tab selection)
+  const activeStatusFilter = ref<TripStatus>(TripStatus.ALL);
 
   /*
    ** Getters - using computed for derived state
@@ -46,12 +53,19 @@ export const useTripsStore = defineStore('trips', () => {
   });
   
   const tripsPayloadHttp = computed(() => {
-    return {
+    const payload: Record<string, any> = {
       started_at: startAt.value,
       ended_at: endAt.value,
       page: currentPage.value,
       limit: import.meta.env.VITE_PAGINATION_LIMIT || 10,
     };
+
+    // Add trip_statuses if any are selected
+    if (selectedTripStatuses.value.length > 0) {
+      payload.trip_statuses = selectedTripStatuses.value;
+    }
+
+    return payload;
   });
 
   /*
@@ -114,10 +128,44 @@ export const useTripsStore = defineStore('trips', () => {
     await fetchTripStats(params);
   };
 
+  /*
+   ** Trip status management methods
+   */
+  const setActiveStatusFilter = (status: TripStatus): void => {
+    activeStatusFilter.value = status;
+    
+    // Update selected trip statuses based on active filter
+    if (status === TripStatus.ALL) {
+      selectedTripStatuses.value = [];
+    } else {
+      selectedTripStatuses.value = [status];
+    }
+  };
+
+  const addTripStatus = (status: TripStatus): void => {
+    if (!selectedTripStatuses.value.includes(status)) {
+      selectedTripStatuses.value.push(status);
+    }
+  };
+
+  const removeTripStatus = (status: TripStatus): void => {
+    const index = selectedTripStatuses.value.indexOf(status);
+    if (index > -1) {
+      selectedTripStatuses.value.splice(index, 1);
+    }
+  };
+
+  const clearTripStatuses = (): void => {
+    selectedTripStatuses.value = [];
+    activeStatusFilter.value = TripStatus.ALL;
+  };
+
   return {
     // States
     currentPage,
     dateTimeRange,
+    selectedTripStatuses,
+    activeStatusFilter,
 
     // Data from API
     trips,
@@ -140,5 +188,9 @@ export const useTripsStore = defineStore('trips', () => {
     // Actions
     fetchTrips: loadTrips,
     fetchTripStats: loadTripStats,
+    setActiveStatusFilter,
+    addTripStatus,
+    removeTripStatus,
+    clearTripStatuses,
   };
 });

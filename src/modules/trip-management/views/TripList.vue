@@ -31,7 +31,7 @@ const { height: tableHeight } = useAutoHeight({
   bottomOffset: 70,
 });
 
-const eventStatus = ref('all');
+// Using store's activeStatusFilter instead of local eventStatus
 const selectedEvents = ref<number[]>([]);
 const selectedVehicleEvent = ref<TripResponse | null>(null);
 const selectedDriverEvent = ref<TripResponse | null>(null);
@@ -323,9 +323,9 @@ const debouncedFetchData = () => {
   }, 500); // 500ms delay
 };
 
-// Watch for changes in date/time range and trigger debounced API calls
+// Watch for changes in date/time range and status selection and trigger debounced API calls
 watch(
-  () => store.dateTimeRange,
+  [() => store.dateTimeRange, () => store.selectedTripStatuses],
   () => {
     debouncedFetchData();
   },
@@ -383,7 +383,8 @@ onUnmounted((): void => {
     <div class="row">
       <div ref="tabsRef" class="col-12 bg-white rounded-borders q-pa-md">
         <q-tabs
-          v-model="eventStatus"
+          :model-value="store.activeStatusFilter"
+          @update:model-value="store.setActiveStatusFilter"
           dense
           class="text-grey"
           active-color="primary"
