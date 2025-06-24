@@ -29,6 +29,7 @@ const tabsRef = ref();
 const { height: tableHeight } = useAutoHeight({
   targetRef: tableRef,
   minHeight: 400,
+  bottomOffset: 70,
 });
 
 const eventStatus = ref('all');
@@ -174,7 +175,7 @@ const showDriverDetails = (trip: TripResponse) => {
 };
 
 // Step 1: Group and Flatten
-const fleetTableColumns = computed(() => [
+const tableColumns = computed(() => [
   {
     name: 'schedule-actual',
     label: 'Schedule / Actual',
@@ -419,7 +420,7 @@ onMounted((): void => {
 
         <FleetTable
           ref="tableRef"
-          :columns="fleetTableColumns"
+          :columns="tableColumns"
           :rows="store.trips"
           :loading="store.tripsLoader"
           :height="tableHeight"
