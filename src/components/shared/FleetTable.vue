@@ -18,6 +18,8 @@
       :bordered="bordered"
       :square="square"
       :separator="separator"
+      :height="height"
+      :style="{ height: typeof height === 'number' ? `${height}px` : height }"
       binary-state-sort
       @row-click="(evt, row, index) => emit('row-click', evt, row, index)"
       @row-dblclick="(evt, row, index) => emit('row-dblclick', evt, row, index)"
@@ -369,6 +371,7 @@ interface TableProps {
   actions?: TableAction[];
   noDataLabel?: string;
   serverSide?: boolean;
+  height?: string | number;
   disableRow?: (row: any) => boolean;
 }
 

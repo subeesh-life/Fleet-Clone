@@ -48,7 +48,6 @@ export function useAutoHeight({
         ? [subtractRefs]
         : [];
 
-    // Calculate total height of elements to subtract
     const subtractHeight = elementsToSubtract.reduce((total, elementRef) => {
       const element = getElement(elementRef);
       if (element) {
@@ -57,11 +56,9 @@ export function useAutoHeight({
       return total;
     }, 0);
 
-    // Calculate available height
     const availableHeight =
       window.innerHeight - targetRect.y - subtractHeight - bottomOffset - topOffset;
 
-    // Apply minimum height constraint
     height.value = Math.max(availableHeight, minHeight);
   };
 
@@ -75,13 +72,11 @@ export function useAutoHeight({
     }, debounceMs);
   };
 
-  // Initialize on mount
   onMounted(() => {
     void calculateHeight();
     window.addEventListener('resize', updateHeight);
   });
 
-  // Cleanup
   onUnmounted(() => {
     if (debounceTimeout) {
       clearTimeout(debounceTimeout);

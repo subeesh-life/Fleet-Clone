@@ -369,12 +369,12 @@
     </q-drawer>
 
     <!-- Page Content -->
-    <q-page-container>
+    <q-page-container class="page-container-with-fixed-footer">
       <router-view />
     </q-page-container>
 
     <!-- Footer -->
-    <q-footer bordered class="bg-white text-black">
+    <q-footer bordered class="bg-white text-black fixed-footer">
       <q-toolbar class="q-py-xs">
         <q-toolbar-title class="text-center text-caption">
           © 2025 Sunshine Transports
@@ -629,5 +629,17 @@ const copyEmail = async () => {
     opacity: 1;
     transform: translateX(0);
   }
+}
+
+.fixed-footer {
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 2000 !important;
+}
+
+.page-container-with-fixed-footer {
+  padding-bottom: 56px !important;
 }
 </style>

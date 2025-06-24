@@ -9,6 +9,7 @@ import FleetAvatar from 'src/components/shared/FleetAvatar.vue';
 import moment from 'moment';
 import { ref, computed, onMounted } from 'vue';
 import { useTripsStore } from '../store/trip.store';
+import { useAutoHeight } from 'src/composables/useAutoHeight';
 import type { TripMode, TripStatus } from '../types/trip-config.types';
 import type { TripResponse } from '../types/trip-api.types';
 import type { Moment } from 'moment';
@@ -19,6 +20,16 @@ import {
 } from '../constants/trip.constants';
 
 const store = useTripsStore();
+
+// Table height management
+const tableRef = ref();
+const headerRef = ref();
+const tabsRef = ref();
+
+const { height: tableHeight } = useAutoHeight({
+  targetRef: tableRef,
+  minHeight: 400,
+});
 
 const eventStatus = ref('all');
 const selectedEvents = ref<number[]>([]);
@@ -41,7 +52,6 @@ const searchEvents = ref<string[]>([
 const selectedFilter = ref<string>('Event Type');
 const activeSearchFilters = ref<{ type: string; value: string }[]>([]);
 const dispatchFilterDrawer = ref(false);
-// Filter Drawer
 const organization = ref([]);
 const organizationOptions = ref([
   { label: 'Abu Dhabi - Operations', value: 'organization1' },
@@ -308,7 +318,7 @@ onMounted((): void => {
 <template>
   <q-page class="q-pa-md bg-grey-1" style="border-top: 1px solid #e0e0e0">
     <!-- Action Bar / Header Bar -->
-    <div class="row flex justify-between items-center q-mb-md">
+    <div ref="headerRef" class="row flex justify-between items-center q-mb-md">
       <div class="col-md-4">
         <FleetBreadcrumbs :items="LISTING_BREADCRUMBS" />
       </div>
@@ -343,7 +353,7 @@ onMounted((): void => {
 
     <!-- Trip Status Tabs -->
     <div class="row">
-      <div class="col-12 bg-white rounded-borders q-pa-md">
+      <div ref="tabsRef" class="col-12 bg-white rounded-borders q-pa-md">
         <q-tabs
           v-model="eventStatus"
           dense
@@ -408,9 +418,11 @@ onMounted((): void => {
         </q-card>
 
         <FleetTable
+          ref="tableRef"
           :columns="fleetTableColumns"
           :rows="store.trips"
           :loading="store.tripsLoader"
+          :height="tableHeight"
           row-key="id"
         >
           <template #cell-schedule-actual="{ row }">
@@ -581,7 +593,7 @@ onMounted((): void => {
                 />
                 <q-tooltip>{{ row.timing.list_view?.[0]?.client?.name || 'N/A' }}</q-tooltip>
               </q-btn>
-              <!-- <q-btn
+              <q-btn
                 v-if="row.timing.list_view?.length > 1"
                 round
                 dense
@@ -590,7 +602,7 @@ onMounted((): void => {
               >
                 +{{ row.timing.list_view?.length - 1 }}
                 <q-tooltip>{{ row.timing.list_view?.length - 1 }} more client(s)</q-tooltip>
-              </q-btn> -->
+              </q-btn>
             </div>
           </template>
 
