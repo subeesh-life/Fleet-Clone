@@ -24,7 +24,6 @@
       table-header-class="bg-grey-2"
       @row-click="(evt, row, index) => emit('row-click', evt, row, index)"
       @row-dblclick="(evt, row, index) => emit('row-dblclick', evt, row, index)"
-      @request="onRequest"
     >
       <slot></slot>
 
@@ -194,44 +193,44 @@
         <div
           v-if="!loading && rows?.length === 0"
           class="absolute-full flex flex-center"
-          style="top: 0; left: 0; right: 0; bottom: 0; z-index: 1;"
+          style="top: 0; left: 0; right: 0; bottom: 0; z-index: 1"
         >
           <div class="column items-center q-gutter-md text-center">
             <!-- Empty State Icon -->
-            <div class="q-pa-lg rounded-borders bg-grey-1" style="border: 2px dashed #e0e0e0;">
-              <q-icon 
-                size="5em" 
-                name="inbox" 
-                class="text-grey-4"
-              />
+            <div class="q-pa-lg rounded-borders bg-grey-1" style="border: 2px dashed #e0e0e0">
+              <q-icon size="5em" name="inbox" class="text-grey-4" />
             </div>
-            
+
             <!-- Empty State Title -->
             <div class="text-h5 text-grey-7 text-weight-medium">
               {{ message }}
             </div>
-            
+
             <!-- Empty State Description -->
-            <div class="text-body1 text-grey-5 text-center" style="max-width: 450px; line-height: 1.6;">
-              It looks like there's no data to display right now. Try adjusting your filters or search criteria, or check back later.
+            <div
+              class="text-body1 text-grey-5 text-center"
+              style="max-width: 450px; line-height: 1.6"
+            >
+              It looks like there's no data to display right now. Try adjusting your filters or
+              search criteria, or check back later.
             </div>
-            
+
             <!-- Optional Action Buttons -->
             <div class="q-mt-lg q-gutter-sm">
               <slot name="no-data-actions">
-                <q-btn 
+                <q-btn
                   unelevated
-                  color="primary" 
-                  icon="refresh" 
-                  label="Refresh" 
+                  color="primary"
+                  icon="refresh"
+                  label="Refresh"
                   @click="$emit('refresh')"
                   class="q-px-lg"
                 />
-                <q-btn 
-                  outline 
-                  color="grey-7" 
-                  icon="filter_list_off" 
-                  label="Clear Filters" 
+                <q-btn
+                  outline
+                  color="grey-7"
+                  icon="filter_list_off"
+                  label="Clear Filters"
                   @click="$emit('clear-filters')"
                   class="q-px-lg"
                 />
