@@ -317,6 +317,7 @@ const handleClearFilters = () => {
   // Reset all filters to default state
   store.clearTripStatuses();
   store.clearSearch();
+  store.resetPagination(); // Reset pagination when clearing filters
   // Reset date/time to today
   store.dateTimeRange = {
     dateRange: {
@@ -329,6 +330,34 @@ const handleClearFilters = () => {
     },
   };
   console.log('All filters cleared');
+};
+
+// Pagination state
+const paginationState = computed(() => {
+  const state = {
+    sortBy: null,
+    descending: false,
+    page: store.currentPage,
+    rowsPerPage: 10, // Default pagination limit
+    rowsNumber: store.tripsTotal,
+  };
+  console.log('Pagination state:', state);
+  return state;
+});
+
+// Handle pagination request from FleetTable
+const onPaginationRequest = (params: { pagination: any; filter: string }) => {
+  store.setCurrentPage(params.pagination.page);
+  // Reset pagination when filters change
+  if (params.filter !== '') {
+    store.resetPagination();
+  }
+  debouncedFetchData();
+};
+
+// Handle pagination update from FleetTable
+const onPaginationUpdate = (pagination: any) => {
+  store.setCurrentPage(pagination.page);
 };
 
 // Debounce timer for API calls
@@ -349,9 +378,19 @@ const debouncedFetchData = () => {
 watch(
   [() => store.dateTimeRange, () => store.selectedTripStatuses, () => store.searchAttribute, () => store.searchTerms],
   () => {
+    // Reset pagination when filters change
+    store.resetPagination();
     debouncedFetchData();
   },
   { deep: true }
+);
+
+// Watch for pagination changes
+watch(
+  () => store.currentPage,
+  () => {
+    debouncedFetchData();
+  }
 );
 
 onMounted((): void => {
@@ -474,10 +513,14 @@ onUnmounted((): void => {
           :rows="store.trips"
           :loading="store.tripsLoader"
           :height="tableHeight"
+          :pagination="paginationState"
+          :server-side="true"
           selection="multiple"
           row-key="id"
           @refresh="handleRefresh"
           @clear-filters="handleClearFilters"
+          @request="onPaginationRequest"
+          @update:pagination="onPaginationUpdate"
         >
           <template #cell-schedule-actual="{ row }">
             <div class="row items-start q-gutter-x-sm flex items-center full-height">

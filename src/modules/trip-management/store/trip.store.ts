@@ -61,7 +61,7 @@ export const useTripsStore = defineStore('trips', () => {
       started_at: startAt.value,
       ended_at: endAt.value,
       page: currentPage.value,
-      limit: import.meta.env.VITE_PAGINATION_LIMIT || 10,
+      limit: 10, // Default pagination limit
     };
 
     // Add trip_statuses if any are selected
@@ -119,7 +119,11 @@ export const useTripsStore = defineStore('trips', () => {
    ** Computed getters for easier access
    */
   const trips = computed(() => tripsData.value?.list || []);
-  const tripsTotal = computed(() => tripsData.value?.total || 0);
+  const tripsTotal = computed(() => {
+    const total = tripsData.value?.total || 0;
+    console.log('Store tripsTotal computed:', total, 'from data:', tripsData.value);
+    return total;
+  });
 
   /*
    ** Helper methods for API calls with current payload
@@ -183,6 +187,17 @@ export const useTripsStore = defineStore('trips', () => {
     searchTerms.value = [];
   };
 
+  /*
+   ** Pagination management methods
+   */
+  const setCurrentPage = (page: number): void => {
+    currentPage.value = page;
+  };
+
+  const resetPagination = (): void => {
+    currentPage.value = 1;
+  };
+
   return {
     // States
     currentPage,
@@ -219,5 +234,7 @@ export const useTripsStore = defineStore('trips', () => {
     clearTripStatuses,
     setSearchParams,
     clearSearch,
+    setCurrentPage,
+    resetPagination,
   };
 });

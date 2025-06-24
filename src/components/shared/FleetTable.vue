@@ -24,6 +24,7 @@
       table-header-class="bg-grey-2"
       @row-click="(evt, row, index) => emit('row-click', evt, row, index)"
       @row-dblclick="(evt, row, index) => emit('row-dblclick', evt, row, index)"
+      @request="onRequest"
     >
       <slot></slot>
 
@@ -620,8 +621,12 @@ watch(
   () => props.pagination,
   newVal => {
     paginationState.value = { ...newVal };
+    // For server-side pagination, ensure rowsNumber is set correctly
+    if (props.serverSide && newVal.rowsNumber !== undefined) {
+      paginationState.value.rowsNumber = newVal.rowsNumber;
+    }
   },
-  { deep: true }
+  { deep: true, immediate: true }
 );
 
 watch(
