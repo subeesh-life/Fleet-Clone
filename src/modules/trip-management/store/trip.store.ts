@@ -15,7 +15,7 @@ export const useTripsStore = defineStore('trips', () => {
    ** Getters - using computed for derived state
    */
   const tripsPayloadHttp = computed(() => {
-    const started_at = moment.utc().subtract(30, 'day');
+    const started_at = moment.utc().subtract(2, 'day');
     const ended_at = moment.utc().add(1, 'day');
     return {
       started_at,
@@ -38,10 +38,10 @@ export const useTripsStore = defineStore('trips', () => {
       tripApi.getTrips(params, queryParams),
     {
       initialValue: { list: [], total: 0 },
-      onSuccess: (data) => {
+      onSuccess: data => {
         console.log(`Fetched ${data.list.length} trips successfully`);
       },
-      onError: (error) => {
+      onError: error => {
         console.error('Error fetching trips:', error.message);
       },
     }
@@ -52,18 +52,15 @@ export const useTripsStore = defineStore('trips', () => {
     loading: tripStatsLoader,
     error: tripStatsError,
     execute: fetchTripStats,
-  } = useApi(
-    (params: Record<string, any>) => tripApi.getTripStats(params),
-    {
-      initialValue: {} as TripStatsResponse,
-      onSuccess: (data) => {
-        console.log('Trip stats fetched successfully:', data);
-      },
-      onError: (error) => {
-        console.error('Error fetching trip stats:', error.message);
-      },
-    }
-  );
+  } = useApi((params: Record<string, any>) => tripApi.getTripStats(params), {
+    initialValue: {} as TripStatsResponse,
+    onSuccess: data => {
+      console.log('Trip stats fetched successfully:', data);
+    },
+    onError: error => {
+      console.error('Error fetching trip stats:', error.message);
+    },
+  });
 
   /*
    ** Computed getters for easier access

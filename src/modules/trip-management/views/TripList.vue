@@ -5,6 +5,7 @@ import FleetChips from 'src/components/shared/chips/FleetChips.vue';
 import VehiclePlate from 'src/components/shared/card/VehiclePlate.vue';
 import FleetBreadcrumbs from 'src/components/shared/FleetBreadcrumbs.vue';
 import FleetTable from 'src/components/shared/FleetTable.vue';
+import FleetAvatar from 'src/components/shared/FleetAvatar.vue';
 import moment from 'moment';
 import { ref, computed, onMounted } from 'vue';
 import { useTripsStore } from '../store/trip.store';
@@ -572,12 +573,15 @@ onMounted((): void => {
           <template #cell-client="{ row }">
             <div class="row items-center q-gutter-x-sm">
               <q-btn flat round dense v-if="row.timing?.list_view?.length > 0">
-                <q-avatar size="24px">
-                  <img :src="row.timing.list_view?.[0]?.client.logo as string" />
-                </q-avatar>
-                <q-tooltip>{{ row.timing.list_view?.[0]?.client.name }}</q-tooltip>
+                <FleetAvatar
+                  size="34px"
+                  color="grey-3"
+                  text-color="grey-7"
+                  :title="row.timing.list_view?.[0]?.client?.name || 'N/A'"
+                />
+                <q-tooltip>{{ row.timing.list_view?.[0]?.client?.name || 'N/A' }}</q-tooltip>
               </q-btn>
-              <q-btn
+              <!-- <q-btn
                 v-if="row.timing.list_view?.length > 1"
                 round
                 dense
@@ -586,7 +590,7 @@ onMounted((): void => {
               >
                 +{{ row.timing.list_view?.length - 1 }}
                 <q-tooltip>{{ row.timing.list_view?.length - 1 }} more client(s)</q-tooltip>
-              </q-btn>
+              </q-btn> -->
             </div>
           </template>
 
