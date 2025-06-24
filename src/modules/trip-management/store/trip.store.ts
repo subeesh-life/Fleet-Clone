@@ -30,6 +30,10 @@ export const useTripsStore = defineStore('trips', () => {
   // Current active status filter (for tab selection)
   const activeStatusFilter = ref<TripStatus>(TripStatus.ALL);
 
+  // Search state
+  const searchAttribute = ref<string>('');
+  const searchTerms = ref<string[]>([]);
+
   /*
    ** Getters - using computed for derived state
    */
@@ -63,6 +67,12 @@ export const useTripsStore = defineStore('trips', () => {
     // Add trip_statuses if any are selected
     if (selectedTripStatuses.value.length > 0) {
       payload.trip_statuses = selectedTripStatuses.value;
+    }
+
+    // Add search parameters if search is active
+    if (searchAttribute.value && searchTerms.value.length > 0) {
+      payload.search_attribute = searchAttribute.value;
+      payload.search_terms = searchTerms.value;
     }
 
     return payload;
@@ -160,12 +170,27 @@ export const useTripsStore = defineStore('trips', () => {
     activeStatusFilter.value = TripStatus.ALL;
   };
 
+  /*
+   ** Search management methods
+   */
+  const setSearchParams = (attribute: string, terms: string[]): void => {
+    searchAttribute.value = attribute;
+    searchTerms.value = terms;
+  };
+
+  const clearSearch = (): void => {
+    searchAttribute.value = '';
+    searchTerms.value = [];
+  };
+
   return {
     // States
     currentPage,
     dateTimeRange,
     selectedTripStatuses,
     activeStatusFilter,
+    searchAttribute,
+    searchTerms,
 
     // Data from API
     trips,
@@ -192,5 +217,7 @@ export const useTripsStore = defineStore('trips', () => {
     addTripStatus,
     removeTripStatus,
     clearTripStatuses,
+    setSearchParams,
+    clearSearch,
   };
 });

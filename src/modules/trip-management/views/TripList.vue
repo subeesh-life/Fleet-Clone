@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import FleetDateTimeRange from 'src/components/shared/FleetDateTimeRange.vue';
+import FleetSearchDialog from 'src/components/shared/FleetSearchDialog.vue';
 import FleetChips from 'src/components/shared/chips/FleetChips.vue';
 import VehiclePlate from 'src/components/shared/card/VehiclePlate.vue';
 import FleetBreadcrumbs from 'src/components/shared/FleetBreadcrumbs.vue';
@@ -35,22 +36,26 @@ const { height: tableHeight } = useAutoHeight({
 const selectedEvents = ref<number[]>([]);
 const selectedVehicleEvent = ref<TripResponse | null>(null);
 const selectedDriverEvent = ref<TripResponse | null>(null);
+// Search dialog state
 const searchEventsDialog = ref(false);
-const searchText = ref('');
-const searchEvents = ref<string[]>([
-  'Event Type',
-  'Event Name',
-  'Event ID',
-  'Vehicle ID',
-  'VIN Number',
-  'Asset Type',
-  'Vehicle Make',
-  'Vehicle Model',
-  'Vehicle Year',
-  'Plate Number',
-]);
-const selectedFilter = ref<string>('Event Type');
-const activeSearchFilters = ref<{ type: string; value: string }[]>([]);
+
+// Trip-specific search types with labels and values
+const tripSearchTypes = [
+  { label: 'All', value: 'all' },
+  { label: 'Vehicle ID', value: 'vehicle_unique_id' },
+  { label: 'VIN Number', value: 'vin_number' },
+  { label: 'Make', value: 'make' },
+  { label: 'Model', value: 'model' },
+  { label: 'Asset Type', value: 'asset_type' },
+  { label: 'Year', value: 'year' },
+  { label: 'Vehicle Number', value: 'vehicle_num' },
+  { label: 'Vehicle Plate', value: 'vehicle_plate' },
+  { label: 'Event Type', value: 'event_type' },
+  { label: 'Event Name', value: 'event_name' },
+  { label: 'Event ID', value: 'event_unique_id' },
+];
+
+// Search is now handled through store state
 const dispatchFilterDrawer = ref(false);
 const organization = ref([]);
 const organizationOptions = ref([
@@ -289,24 +294,15 @@ const getTripMode = (mode: TripMode): string => {
   return tripModeConfig ? tripModeConfig.label : 'Unknown';
 };
 
-const addSearchFilter = () => {
-  if (searchText.value && selectedFilter.value) {
-    activeSearchFilters.value.push({
-      type: selectedFilter.value,
-      value: searchText.value,
-    });
-    searchText.value = '';
-  }
+// Search dialog handlers
+const handleSearch = (searchData: { searchAttribute: string; searchTerms: string[] }) => {
+  store.setSearchParams(searchData.searchAttribute, searchData.searchTerms);
+  console.log('Search applied:', searchData);
 };
 
-const removeSearchFilter = (index: number) => {
-  activeSearchFilters.value.splice(index, 1);
-};
-
-const clearSearchFilters = () => {
-  searchText.value = '';
-  selectedFilter.value = '';
-  activeSearchFilters.value = [];
+const handleClearSearch = () => {
+  store.clearSearch();
+  console.log('Search cleared');
 };
 
 // Debounce timer for API calls
@@ -323,9 +319,9 @@ const debouncedFetchData = () => {
   }, 500); // 500ms delay
 };
 
-// Watch for changes in date/time range and status selection and trigger debounced API calls
+// Watch for changes in date/time range, status selection, and search parameters and trigger debounced API calls
 watch(
-  [() => store.dateTimeRange, () => store.selectedTripStatuses],
+  [() => store.dateTimeRange, () => store.selectedTripStatuses, () => store.searchAttribute, () => store.searchTerms],
   () => {
     debouncedFetchData();
   },
@@ -913,109 +909,18 @@ onUnmounted((): void => {
       </div>
     </div>
 
-    <!-- Card -  Search Events  -->
-    <q-dialog
+    <!-- Search Events Dialog -->
+    <FleetSearchDialog
       v-model="searchEventsDialog"
-      backdrop-filter="blur(2px)"
-      transition-show="jump-down"
-      transition-hide="jump-up"
-      persistent
-    >
-      <q-card style="width: 600px; max-width: 80vw">
-        <q-card-section>
-          <div class="row flex items-center">
-            <div class="col-10">
-              <div class="text-h6">Search Events</div>
-              <div class="text-body2 text-grey-7">Find events faster with the filters below.</div>
-            </div>
-            <div class="col-2 flex justify-end">
-              <q-btn flat dense @click="searchEventsDialog = false">
-                <IconifyIcon
-                  icon="hugeicons:cancel-01"
-                  width="24px"
-                  height="24px"
-                  class="text-grey-7"
-                />
-              </q-btn>
-            </div>
-          </div>
-          <q-separator class="q-my-md" />
-          <div class="row">
-            <div class="col-12 q-mr-sm">
-              <q-chip
-                v-for="filterTypes in searchEvents"
-                :key="filterTypes"
-                :selected="selectedFilter === filterTypes"
-                @click="selectedFilter = selectedFilter === filterTypes ? '' : filterTypes"
-                :outline="selectedFilter !== filterTypes"
-                :color="selectedFilter === filterTypes ? 'primary' : 'grey-7'"
-                :text-color="selectedFilter === filterTypes ? 'white' : 'grey-7'"
-                :icon="selectedFilter === filterTypes ? 'check' : undefined"
-                class="text-caption cursor-pointer"
-              >
-                {{ filterTypes }}
-              </q-chip>
-            </div>
-            <div class="col-12 q-pt-md">
-              <q-input autofocus outlined v-model="searchText" placeholder="Search for...">
-                <template v-slot:prepend>
-                  <IconifyIcon
-                    icon="hugeicons:search-02"
-                    width="24px"
-                    height="24px"
-                    class="text-grey-7"
-                  />
-                </template>
-                <template v-slot:append>
-                  <q-btn flat dense @click="addSearchFilter">
-                    <IconifyIcon
-                      icon="hugeicons:add-01"
-                      width="24px"
-                      height="24px"
-                      class="text-grey-7"
-                    />
-                    <q-tooltip>Add Filter</q-tooltip>
-                  </q-btn>
-                </template>
-              </q-input>
-            </div>
-            <div class="col-12 q-mt-sm" v-if="activeSearchFilters.length > 0">
-              <div class="row q-gutter-x-sm q-gutter-y-sm">
-                <q-badge
-                  v-for="(filter, index) in activeSearchFilters"
-                  :key="index"
-                  color="grey-3"
-                  text-color="primary"
-                  class="text-caption"
-                >
-                  {{ filter.type }}:
-                  <q-chip color="primary" text-color="white" class="text-caption">
-                    {{ filter.value }}
-                    <q-btn
-                      flat
-                      dense
-                      round
-                      size="xs"
-                      class="q-ml-sm"
-                      @click="removeSearchFilter(index)"
-                    >
-                      <IconifyIcon icon="hugeicons:cancel-01" width="12px" height="12px" />
-                    </q-btn>
-                  </q-chip>
-                </q-badge>
-              </div>
-            </div>
-          </div>
-        </q-card-section>
-
-        <q-card-section>
-          <div class="col-12 flex justify-end q-gutter-x-sm">
-            <q-btn outline label="Clear" color="secondary" @click="clearSearchFilters" />
-            <q-btn label="Search" color="primary" />
-          </div>
-        </q-card-section>
-      </q-card>
-    </q-dialog>
+      title="Search Events"
+      subtitle="Find events faster with the filters below."
+      :search-types="tripSearchTypes"
+      v-model:selected-search-type="store.searchAttribute"
+      v-model:search-terms="store.searchTerms"
+      placeholder="Search for..."
+      @search="handleSearch"
+      @clear="handleClearSearch"
+    />
 
     <!-- Model - Filter Drawer-->
     <q-dialog
