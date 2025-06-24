@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import FleetDateRange from 'src/components/shared/FleetDateRange.vue';
-import FleetTimeRange from 'src/components/shared/FleetTimeRange.vue';
+import FleetDateTimeRange from 'src/components/shared/FleetDateTimeRange.vue';
 import FleetChips from 'src/components/shared/chips/FleetChips.vue';
 import VehiclePlate from 'src/components/shared/card/VehiclePlate.vue';
 import FleetBreadcrumbs from 'src/components/shared/FleetBreadcrumbs.vue';
@@ -326,7 +325,7 @@ const debouncedFetchData = () => {
 
 // Watch for changes in date/time range and trigger debounced API calls
 watch(
-  [() => store.dateRange, () => store.timeRange],
+  () => store.dateTimeRange,
   () => {
     debouncedFetchData();
   },
@@ -355,9 +354,7 @@ onUnmounted((): void => {
       </div>
 
       <div class="col-md-8 flex justify-end q-gutter-x-md">
-        <FleetDateRange class="gt-sm" v-model="store.dateRange" />
-
-        <FleetTimeRange class="gt-sm" v-model="store.timeRange" />
+        <FleetDateTimeRange v-model="store.dateTimeRange" />
 
         <div class="row q-gutter-x-sm">
           <q-btn
