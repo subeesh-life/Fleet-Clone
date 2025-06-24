@@ -363,7 +363,7 @@ onMounted((): void => {
               <div class="row no-wrap items-center q-px-lg">
                 {{ status.label }}
                 <FleetChips
-                  :text="(store.tripStats[status.name] ?? 0).toLocaleString()"
+                  :text="(store.tripStats?.[status.name] ?? 0).toLocaleString()"
                   :color="status.color"
                   :iconVisibility="false"
                   class="q-ml-sm gt-sm"

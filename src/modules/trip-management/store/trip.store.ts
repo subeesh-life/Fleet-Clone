@@ -2,18 +2,14 @@ import moment from 'moment';
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import { tripApi } from '../api/trip.api';
-import type { TripResponse, TripStatsResponse } from '../types/trip-api.types';
+import { useApi, useApiList } from 'src/composables/useApi';
+import type { TripStatsResponse } from '../types/trip-api.types';
 
 export const useTripsStore = defineStore('trips', () => {
   /*
    ** States - using refs for reactive state
    */
   const currentPage = ref(1);
-  const trips = ref<TripResponse[]>([]);
-  const tripsLoader = ref(false);
-  const tripsTotal = ref(0);
-  const tripStats = ref<TripStatsResponse>({});
-  const tripStatsLoader = ref(false);
 
   /*
    ** Getters - using computed for derived state
@@ -30,72 +26,90 @@ export const useTripsStore = defineStore('trips', () => {
   });
 
   /*
-   ** Actions - regular functions
+   ** API Composables
    */
-  const startLoader = () => {
-    tripsLoader.value = true;
-  };
-
-  const endLoader = () => {
-    tripsLoader.value = false;
-  };
-
-  const startTripStatsLoader = () => {
-    tripStatsLoader.value = true;
-  };
-
-  const endTripStatsLoader = () => {
-    tripStatsLoader.value = false;
-  };
-
-  const fetchTrips = async (): Promise<void> => {
-    try {
-      startLoader();
-      const params = tripsPayloadHttp.value;
-      const queryParams = {
-        page: params.page,
-        limit: params.limit,
-      };
-      const response = await tripApi.getTrips(params, queryParams);
-      trips.value = response.list;
-      tripsTotal.value = response.total;
-    } catch (error) {
-      console.error('Error fetching trips:', error);
-    } finally {
-      endLoader();
+  const {
+    data: tripsData,
+    loading: tripsLoader,
+    error: tripsError,
+    execute: fetchTrips,
+  } = useApiList(
+    (params: Record<string, any>, queryParams: Record<string, any>) =>
+      tripApi.getTrips(params, queryParams),
+    {
+      initialValue: { list: [], total: 0 },
+      onSuccess: (data) => {
+        console.log(`Fetched ${data.list.length} trips successfully`);
+      },
+      onError: (error) => {
+        console.error('Error fetching trips:', error.message);
+      },
     }
+  );
+
+  const {
+    data: tripStats,
+    loading: tripStatsLoader,
+    error: tripStatsError,
+    execute: fetchTripStats,
+  } = useApi(
+    (params: Record<string, any>) => tripApi.getTripStats(params),
+    {
+      initialValue: {} as TripStatsResponse,
+      onSuccess: (data) => {
+        console.log('Trip stats fetched successfully:', data);
+      },
+      onError: (error) => {
+        console.error('Error fetching trip stats:', error.message);
+      },
+    }
+  );
+
+  /*
+   ** Computed getters for easier access
+   */
+  const trips = computed(() => tripsData.value?.list || []);
+  const tripsTotal = computed(() => tripsData.value?.total || 0);
+
+  /*
+   ** Helper methods for API calls with current payload
+   */
+  const loadTrips = async (): Promise<void> => {
+    const params = tripsPayloadHttp.value;
+    const queryParams = {
+      page: params.page,
+      limit: params.limit,
+    };
+    await fetchTrips(params, queryParams);
   };
 
-  const fetchTripStats = async (): Promise<void> => {
-    try {
-      startTripStatsLoader();
-      const response = await tripApi.getTripStats(tripsPayloadHttp.value);
-      tripStats.value = response;
-    } catch (error) {
-      console.error('Error fetching trip status:', error);
-    } finally {
-      endTripStatsLoader();
-    }
+  const loadTripStats = async (): Promise<void> => {
+    const params = tripsPayloadHttp.value;
+    await fetchTripStats(params);
   };
 
   return {
     // States
     currentPage,
+
+    // Data from API
     trips,
-    tripsLoader,
     tripsTotal,
     tripStats,
+
+    // Loading states
+    tripsLoader,
     tripStatsLoader,
+
+    // Error states
+    tripsError,
+    tripStatsError,
 
     // Getters
     tripsPayloadHttp,
 
     // Actions
-    startLoader,
-    endLoader,
-    startTripStatsLoader,
-    endTripStatsLoader,
-    fetchTrips,
-    fetchTripStats,
+    fetchTrips: loadTrips,
+    fetchTripStats: loadTripStats,
   };
 });
