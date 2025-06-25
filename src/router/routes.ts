@@ -57,6 +57,20 @@ const routes: RouteRecordRaw[] = [
     ],
   },
   {
+    path: '/legacy',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      {
+        path: 'manage-drivers',
+        name: 'manage-drivers',
+        component: () => import('src/components/shared/IframeWrapper.vue'),
+        props: {
+          module: 'tpc-portal/manage-drivers',
+        }
+      }
+    ],
+  },
+  {
     path: '/admin-regulator',
     component: () => import('src/layouts/AdminLayout.vue'),
     children: [

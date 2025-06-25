@@ -81,6 +81,7 @@ const PERMISSIONS_KEY = 'user_permissions';
 const ROLE_ACCESS_KEY = 'user_role_access';
 
 // State
+const authResponse = ref<AuthResponse | null>(null);
 const accessToken = ref<string | null>(null);
 const refreshToken = ref<string | null>(null);
 const user = ref<TokenPayload | null>(null);
@@ -159,6 +160,7 @@ const clearStorage = () => {
 
 // Main functions
 const setAuthorization = (response: AuthResponse) => {
+  authResponse.value = response;
   accessToken.value = response.access_token;
   refreshToken.value = response.refresh_token;
   user.value = parseJwt(response.access_token);
@@ -224,6 +226,7 @@ loadFromStorage();
 export const useAuth = () => {
   return {
     // State (readonly)
+    authResponse: readonly(authResponse) as Readonly<Ref<AuthResponse | null>>,
     accessToken: readonly(accessToken) as Readonly<Ref<string | null>>,
     refreshToken: readonly(refreshToken) as Readonly<Ref<string | null>>,
     user: readonly(user) as Readonly<Ref<TokenPayload | null>>,
