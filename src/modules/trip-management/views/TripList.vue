@@ -93,7 +93,6 @@ const usageModeOptions = ref([
   { label: 'Internal', value: 'internal' },
 ]);
 const eventType = ref([]);
-
 const eventTypeOptions = ref([
   { label: 'Oneway', value: 'oneway' },
   { label: 'Roundtrip', value: 'roundtrip' },
@@ -108,7 +107,6 @@ const actionButtons = computed(() => [
   {
     icon: 'hugeicons:search-02',
     tooltip: 'Search Events',
-    class: 'gt-sm',
     onClick: () => (searchEventsDialog.value = true),
   },
   {
@@ -226,9 +224,9 @@ const tableColumns = computed(() => [
   },
   {
     name: 'status',
-    label: 'Status',
+    label: 'Approval Status',
     field: 'id', // Use a simple field since we have custom template
-    align: 'left' as const,
+    align: 'center' as const,
     headerClasses: 'bg-grey-2',
   },
   {
@@ -376,7 +374,12 @@ const debouncedFetchData = () => {
 
 // Watch for changes in date/time range, status selection, and search parameters and trigger debounced API calls
 watch(
-  [() => store.dateTimeRange, () => store.selectedTripStatuses, () => store.searchAttribute, () => store.searchTerms],
+  [
+    () => store.dateTimeRange,
+    () => store.selectedTripStatuses,
+    () => store.searchAttribute,
+    () => store.searchTerms,
+  ],
   () => {
     // Reset pagination when filters change
     store.resetPagination();
@@ -407,14 +410,14 @@ onUnmounted((): void => {
 </script>
 
 <template>
-  <q-page class="q-pa-md bg-grey-1" style="border-top: 1px solid #e0e0e0">
+  <q-page class="q-pa-md wrapper">
     <!-- Action Bar / Header Bar -->
     <div ref="headerRef" class="row flex justify-between items-center q-mb-md">
-      <div class="col-md-4">
+      <div class="col-md-4 gt-sm">
         <FleetBreadcrumbs :items="LISTING_BREADCRUMBS" />
       </div>
 
-      <div class="col-md-8 flex justify-end q-gutter-x-md">
+      <div class="col-md-8 col-xs-12 flex justify-end q-gutter-x-md">
         <FleetDateTimeRange v-model="store.dateTimeRange" />
 
         <div class="row q-gutter-x-sm">
@@ -809,19 +812,19 @@ onUnmounted((): void => {
 
           <!-- Custom No Data Actions -->
           <template #no-data-actions>
-            <q-btn 
-              outline 
-              color="primary" 
-              icon="refresh" 
-              label="Refresh Data" 
+            <q-btn
+              outline
+              color="primary"
+              icon="refresh"
+              label="Refresh Data"
               @click="handleRefresh"
               class="q-mr-sm"
             />
-            <q-btn 
-              flat 
-              color="grey-7" 
-              icon="filter_list_off" 
-              label="Clear All Filters" 
+            <q-btn
+              flat
+              color="grey-7"
+              icon="filter_list_off"
+              label="Clear All Filters"
               @click="handleClearFilters"
             />
           </template>

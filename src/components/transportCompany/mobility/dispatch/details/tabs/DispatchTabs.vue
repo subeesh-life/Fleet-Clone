@@ -20,24 +20,14 @@ import TabDetails from './details/TabDetails.vue';
           >
             <q-tab name="details" class="flex">
               <template v-slot:default>
-                <IconifyIcon
-                  icon="hugeicons:more"
-                  width="24px"
-                  height="24px"
-                  class="q-mb-xs"
-                />
+                <IconifyIcon icon="hugeicons:more" width="24px" height="24px" class="q-mb-xs" />
                 <div class="row items-center">Details</div>
               </template>
             </q-tab>
 
             <q-tab name="route-details" class="flex">
               <template v-slot:default>
-                <IconifyIcon
-                  icon="hugeicons:route-02"
-                  width="24px"
-                  height="24px"
-                  class="q-mb-xs"
-                />
+                <IconifyIcon icon="hugeicons:route-02" width="24px" height="24px" class="q-mb-xs" />
                 <div class="row items-center">Routes</div>
               </template>
             </q-tab>
@@ -104,12 +94,7 @@ import TabDetails from './details/TabDetails.vue';
 
             <q-tab name="logs" class="flex">
               <template v-slot:default>
-                <IconifyIcon
-                  icon="hugeicons:clock-02"
-                  width="24px"
-                  height="24px"
-                  class="q-mb-xs"
-                />
+                <IconifyIcon icon="hugeicons:clock-02" width="24px" height="24px" class="q-mb-xs" />
                 <div class="row items-center">Logs</div>
               </template>
             </q-tab>

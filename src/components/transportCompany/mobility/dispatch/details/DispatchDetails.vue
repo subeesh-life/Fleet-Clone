@@ -1,32 +1,28 @@
 <script setup lang="ts">
+import { useRouter } from 'vue-router';
 import EventCard from './cards/EventCard.vue';
 import AssetCard from './cards/AssetCard.vue';
 import ClientCard from './cards/ClientCard.vue';
 import LogInformation from 'components/shared/card/LogInformation.vue';
 import DispatchTabs from './tabs/DispatchTabs.vue';
+
+const router = useRouter();
+
+const handleClose = async () => {
+  await router.push({ name: 'dispatch-listing' });
+};
 </script>
 <template>
-  <q-page class="q-pa-md bg-grey-1" style="border-top: 1px solid #e0e0e0">
+  <q-page class="q-pa-md wrapper">
     <div class="row flex justify-between items-center q-mb-md">
       <div class="col-md-4 flex items-center" style="min-height: 42px">
         <q-breadcrumbs active-color="secondary">
           <template v-slot:separator>
             <q-icon size="1.5em" name="chevron_right" color="primary" />
           </template>
-          <q-breadcrumbs-el
-            label="Home"
-            :to="{ name: 'executive-dashboard' }"
-          />
-          <q-breadcrumbs-el
-            label="Mobility"
-            :to="{ name: 'mobility-link' }"
-            class="gt-sm"
-          />
-          <q-breadcrumbs-el
-            label="Dispatch"
-            :to="{ name: 'dispatch-link' }"
-            class="gt-sm"
-          />
+          <q-breadcrumbs-el label="Home" :to="{ name: 'executive-dashboard' }" />
+          <q-breadcrumbs-el label="Mobility" :to="{ name: 'mobility-link' }" class="gt-sm" />
+          <q-breadcrumbs-el label="Dispatch" :to="{ name: 'dispatch-link' }" class="gt-sm" />
           <q-breadcrumbs-el label="Listing" :to="{ name: 'dispatch' }" />
           <q-breadcrumbs-el label="Details" color="text-grey-7" />
         </q-breadcrumbs>
@@ -59,13 +55,7 @@ import DispatchTabs from './tabs/DispatchTabs.vue';
               <div class="text-caption">Edit</div>
             </q-tooltip>
           </q-btn>
-          <q-btn
-            flat
-            color="primary"
-            text-color="grey-7"
-            round
-            :to="{ name: 'dispatch' }"
-          >
+          <q-btn flat color="primary" text-color="grey-7" round @click="handleClose">
             <q-icon>
               <IconifyIcon
                 icon="hugeicons:cancel-01"

@@ -9,13 +9,10 @@ onMounted(() => {
     const map = L.map('map').setView([24.4539, 54.3773], 4);
 
     // Using CartoDB's light (grayscale) map with English labels
-    L.tileLayer(
-      'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
-      {
-        subdomains: 'abcd',
-        maxZoom: 20,
-      }
-    ).addTo(map);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      subdomains: 'abcd',
+      maxZoom: 20,
+    }).addTo(map);
 
     map.invalidateSize();
   }, 100);
@@ -29,18 +26,13 @@ onMounted(() => {
           HS-76578
           <q-tooltip>Event Name</q-tooltip>
           <q-btn flat dense padding="xs" class="q-ml-xs">
-            <iconify-icon
-              icon="hugeicons:copy-02"
-              width="16px"
-              height="16px"
-              class="text-white"
-            />
+            <iconify-icon icon="hugeicons:copy-02" width="16px" height="16px" class="text-white" />
           </q-btn>
         </div>
         <div class="col-6 text-body2">
           <FleetChips
-            text="Upcoming - 11 M"
-            color="purple"
+            text="Completed - 11 M Ago"
+            color="success"
             :iconVisibility="false"
             class="q-pa-xs"
           />
@@ -60,15 +52,11 @@ onMounted(() => {
       <div class="row q-mt-sm q-px-sm flex flex-center">
         <div class="col-4">
           <div class="text-caption text-grey-7">Service Type</div>
-          <div class="text-body2 text-weight-medium text-grey-9">
-            School Transport
-          </div>
+          <div class="text-body2 text-weight-medium text-grey-9">School Transport</div>
         </div>
         <div class="col-4">
           <div class="text-caption text-grey-7">Event Type</div>
-          <div class="text-body2 text-weight-medium text-grey-9">
-            Home to School
-          </div>
+          <div class="text-body2 text-weight-medium text-grey-9">Home to School</div>
         </div>
         <div class="col-4">
           <div class="text-caption text-grey-7">Refference ID</div>
@@ -90,9 +78,7 @@ onMounted(() => {
       <div class="row q-mt-sm q-px-sm flex flex-center">
         <div class="col-4">
           <div class="text-caption text-grey-7">Schedule</div>
-          <div class="text-body2 text-weight-medium text-grey-9">
-            Jun, 16 2025
-          </div>
+          <div class="text-body2 text-weight-medium text-grey-9">Jun, 16 2025</div>
         </div>
         <div class="col-4">
           <div class="text-caption text-grey-7">Start</div>
@@ -114,9 +100,7 @@ onMounted(() => {
                 height="16px"
                 class="text-grey-7 gt-md"
               />
-              <span
-                class="q-ml-xs text-grey-9 ellipsis"
-                style="max-width: 364px"
+              <span class="q-ml-xs text-grey-9 ellipsis" style="max-width: 364px"
                 >Yas Island Zone B - C67-04 - Abu Dhabi, UAE
               </span>
             </div>
@@ -130,9 +114,7 @@ onMounted(() => {
                 height="16px"
                 class="text-grey-7 gt-md"
               />
-              <span
-                class="q-ml-xs text-grey-9 ellipsis"
-                style="max-width: 264px"
+              <span class="q-ml-xs text-grey-9 ellipsis" style="max-width: 264px"
                 >Al Bateen Academy
               </span>
             </div>

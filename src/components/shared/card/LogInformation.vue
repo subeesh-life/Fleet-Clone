@@ -19,34 +19,14 @@
           </div>
         </div>
         <div class="col-6 flex justify-end items-center">
-          <q-chip
-            dense
-            rounded
-            style="height: 24px; width: 24px; border: 1px solid #0000001f"
-            class="q-mr-sm bg-white"
-          >
-            <IconifyIcon
-              icon="hugeicons:call"
-              width="16px"
-              height="16px"
-              class="text-grey-8"
-            />
+          <q-btn outline round size="sm" class="q-mr-sm bg-white text-grey-5">
+            <IconifyIcon icon="hugeicons:call" width="16px" height="16px" />
             <q-tooltip>+971 50 123 4567</q-tooltip>
-          </q-chip>
-          <q-chip
-            dense
-            rounded
-            style="height: 24px; width: 24px; border: 1px solid #0000001f"
-            class="q-mr-sm bg-white"
-          >
-            <IconifyIcon
-              icon="hugeicons:mail-01"
-              width="16px"
-              height="16px"
-              class="text-grey-8"
-            />
+          </q-btn>
+          <q-btn outline round size="sm" class="bg-white text-grey-5">
+            <IconifyIcon icon="hugeicons:mail-01" width="16px" height="16px" />
             <q-tooltip>john.doe@example.com</q-tooltip>
-          </q-chip>
+          </q-btn>
         </div>
       </div>
 
@@ -67,34 +47,14 @@
           </div>
         </div>
         <div class="col-6 flex justify-end items-center">
-          <q-chip
-            dense
-            rounded
-            style="height: 24px; width: 24px; border: 1px solid #0000001f"
-            class="q-mr-sm bg-white"
-          >
-            <IconifyIcon
-              icon="hugeicons:call"
-              width="16px"
-              height="16px"
-              class="text-grey-8"
-            />
+          <q-btn outline round size="sm" class="q-mr-sm bg-white text-grey-5">
+            <IconifyIcon icon="hugeicons:call" width="16px" height="16px" />
             <q-tooltip>+971 50 123 4567</q-tooltip>
-          </q-chip>
-          <q-chip
-            dense
-            rounded
-            style="height: 24px; width: 24px; border: 1px solid #0000001f"
-            class="q-mr-sm bg-white"
-          >
-            <IconifyIcon
-              icon="hugeicons:mail-01"
-              width="16px"
-              height="16px"
-              class="text-grey-8"
-            />
+          </q-btn>
+          <q-btn outline round size="sm" class="bg-white text-grey-5">
+            <IconifyIcon icon="hugeicons:mail-01" width="16px" height="16px" />
             <q-tooltip>john.doe@example.com</q-tooltip>
-          </q-chip>
+          </q-btn>
         </div>
       </div>
     </q-card-section>

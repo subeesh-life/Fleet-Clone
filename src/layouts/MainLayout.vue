@@ -1,389 +1,3 @@
-<template>
-  <q-layout view="hHh LpR fff">
-    <!-- Header -->
-    <q-header class="bg-white" style="color: var(--fleet-color-text-primary)">
-      <q-toolbar>
-        <q-btn flat dense round aria-label="Menu" @click="toggleLeftDrawer">
-          <iconify-icon icon="hugeicons:menu-02" width="24px" height="24px" class="text-grey-9" />
-        </q-btn>
-        <div class="flex items-center q-ml-sm">
-          <q-img src="assets/logo.svg" style="width: 30px; height: 30px" />
-          <q-toolbar-title class="gt-xs"> Sunshine Transports </q-toolbar-title>
-        </div>
-
-        <q-space />
-
-        <div class="row flex items-center">
-          <div>
-            <q-btn flat round>
-              <q-tooltip>Add New</q-tooltip>
-              <iconify-icon
-                icon="hugeicons:add-circle-half-dot"
-                width="24px"
-                height="24px"
-                class="text-grey-9"
-              />
-              <q-menu
-                v-model="addNewMenu"
-                transition-show="jump-down"
-                transition-hide="jump-up"
-                anchor="bottom right"
-                self="top right"
-                :offset="[0, 10]"
-                class="animated-menu"
-              >
-                <q-list style="min-width: 300px" padding>
-                  <!-- User Info Section -->
-
-                  <q-item clickable v-ripple :to="{ name: 'create-event' }">
-                    <q-item-section avatar>
-                      <IconifyIcon
-                        icon="hugeicons:route-02"
-                        width="24px"
-                        height="24px"
-                        class="text-grey-7"
-                      />
-                    </q-item-section>
-                    <q-item-section>
-                      <q-item-label>New Event</q-item-label>
-                      <q-item-label caption>Schedule and manage an upcoming event</q-item-label>
-                    </q-item-section>
-                  </q-item>
-
-                  <q-item clickable v-ripple>
-                    <q-item-section avatar>
-                      <iconify-icon
-                        icon="hugeicons:ai-user"
-                        width="24px"
-                        height="24px"
-                        class="text-grey-7"
-                      />
-                    </q-item-section>
-                    <q-item-section>
-                      <q-item-label>New Client</q-item-label>
-                      <q-item-label caption>Register a new customer profiles</q-item-label>
-                    </q-item-section>
-                  </q-item>
-
-                  <q-item clickable v-ripple>
-                    <q-item-section avatar>
-                      <iconify-icon
-                        icon="hugeicons:user-account"
-                        width="24px"
-                        height="24px"
-                        class="text-grey-7"
-                      />
-                    </q-item-section>
-                    <q-item-section>
-                      <q-item-label>New Staff</q-item-label>
-                      <q-item-label caption>Register a team member or employee</q-item-label>
-                    </q-item-section>
-                  </q-item>
-
-                  <q-item clickable v-ripple>
-                    <q-item-section avatar>
-                      <iconify-icon
-                        icon="hugeicons:bus-03"
-                        width="24px"
-                        height="24px"
-                        class="text-grey-7"
-                      />
-                    </q-item-section>
-                    <q-item-section>
-                      <q-item-label>New Vehicle</q-item-label>
-                      <q-item-label caption>Add details for a new fleet vehicle</q-item-label>
-                    </q-item-section>
-                  </q-item>
-
-                  <q-item clickable v-ripple>
-                    <q-item-section avatar>
-                      <iconify-icon
-                        icon="healthicons:truck-driver-outline"
-                        width="30px"
-                        height="30px"
-                        class="text-grey-7"
-                      />
-                    </q-item-section>
-                    <q-item-section>
-                      <q-item-label>New Driver</q-item-label>
-                      <q-item-label caption
-                        >Assign a licensed driver to your operations</q-item-label
-                      >
-                    </q-item-section>
-                  </q-item>
-
-                  <q-item clickable v-ripple>
-                    <q-item-section avatar>
-                      <iconify-icon
-                        icon="hugeicons:user-square"
-                        width="24px"
-                        height="24px"
-                        class="text-grey-7"
-                      />
-                    </q-item-section>
-                    <q-item-section>
-                      <q-item-label>New Assistant</q-item-label>
-                      <q-item-label caption>Register a support staff or helper</q-item-label>
-                    </q-item-section>
-                  </q-item>
-                </q-list>
-              </q-menu>
-            </q-btn>
-          </div>
-          <div>
-            <q-btn flat round>
-              <q-tooltip>Settings</q-tooltip>
-              <iconify-icon
-                icon="hugeicons:settings-01"
-                width="24px"
-                height="24px"
-                class="text-grey-9"
-              />
-            </q-btn>
-          </div>
-          <div>
-            <q-btn flat round>
-              <q-tooltip>Chats</q-tooltip>
-              <iconify-icon
-                icon="hugeicons:message-01"
-                width="24px"
-                height="24px"
-                class="text-grey-9"
-              />
-            </q-btn>
-          </div>
-          <div>
-            <q-btn flat round>
-              <q-badge color="red" rounded class="absolute-top-right q-mr-xs q-mt-xs" />
-              <q-tooltip>Notifications</q-tooltip>
-              <iconify-icon
-                icon="hugeicons:notification-01"
-                width="24px"
-                height="24px"
-                class="text-grey-9"
-              />
-            </q-btn>
-          </div>
-          <div>
-            <q-separator vertical class="q-mx-sm" style="height: 30px" />
-          </div>
-          <div>
-            <q-btn flat class="logged-user flex items-center">
-              <div class="q-mr-sm gt-sm">
-                <div class="text-subtitle2 text-weight-bold text-right">John</div>
-                <div class="text-caption text-right text-grey-7">Transport Manager</div>
-              </div>
-              <div>
-                <q-avatar size="48px">
-                  <img src="https://cdn.quasar.dev/img/avatar4.jpg" />
-                </q-avatar>
-              </div>
-              <div class="q-ml-sm q-mt-sm">
-                <iconify-icon
-                  icon="hugeicons:arrow-down-01"
-                  width="24px"
-                  height="24px"
-                  class="text-grey-9"
-                />
-              </div>
-              <q-menu
-                v-model="profileMenu"
-                transition-show="jump-down"
-                transition-hide="jump-up"
-                anchor="bottom right"
-                self="top right"
-                :offset="[0, 10]"
-                class="animated-menu"
-              >
-                <q-list style="min-width: 300px" padding>
-                  <!-- User Info Section -->
-                  <q-item class="q-px-md">
-                    <q-item-section>
-                      <div>
-                        <span class="text-grey-7 text-caption">Level: </span>
-                        <span class="text-weight-bold text-subtitle2">Senior </span>
-                      </div>
-                      <div class="row items-center">
-                        <div class="text-grey-7 text-caption">john.doe@email.com</div>
-                        <q-btn flat dense padding="xs" class="q-ml-xs" @click="copyEmail">
-                          <q-tooltip>Copy email</q-tooltip>
-                          <iconify-icon
-                            icon="hugeicons:copy-02"
-                            width="16px"
-                            height="16px"
-                            class="text-grey-7"
-                          />
-                        </q-btn>
-                      </div>
-                    </q-item-section>
-                  </q-item>
-
-                  <q-separator class="q-my-sm" />
-
-                  <q-item clickable v-ripple>
-                    <q-item-section avatar>
-                      <IconifyIcon
-                        icon="hugeicons:user-account"
-                        width="24px"
-                        height="24px"
-                        class="text-grey-7"
-                      />
-                    </q-item-section>
-                    <q-item-section>
-                      <q-item-label>My Profile</q-item-label>
-                      <q-item-label caption>Manage Personal Details</q-item-label>
-                    </q-item-section>
-                  </q-item>
-
-                  <q-item clickable v-ripple>
-                    <q-item-section avatar>
-                      <iconify-icon
-                        icon="hugeicons:building-03"
-                        width="20px"
-                        height="20px"
-                        class="text-grey-7"
-                      />
-                    </q-item-section>
-                    <q-item-section>
-                      <q-item-label>Company Profile</q-item-label>
-                      <q-item-label caption>Manage Company Details</q-item-label>
-                    </q-item-section>
-                  </q-item>
-
-                  <q-item clickable v-ripple>
-                    <q-item-section avatar>
-                      <iconify-icon
-                        icon="hugeicons:language-square"
-                        width="20px"
-                        height="20px"
-                        class="text-grey-7"
-                      />
-                    </q-item-section>
-                    <q-item-section>
-                      <q-item-label>Language</q-item-label>
-                      <q-item-label caption>Choose Preferred Language</q-item-label>
-                    </q-item-section>
-                  </q-item>
-
-                  <q-separator class="q-my-sm" />
-
-                  <div class="q-px-md q-py-sm">
-                    <q-btn
-                      outline
-                      class="full-width border-grey-7"
-                      color="text-grey-7"
-                      label="Logout"
-                      v-ripple
-                    />
-                  </div>
-                </q-list>
-              </q-menu>
-            </q-btn>
-          </div>
-        </div>
-      </q-toolbar>
-    </q-header>
-    <!-- Drawer -->
-    <q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-      :mini="miniState"
-      @mouseover="miniState = false"
-      @mouseout="miniState = true"
-      mini-to-overlay
-      :width="300"
-      :breakpoint="500"
-    >
-      <div class="full-height column justify-between">
-        <div>
-          <q-list>
-            <!-- Main Menu -->
-            <template v-if="currentMenu === 'main'">
-              <template v-for="item in menuItems" :key="item.label">
-                <!-- For items with sub-menu -->
-                <q-expansion-item
-                  v-if="item.children"
-                  expand-separator
-                  class="cursor-pointer"
-                  :label="item.label"
-                  group="somegroup"
-                >
-                  <template v-slot:header>
-                    <q-item-section avatar>
-                      <iconify-icon
-                        :icon="item.icon"
-                        width="24px"
-                        height="24px"
-                        class="text-grey-7"
-                      />
-                    </q-item-section>
-                    <q-item-section> {{ item.label }} </q-item-section>
-                  </template>
-                  <q-list class="q-ml-sm q-pl-xl">
-                    <q-item
-                      v-for="child in item.children"
-                      :key="child.label"
-                      clickable
-                      v-ripple
-                      @click="child.action && child.action()"
-                    >
-                      <q-item-section class="text-caption">{{ child.label }}</q-item-section>
-                    </q-item>
-                  </q-list>
-                </q-expansion-item>
-
-                <!-- For items without sub-menu -->
-                <q-item v-else clickable v-ripple>
-                  <q-item-section avatar>
-                    <iconify-icon
-                      :icon="item.icon"
-                      width="24px"
-                      height="24px"
-                      class="text-grey-7"
-                    />
-                  </q-item-section>
-                  <q-item-section>{{ item.label }}</q-item-section>
-                </q-item>
-              </template>
-            </template>
-
-            <!-- Dispatch Menu -->
-            <template v-else-if="currentMenu === 'dispatch'">
-              <q-item
-                v-for="item in dispatchMenu"
-                :key="item.label"
-                clickable
-                v-ripple
-                @click="item.action && item.action()"
-              >
-                <q-item-section avatar>
-                  <iconify-icon :icon="item.icon" width="24px" height="24px" class="text-grey-7" />
-                </q-item-section>
-                <q-item-section>{{ item.label }}</q-item-section>
-              </q-item>
-            </template>
-          </q-list>
-        </div>
-      </div>
-    </q-drawer>
-
-    <!-- Page Content -->
-    <q-page-container class="page-container-with-fixed-footer">
-      <router-view />
-    </q-page-container>
-
-    <!-- Footer -->
-    <q-footer bordered class="bg-white text-black fixed-footer">
-      <q-toolbar class="q-py-xs">
-        <q-toolbar-title class="text-center text-caption">
-          © 2025 Sunshine Transports
-        </q-toolbar-title>
-      </q-toolbar>
-    </q-footer>
-  </q-layout>
-</template>
-
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
@@ -397,7 +11,12 @@ const miniState = ref(true);
 const currentMenu = ref('main');
 const profileMenu = ref(false);
 const addNewMenu = ref(false);
-
+import { useAuth } from '../composables/useAuth';
+const { logout } = useAuth();
+const handleLogout = async () => {
+  logout();
+  await router.push({ name: 'login' });
+};
 // Initialize keyboard shortcuts
 useKeyboardShortcuts(router);
 
@@ -411,7 +30,7 @@ const dispatchMenu = [
   {
     label: 'Listing Dispatch',
     icon: 'hugeicons:route-02',
-    action: () => router.push({ name: 'dispatch' }),
+    action: () => router.push({ name: 'dispatch-listing' }),
   },
   {
     label: 'Draft Events',
@@ -555,6 +174,392 @@ const copyEmail = async () => {
   }
 };
 </script>
+
+<template>
+  <q-layout view="hHh LpR fff">
+    <!-- Header -->
+    <q-header class="bg-white" style="color: var(--fleet-color-text-primary)">
+      <q-toolbar>
+        <q-btn flat dense round aria-label="Menu" @click="toggleLeftDrawer">
+          <iconify-icon icon="hugeicons:menu-02" width="24px" height="24px" class="text-grey-9" />
+        </q-btn>
+        <div class="flex items-center q-ml-sm">
+          <q-img src="assets/logo.svg" style="width: 30px; height: 30px" />
+          <q-toolbar-title class="gt-xs"> Sunshine Transports </q-toolbar-title>
+        </div>
+
+        <q-space />
+
+        <div class="row flex items-center">
+          <div>
+            <q-btn flat round>
+              <q-tooltip>Add New</q-tooltip>
+              <iconify-icon
+                icon="hugeicons:add-circle-half-dot"
+                width="24px"
+                height="24px"
+                class="text-grey-9"
+              />
+              <q-menu
+                v-model="addNewMenu"
+                transition-show="jump-down"
+                transition-hide="jump-up"
+                anchor="bottom right"
+                self="top right"
+                :offset="[0, 10]"
+                class="animated-menu"
+              >
+                <q-list style="min-width: 300px" padding>
+                  <!-- User Info Section -->
+
+                  <q-item clickable v-ripple :to="{ name: 'create-event' }">
+                    <q-item-section avatar>
+                      <IconifyIcon
+                        icon="hugeicons:route-02"
+                        width="24px"
+                        height="24px"
+                        class="text-grey-7"
+                      />
+                    </q-item-section>
+                    <q-item-section>
+                      <q-item-label>New Event</q-item-label>
+                      <q-item-label caption>Schedule and manage an upcoming event</q-item-label>
+                    </q-item-section>
+                  </q-item>
+
+                  <q-item clickable v-ripple>
+                    <q-item-section avatar>
+                      <iconify-icon
+                        icon="hugeicons:ai-user"
+                        width="24px"
+                        height="24px"
+                        class="text-grey-7"
+                      />
+                    </q-item-section>
+                    <q-item-section>
+                      <q-item-label>New Client</q-item-label>
+                      <q-item-label caption>Register a new customer profiles</q-item-label>
+                    </q-item-section>
+                  </q-item>
+
+                  <q-item clickable v-ripple>
+                    <q-item-section avatar>
+                      <iconify-icon
+                        icon="hugeicons:user-account"
+                        width="24px"
+                        height="24px"
+                        class="text-grey-7"
+                      />
+                    </q-item-section>
+                    <q-item-section>
+                      <q-item-label>New Staff</q-item-label>
+                      <q-item-label caption>Register a team member or employee</q-item-label>
+                    </q-item-section>
+                  </q-item>
+
+                  <q-item clickable v-ripple>
+                    <q-item-section avatar>
+                      <iconify-icon
+                        icon="hugeicons:bus-03"
+                        width="24px"
+                        height="24px"
+                        class="text-grey-7"
+                      />
+                    </q-item-section>
+                    <q-item-section>
+                      <q-item-label>New Vehicle</q-item-label>
+                      <q-item-label caption>Add details for a new fleet vehicle</q-item-label>
+                    </q-item-section>
+                  </q-item>
+
+                  <q-item clickable v-ripple>
+                    <q-item-section avatar>
+                      <iconify-icon
+                        icon="healthicons:truck-driver-outline"
+                        width="30px"
+                        height="30px"
+                        class="text-grey-7"
+                      />
+                    </q-item-section>
+                    <q-item-section>
+                      <q-item-label>New Driver</q-item-label>
+                      <q-item-label caption
+                        >Assign a licensed driver to your operations</q-item-label
+                      >
+                    </q-item-section>
+                  </q-item>
+
+                  <q-item clickable v-ripple>
+                    <q-item-section avatar>
+                      <iconify-icon
+                        icon="hugeicons:user-square"
+                        width="24px"
+                        height="24px"
+                        class="text-grey-7"
+                      />
+                    </q-item-section>
+                    <q-item-section>
+                      <q-item-label>New Assistant</q-item-label>
+                      <q-item-label caption>Register a support staff or helper</q-item-label>
+                    </q-item-section>
+                  </q-item>
+                </q-list>
+              </q-menu>
+            </q-btn>
+          </div>
+          <div>
+            <q-btn flat round>
+              <q-tooltip>Settings</q-tooltip>
+              <iconify-icon
+                icon="hugeicons:settings-01"
+                width="24px"
+                height="24px"
+                class="text-grey-9"
+              />
+            </q-btn>
+          </div>
+          <div class="gt-sm">
+            <q-btn flat round>
+              <q-tooltip>Chats</q-tooltip>
+              <iconify-icon
+                icon="hugeicons:message-01"
+                width="24px"
+                height="24px"
+                class="text-grey-9"
+              />
+            </q-btn>
+          </div>
+          <div class="gt-sm">
+            <q-btn flat round>
+              <q-badge color="red" rounded class="absolute-top-right q-mr-xs q-mt-xs" />
+              <q-tooltip>Notifications</q-tooltip>
+              <iconify-icon
+                icon="hugeicons:notification-01"
+                width="24px"
+                height="24px"
+                class="text-grey-9"
+              />
+            </q-btn>
+          </div>
+          <div>
+            <q-separator vertical class="q-mx-sm" style="height: 30px" />
+          </div>
+          <div>
+            <q-btn flat class="logged-user flex items-center">
+              <div class="q-mr-sm gt-sm">
+                <div class="text-subtitle2 text-weight-bold text-right">John</div>
+                <div class="text-caption text-right text-grey-7">Transport Manager</div>
+              </div>
+              <div>
+                <q-avatar size="48px">
+                  <img src="https://cdn.quasar.dev/img/avatar4.jpg" />
+                </q-avatar>
+              </div>
+              <div class="q-ml-sm q-mt-sm">
+                <iconify-icon
+                  icon="hugeicons:arrow-down-01"
+                  width="24px"
+                  height="24px"
+                  class="text-grey-9"
+                />
+              </div>
+              <q-menu
+                v-model="profileMenu"
+                transition-show="jump-down"
+                transition-hide="jump-up"
+                anchor="bottom right"
+                self="top right"
+                :offset="[0, 10]"
+                class="animated-menu"
+              >
+                <q-list style="min-width: 300px" padding>
+                  <!-- User Info Section -->
+                  <q-item class="q-px-md">
+                    <q-item-section>
+                      <div>
+                        <span class="text-grey-7 text-caption">Level: </span>
+                        <span class="text-weight-bold text-subtitle2">Senior </span>
+                      </div>
+                      <div class="row items-center">
+                        <div class="text-grey-7 text-caption">john.doe@email.com</div>
+                        <q-btn flat dense padding="xs" class="q-ml-xs" @click="copyEmail">
+                          <q-tooltip>Copy email</q-tooltip>
+                          <iconify-icon
+                            icon="hugeicons:copy-02"
+                            width="16px"
+                            height="16px"
+                            class="text-grey-7"
+                          />
+                        </q-btn>
+                      </div>
+                    </q-item-section>
+                  </q-item>
+
+                  <q-separator class="q-my-sm" />
+
+                  <q-item clickable v-ripple>
+                    <q-item-section avatar>
+                      <IconifyIcon
+                        icon="hugeicons:user-account"
+                        width="24px"
+                        height="24px"
+                        class="text-grey-7"
+                      />
+                    </q-item-section>
+                    <q-item-section>
+                      <q-item-label>My Profile</q-item-label>
+                      <q-item-label caption>Manage Personal Details</q-item-label>
+                    </q-item-section>
+                  </q-item>
+
+                  <q-item clickable v-ripple>
+                    <q-item-section avatar>
+                      <iconify-icon
+                        icon="hugeicons:building-03"
+                        width="20px"
+                        height="20px"
+                        class="text-grey-7"
+                      />
+                    </q-item-section>
+                    <q-item-section>
+                      <q-item-label>Company Profile</q-item-label>
+                      <q-item-label caption>Manage Company Details</q-item-label>
+                    </q-item-section>
+                  </q-item>
+
+                  <q-item clickable v-ripple>
+                    <q-item-section avatar>
+                      <iconify-icon
+                        icon="hugeicons:language-square"
+                        width="20px"
+                        height="20px"
+                        class="text-grey-7"
+                      />
+                    </q-item-section>
+                    <q-item-section>
+                      <q-item-label>Language</q-item-label>
+                      <q-item-label caption>Choose Preferred Language</q-item-label>
+                    </q-item-section>
+                  </q-item>
+
+                  <q-separator class="q-my-sm" />
+
+                  <div class="q-px-md q-py-sm" @click="handleLogout">
+                    <q-btn
+                      outline
+                      class="full-width border-grey-7"
+                      color="text-grey-7"
+                      label="Logout"
+                      v-ripple
+                    />
+                  </div>
+                </q-list>
+              </q-menu>
+            </q-btn>
+          </div>
+        </div>
+      </q-toolbar>
+    </q-header>
+    <!-- Drawer -->
+    <q-drawer
+      v-model="leftDrawerOpen"
+      show-if-above
+      bordered
+      :mini="miniState"
+      @mouseover="miniState = false"
+      @mouseout="miniState = true"
+      mini-to-overlay
+      :width="300"
+      :breakpoint="500"
+    >
+      <div class="full-height column justify-between">
+        <div>
+          <q-list>
+            <!-- Main Menu -->
+            <template v-if="currentMenu === 'main'">
+              <template v-for="item in menuItems" :key="item.label">
+                <!-- For items with sub-menu -->
+                <q-expansion-item
+                  v-if="item.children"
+                  expand-separator
+                  class="cursor-pointer"
+                  :label="item.label"
+                  group="somegroup"
+                >
+                  <template v-slot:header>
+                    <q-item-section avatar>
+                      <iconify-icon
+                        :icon="item.icon"
+                        width="24px"
+                        height="24px"
+                        class="text-grey-7"
+                      />
+                    </q-item-section>
+                    <q-item-section> {{ item.label }} </q-item-section>
+                  </template>
+                  <q-list class="q-ml-sm q-pl-xl">
+                    <q-item
+                      v-for="child in item.children"
+                      :key="child.label"
+                      clickable
+                      v-ripple
+                      @click="child.action && child.action()"
+                    >
+                      <q-item-section class="text-caption">{{ child.label }}</q-item-section>
+                    </q-item>
+                  </q-list>
+                </q-expansion-item>
+
+                <!-- For items without sub-menu -->
+                <q-item v-else clickable v-ripple>
+                  <q-item-section avatar>
+                    <iconify-icon
+                      :icon="item.icon"
+                      width="24px"
+                      height="24px"
+                      class="text-grey-7"
+                    />
+                  </q-item-section>
+                  <q-item-section>{{ item.label }}</q-item-section>
+                </q-item>
+              </template>
+            </template>
+
+            <!-- Dispatch Menu -->
+            <template v-else-if="currentMenu === 'dispatch'">
+              <q-item
+                v-for="item in dispatchMenu"
+                :key="item.label"
+                clickable
+                v-ripple
+                @click="item.action && item.action()"
+              >
+                <q-item-section avatar>
+                  <iconify-icon :icon="item.icon" width="24px" height="24px" class="text-grey-7" />
+                </q-item-section>
+                <q-item-section>{{ item.label }}</q-item-section>
+              </q-item>
+            </template>
+          </q-list>
+        </div>
+      </div>
+    </q-drawer>
+
+    <!-- Page Content -->
+    <q-page-container class="page-container-with-fixed-footer">
+      <router-view />
+    </q-page-container>
+
+    <!-- Footer -->
+    <q-footer bordered class="bg-white text-black fixed-footer">
+      <q-toolbar class="q-py-xs">
+        <q-toolbar-title class="text-center text-caption">
+          © 2025 Sunshine Transports
+        </q-toolbar-title>
+      </q-toolbar>
+    </q-footer>
+  </q-layout>
+</template>
 
 <style scoped>
 .q-drawer--mini .q-input {

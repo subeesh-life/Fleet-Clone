@@ -1,8 +1,8 @@
 {
   "name": "fms-clone",
   "version": "0.0.1",
-  "description": "Fleet Management System",
-  "productName": "WioT - Fleet",
+  "description": "A Complete Fleet Management Solution",
+  "productName": "WioT - Fleet Management Solutions",
   "author": "subeesh-lab <mails@subeesh.me>",
   "type": "module",
   "private": true,

@@ -3,6 +3,7 @@ import type { RouteRecordRaw } from 'vue-router';
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
+    name: 'login',
     component: () => import('src/layouts/AuthLayout.vue'),
     children: [{ path: '', component: () => import('src/modules/auth/SignIn.vue') }],
   },
@@ -31,6 +32,12 @@ const routes: RouteRecordRaw[] = [
         name: 'create-event',
         component: () =>
           import('components/transportCompany/mobility/dispatch/creation/CreateNew.vue'),
+      },
+      {
+        path: 'creation2',
+        name: 'create-event2',
+        component: () =>
+          import('components/transportCompany/mobility/dispatch/creation/CreateNew2.vue'),
       },
       {
         path: 'mobility-links',

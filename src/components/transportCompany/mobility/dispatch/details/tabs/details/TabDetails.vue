@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-const activeTab = ref('estimation');
+const activeTab = ref('actual');
 import EstimatedKPIs from './KPIs/EstimatedKPIs.vue';
+import ActualKPIs from './KPIs/ActualKPIs.vue';
 </script>
 <template>
   <q-tabs
@@ -15,10 +16,7 @@ import EstimatedKPIs from './KPIs/EstimatedKPIs.vue';
     indicator-color="primary"
     active-bg-color="primary"
   >
-    <q-tab
-      name="estimation"
-      :class="{ 'bg-grey-2': activeTab !== 'estimation' }"
-    >
+    <q-tab name="estimation" :class="{ 'bg-grey-2': activeTab !== 'estimation' }">
       <template v-slot:default>
         <IconifyIcon
           icon="hugeicons:information-square"
@@ -29,11 +27,7 @@ import EstimatedKPIs from './KPIs/EstimatedKPIs.vue';
         <span>Estimation</span>
       </template>
     </q-tab>
-    <q-tab
-      name="actual"
-      v-model="activeTab"
-      :class="{ 'bg-grey-2': activeTab !== 'actual' }"
-    >
+    <q-tab name="actual" v-model="activeTab" :class="{ 'bg-grey-2': activeTab !== 'actual' }">
       <template v-slot:default>
         <IconifyIcon
           icon="hugeicons:checkmark-circle-01"
@@ -50,6 +44,9 @@ import EstimatedKPIs from './KPIs/EstimatedKPIs.vue';
     <!-- Vehicles Tab-->
     <q-tab-panel name="estimation" class="q-pa-none q-pt-md">
       <EstimatedKPIs />
+    </q-tab-panel>
+    <q-tab-panel name="actual" class="q-pa-none q-pt-md">
+      <ActualKPIs />
     </q-tab-panel>
   </q-tab-panels>
 </template>

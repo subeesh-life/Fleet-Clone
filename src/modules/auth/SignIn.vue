@@ -55,12 +55,11 @@
                 </div>
               </div>
               <q-btn
-                glossy
                 type="submit"
                 size="md"
                 class="full-width"
                 label="Sign In"
-                color="black"
+                color="primary"
                 style="text-transform: none"
                 :loading="loading"
                 :disabled="loading"

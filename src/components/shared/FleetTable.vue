@@ -428,6 +428,9 @@ const props = withDefaults(defineProps<TableProps>(), {
   noDataLabel: 'No data available',
   actions: () => [],
   rowsPerPageOptions: () => [5, 10, 15, 20, 25, 50, 100],
+  flat: true,
+  bordered: true,
+  square: false,
   pagination: () => ({
     sortBy: null,
     descending: false,
