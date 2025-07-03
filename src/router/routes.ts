@@ -72,6 +72,11 @@ const routes: RouteRecordRaw[] = [
         name: 'live-map',
         component: () => import('src/modules/liveMap/LiveMap.vue'),
       },
+      {
+        path: 'live-map-details',
+        name: 'live-map-details',
+        component: () => import('src/modules/liveMap/LiveMapDetails.vue'),
+      },
     ],
   },
   {

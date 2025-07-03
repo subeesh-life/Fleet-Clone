@@ -2,7 +2,8 @@
 import { onMounted, ref } from 'vue';
 import LiveMapKpis from 'src/components/adminRegulator/liveMap/liveMapKpis.vue';
 import VehiclePlate from 'components/shared/card/VehiclePlate.vue';
-import FleetChips from 'components/shared/chips/FleetChips.vue';
+import { useRouter } from 'vue-router';
+
 import { L } from 'boot/leaflet';
 
 const showAllCards = ref(false);
@@ -22,6 +23,8 @@ const searchEvents = ref<string[]>([
 ]);
 const selectedFilter = ref<string>('Company Name');
 const activeSearchFilters = ref<{ type: string; value: string }[]>([]);
+
+const router = useRouter();
 
 // Vehicle markers data
 const vehicleMarkers = ref([
@@ -83,7 +86,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <q-page class="q-pa-md bg-grey-1" style="border-top: 1px solid #e0e0e0">
+  <q-page class="q-pa-md bg-grey-1" style="wrapper">
     <div class="row flex justify-between items-center">
       <div class="col-md-4">
         <q-breadcrumbs active-color="secondary">
@@ -168,11 +171,12 @@ onMounted(() => {
                 </div>
 
                 <!-- Vehicle Popover -->
-                <div v-if="marker.showPopup">
-                  <q-card style="min-width: 600px">
+
+                <div v-if="marker.showPopup" @click="router.push({ name: 'live-map-details' })">
+                  <q-card style="min-width: 400px">
                     <q-card-section class="q-pa-none">
                       <div class="row flex items-center q-pa-md">
-                        <div class="col-md-6 col-sm-12 col-xs-12 flex items-center">
+                        <div class="col flex items-center">
                           <VehiclePlate />
                           <div class="q-ml-md">
                             <div>
@@ -190,93 +194,39 @@ onMounted(() => {
                             <q-tooltip>Bus, Mini Bus</q-tooltip>
                           </div>
                         </div>
-                        <div class="col-md-2 flex items-center justify-start">
-                          <div class="column">
-                            <FleetChips
-                              :text="'25 Seats'"
-                              :color="'grey'"
-                              :iconVisibility="false"
-                              class="q-px-none q-mb-sm"
-                            />
-                            <q-badge
-                              rounded
-                              color="brown-7"
-                              text-color="white"
-                              class="text-caption"
-                            >
-                              BOOO7345
-                            </q-badge>
-                          </div>
-                        </div>
-                        <div class="col-md-4">
+
+                        <div class="flex justify-end">
                           <div class="text-body2 text-weight-medium text-right text-positive">
                             Live
                           </div>
-                          <div class="text-caption text-weight-medium text-right text-grey-7">
-                            Since 17 Minutes ago
-                          </div>
                         </div>
                       </div>
-                      <q-separator />
-                      <div class="row bg-grey-2 q-pa-md">
-                        <div class="col flex items-center">
-                          <IconifyIcon
-                            icon="hugeicons:location-01"
-                            width="24px"
-                            height="24px"
-                            class="text-grey-7 q-mr-sm"
-                          />
-                          <div class="text-body2 text-weight-medium">
-                            Fatima Bint Mubarak Street - Al Danah - Zone 1 - Abu Dhabi
-                            <div class="text-caption text-weight-medium text-grey-7">
-                              Jun 16, 2025, 11:30 am
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+
                       <q-separator />
                       <div class="row q-pa-md">
-                        <div class="col-md-4">
+                        <div class="col">
                           <div class="text-body2 text-weight-medium">
                             <div class="text-grey-7 text-caption">Odometer</div>
-                            <div class="text-weight-medium text-body2">100,000 km</div>
+                            <div class="text-weight-medium text-body2">77,675 km</div>
                           </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col">
                           <div class="text-body2 text-weight-medium">
-                            <div class="text-grey-7 text-caption">Company Code</div>
-                            <div class="text-weight-medium text-body2">LC8393</div>
-                          </div>
-                        </div>
-                        <div class="col-md-4">
-                          <div class="text-body2 text-weight-medium">
-                            <div class="text-grey-7 text-caption">Business Domain</div>
-                            <div class="text-weight-medium text-body2">Fire & Safety</div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="row q-px-md q-pb-md">
-                        <div class="col-md-6">
-                          <div class="text-body2 text-weight-medium">
-                            <div class="text-grey-7 text-caption">Company Name</div>
-                            <div class="text-weight-medium text-body2">
-                              Emirates Fire Systems Co.
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-md-6">
-                          <div class="text-body2 text-weight-medium">
-                            <div class="text-grey-7 text-caption">Entity Name</div>
-                            <div class="text-weight-medium text-body2">
-                              Emirates Industrial Fire Unit
+                            <div class="text-grey-7 text-caption">Company Info</div>
+                            <div>
+                              <div class="text-weight-medium text-body2">
+                                Emirates Fire Systems Co.
+                                <q-tooltip>Company Name</q-tooltip>
+                              </div>
+                              <div class="text-weight-medium text-caption text-grey-9">
+                                Fire & Safety
+                                <q-tooltip>Business Domain</q-tooltip>
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
                     </q-card-section>
-                    <q-card-actions>
-                      <q-btn label="View Details" color="primary" class="full-width" />
-                    </q-card-actions>
                   </q-card>
                 </div>
               </div>

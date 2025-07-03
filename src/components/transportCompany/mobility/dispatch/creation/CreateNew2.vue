@@ -42,7 +42,6 @@ const showDraftConfirmationModal = ref(false);
 const step = ref(1);
 const stepper = ref<QStepper>();
 const eventName = ref('');
-const activeTab = ref('standard');
 const tripMode = ref('one-way-trip');
 const eventSchedule = ref('single-day-trip');
 const eventStartDate = ref('2025/06/30');
@@ -119,7 +118,6 @@ const eventTypes = ref([
   { label: 'School to Home', value: 'school-to-home' },
   { label: 'School to School', value: 'school-to-school' },
 ]);
-const showEventModeSelectionBanner = ref(true);
 
 const copyEventReferenceId = async () => {
   try {
@@ -366,114 +364,27 @@ const filterIndividuals = (val: string, update: (callback: () => void) => void) 
                     <q-card flat>
                       <q-card-section class="q-py-sm">
                         <div class="text-subtitle2 text-grey-7 q-mb-sm">Event Mode</div>
-                        <q-tabs
-                          v-model="activeTab"
-                          dense
-                          align="justify"
-                          class="tab-style"
-                          inline-label
-                          no-caps
-                          active-color="white"
-                          indicator-color="primary"
-                          active-bg-color="primary"
-                        >
-                          <q-tab name="standard">
-                            <template v-slot:default>
-                              <IconifyIcon
-                                icon="hugeicons:navigator-02"
-                                width="24px"
-                                height="24px"
-                                class="q-mr-sm"
-                              />
-                              <span>Standard</span>
-                            </template>
-                          </q-tab>
-                          <q-tab
-                            disable
-                            name="shuttle"
-                            v-model="activeTab"
-                            :class="{ 'bg-grey-2': activeTab !== 'shuttle' }"
+                        <div class="q-gutter-md">
+                          <q-radio
+                            v-model="tripMode"
+                            checked-icon="task_alt"
+                            unchecked-icon="panorama_fish_eye"
+                            val="one-way-trip"
+                            label="One-Way Trip"
                           >
-                            <template v-slot:default>
-                              <IconifyIcon
-                                icon="hugeicons:arrow-reload-vertical"
-                                width="24px"
-                                height="24px"
-                                class="q-mr-sm text-grey-7"
-                              />
-                              <span>Shuttle</span>
-                              <q-tooltip self="top start"> Currently unavailable </q-tooltip>
-                            </template>
-                          </q-tab>
-                          <q-tab
+                            <q-tooltip self="top start"> Selected </q-tooltip>
+                          </q-radio>
+                          <q-radio
                             disable
-                            name="area"
-                            v-model="activeTab"
-                            :class="{ 'bg-grey-2': activeTab !== 'area' }"
+                            v-model="tripMode"
+                            checked-icon="task_alt"
+                            unchecked-icon="panorama_fish_eye"
+                            val="round-trip"
+                            label="Round Trip"
                           >
-                            <template v-slot:default>
-                              <IconifyIcon
-                                icon="hugeicons:map-pin"
-                                width="24px"
-                                height="24px"
-                                class="q-mr-sm text-grey-7"
-                              />
-                              <span>Area</span>
-                              <q-tooltip self="top start"> Currently unavailable </q-tooltip>
-                            </template>
-                          </q-tab>
-                        </q-tabs>
-                        <q-tab-panels v-model="activeTab" animated>
-                          <q-tab-panel name="standard" class="q-pa-none q-mt-sm">
-                            <div class="q-gutter-md">
-                              <q-radio
-                                v-model="tripMode"
-                                checked-icon="task_alt"
-                                unchecked-icon="panorama_fish_eye"
-                                val="one-way-trip"
-                                label="One-Way Trip"
-                              >
-                                <q-tooltip self="top start"> Selected </q-tooltip>
-                              </q-radio>
-                              <q-radio
-                                disable
-                                v-model="tripMode"
-                                checked-icon="task_alt"
-                                unchecked-icon="panorama_fish_eye"
-                                val="round-trip"
-                                label="Round Trip"
-                              >
-                                <q-tooltip self="top start"> Currently unavailable </q-tooltip>
-                              </q-radio>
-                            </div>
-                          </q-tab-panel>
-                        </q-tab-panels>
-                        <q-banner
-                          v-show="showEventModeSelectionBanner"
-                          inline-actions
-                          rounded
-                          class="bg-grey-3 text-grey-9 q-mt-sm"
-                        >
-                          <div class="flex items-center">
-                            <IconifyIcon
-                              icon="hugeicons:alert-square"
-                              width="24px"
-                              height="24px"
-                              class="q-mr-sm text-grey-7 gt-sm"
-                            />
-                            <span>
-                              Only standard one-way trips are currently available for selection.
-                            </span>
-                          </div>
-
-                          <template v-slot:action>
-                            <q-btn
-                              flat
-                              label="Dismiss"
-                              @click="showEventModeSelectionBanner = false"
-                            />
-                          </template>
-                        </q-banner>
+                            <q-tooltip self="top start"> Currently unavailable </q-tooltip>
+                          </q-radio>
+                        </div>
                       </q-card-section>
                     </q-card>
                     <q-separator />
