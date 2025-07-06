@@ -1,21 +1,64 @@
 <script setup lang="ts">
 import VehiclePlate from 'components/shared/card/VehiclePlate.vue';
-import { onMounted } from 'vue';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { L } from 'boot/leaflet';
+
+const intervalId = ref<number | null>(null);
+const playbackTime = ref(47);
 
 onMounted(() => {
   setTimeout(() => {
-    // Abu Dhabi coordinates: 24.4539° N, 54.3773° E
-    const map = L.map('map').setView([24.4539, 54.3773], 4);
+    const map = L.map('map', { zoomControl: false }).setView([24.4539, 54.3773], 13);
 
-    // Using CartoDB's light (grayscale) map with English labels
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
       subdomains: 'abcd',
       maxZoom: 20,
     }).addTo(map);
 
+    // Path closely following Corniche Road, Abu Dhabi
+    const route: [number, number][] = [
+      [24.469, 54.341], // Starting point near Corniche, a bit east of Marina Mall
+      [24.4695, 54.3425],
+      [24.47, 54.344],
+      [24.4705, 54.3455],
+      [24.471, 54.347],
+      [24.4715, 54.3485],
+      [24.472, 54.35],
+      [24.4725, 54.3515],
+      [24.473, 54.353],
+      [24.4735, 54.3545], // Ending point a bit further along Corniche
+      [24.474, 54.356],
+      [24.4745, 54.3575],
+    ];
+    const polyline = L.polyline(route, { color: '#000', weight: 3 }).addTo(map);
+
+    const carIcon = L.divIcon({
+      html: `<div class="vehicle-icon"></div>`,
+      iconSize: [24, 24],
+      className: 'vehicle-marker',
+    });
+
+    let currentIdx = 0;
+    const marker = L.marker(route[currentIdx] as L.LatLngExpression, { icon: carIcon }).addTo(map);
+
+    map.fitBounds(polyline.getBounds(), { padding: [30, 30] });
     map.invalidateSize();
+
+    intervalId.value = window.setInterval(() => {
+      if (currentIdx + 1 < route.length) {
+        currentIdx++;
+        marker.setLatLng(route[currentIdx] as L.LatLngExpression);
+      } else {
+        window.clearInterval(intervalId.value!);
+      }
+    }, 10000); // 10 seconds
   }, 100);
+});
+
+onBeforeUnmount(() => {
+  if (intervalId.value) {
+    window.clearInterval(intervalId.value);
+  }
 });
 </script>
 
@@ -65,8 +108,8 @@ onMounted(() => {
       </div>
     </div>
 
-    <div class="row q-col-gutter-md q-mb-md">
-      <div class="col-md-4">
+    <div class="row q-col-gutter-md">
+      <div class="col-md-4 col-xs-12">
         <q-card bordered flat>
           <q-card-section class="q-pa-md">
             <div class="text-caption text-weight-medium text-grey-7 q-mb-sm">Current Location</div>
@@ -120,7 +163,7 @@ onMounted(() => {
 
               <div class="col flex justify-end">
                 <div class="column q-gutter-xs">
-                  <div class="text-body2 text-weight-medium text-right text-positive">Live</div>
+                  <div class="text-body2 text-weight-bold text-right text-positive">Live</div>
                   <div class="text-caption text-grey-7">Since 17 Minutes Ago</div>
                 </div>
               </div>
@@ -204,19 +247,19 @@ onMounted(() => {
         </q-card>
       </div>
 
-      <div class="col-md-8">
+      <div class="col-md-8 col-xs-12">
         <q-card bordered flat class="q-pa-none">
           <q-card-section class="q-pa-xs">
-            <div class="row items-center justify-between q-pa-md bg-grey-1 relative-position">
+            <div class="row items-center justify-between q-pa-md bg-secondary relative-position">
               <div class="row flex justify-between full-width">
                 <div class="flex flex-center">
                   <IconifyIcon
                     icon="hugeicons:steering"
                     width="24px"
                     height="24px"
-                    class="text-grey-7 q-mr-sm"
+                    class="text-white q-mr-sm"
                   />
-                  <span class="text-weight-medium text-grey-9"> 17 min</span>
+                  <span class="text-weight-medium text-white"> 17 min</span>
                   <q-tooltip>
                     <div class="text-caption text-white">Driving Time</div>
                   </q-tooltip>
@@ -226,9 +269,9 @@ onMounted(() => {
                     icon="hugeicons:temperature"
                     width="24px"
                     height="24px"
-                    class="text-grey-7 q-mr-sm"
+                    class="text-white q-mr-sm"
                   />
-                  <span class="text-weight-medium text-grey-9"> 20°C</span>
+                  <span class="text-weight-medium text-white"> 20°C</span>
                   <q-tooltip>
                     <div class="text-caption text-white">Temperature</div>
                   </q-tooltip>
@@ -238,45 +281,45 @@ onMounted(() => {
                     icon="hugeicons:dashboard-speed-02"
                     width="24px"
                     height="24px"
-                    class="text-grey-7 q-mr-sm"
+                    class="text-white q-mr-sm"
                   />
-                  <span class="text-weight-medium text-grey-9"> 79 km/h</span>
+                  <span class="text-weight-medium text-white"> 79 km/h</span>
                   <q-tooltip>
                     <div class="text-caption text-white">Speed</div>
                   </q-tooltip>
                 </div>
-                <div class="flex flex-center">
+                <div class="flex flex-center gt-sm">
                   <IconifyIcon
                     icon="hugeicons:dashboard-speed-01"
                     width="24px"
                     height="24px"
-                    class="text-grey-7 q-mr-sm"
+                    class="text-white q-mr-sm"
                   />
-                  <span class="text-weight-medium text-grey-9"> 1200 rpm</span>
+                  <span class="text-weight-medium text-white"> 1200 rpm</span>
                   <q-tooltip>
                     <div class="text-caption text-white">RPM</div>
                   </q-tooltip>
                 </div>
-                <div class="flex flex-center">
+                <div class="flex flex-center gt-sm">
                   <IconifyIcon
                     icon="hugeicons:automotive-battery-02"
                     width="24px"
                     height="24px"
-                    class="text-grey-7 q-mr-sm"
+                    class="text-white q-mr-sm"
                   />
-                  <span class="text-weight-medium text-grey-9"> 12.6 volts</span>
+                  <span class="text-weight-medium text-white"> 12.6 volts</span>
                   <q-tooltip>
                     <div class="text-caption text-white">Battery</div>
                   </q-tooltip>
                 </div>
-                <div class="flex flex-center">
+                <div class="flex flex-center gt-sm">
                   <IconifyIcon
                     icon="hugeicons:slow-winds"
                     width="24px"
                     height="24px"
-                    class="text-grey-7 q-mr-sm"
+                    class="text-white q-mr-sm"
                   />
-                  <span class="text-weight-medium text-grey-9"> 0.184 kg CO2</span>
+                  <span class="text-weight-medium text-white"> 0.184 kg CO2</span>
                   <q-tooltip>
                     <div class="text-caption text-white">CO2 emissions</div>
                   </q-tooltip>
@@ -286,15 +329,97 @@ onMounted(() => {
                     icon="hugeicons:route-01"
                     width="24px"
                     height="24px"
-                    class="text-grey-7 q-mr-sm"
+                    class="text-white q-mr-sm"
                   />
-                  <span class="text-weight-medium text-grey-9"> 12.6 km</span>
+                  <span class="text-weight-medium text-white"> 12.6 km</span>
                   <q-tooltip>
                     <div class="text-caption text-white">Distance</div>
                   </q-tooltip>
                 </div>
+                <div class="flex flex-center cursor-pointer">
+                  <q-badge class="bg-white text-primary">
+                    <div class="text-caption text-weight-bold">+3 More</div>
+                  </q-badge>
+                </div>
               </div>
             </div>
+
+            <!-- Vehicle Satus -->
+            <div class="absolute-top text-center gentle-heartbeat" style="top: 80px; z-index: 2">
+              <q-badge color="positive" text-color="white" class="text-subtitle2" rounded>
+                <IconifyIcon icon="hugeicons:live-streaming-02" width="20px" height="20px" />
+                <span class="text-weight-medium text-white q-px-xs">Moving</span>
+              </q-badge>
+            </div>
+
+            <!-- Timeline Slider Section -->
+            <div class="q-pa-sm glass-bg absolute-bottom z-top">
+              <div class="row flex items-center">
+                <q-list class="full-width">
+                  <q-item class="full-width q-pa-none">
+                    <q-item-section side>
+                      <div class="text-caption text-weight-medium text-grey-8">7:30 am</div>
+                    </q-item-section>
+                    <q-item-section>
+                      <q-slider v-model="playbackTime" :min="0" :max="47" label />
+                    </q-item-section>
+                    <q-item-section side>
+                      <div class="text-caption text-weight-medium text-grey-8 flex justify-end">
+                        8:17 am
+                      </div>
+                    </q-item-section>
+                  </q-item>
+                </q-list>
+              </div>
+              <!-- Playback Control Buttons -->
+              <div class="row justify-center q-pa-sm q-gutter-x-sm q-ml-none border-bottom">
+                <q-btn round bordered>
+                  <IconifyIcon
+                    icon="hugeicons:backward-02"
+                    width="24px"
+                    height="24px"
+                    class="text-grey-7"
+                  />
+                  <q-tooltip>
+                    <div class="text-caption text-weight-medium text-white">Rewind</div>
+                  </q-tooltip>
+                </q-btn>
+                <q-btn round bordered>
+                  <IconifyIcon
+                    icon="hugeicons:live-streaming-02"
+                    width="24px"
+                    height="24px"
+                    class="text-red-7"
+                  />
+                  <q-tooltip>
+                    <div class="text-caption text-weight-medium text-white">Toggle Live</div>
+                  </q-tooltip>
+                </q-btn>
+                <q-btn round bordered>
+                  <IconifyIcon
+                    icon="hugeicons:play"
+                    width="24px"
+                    height="24px"
+                    class="text-grey-7"
+                  />
+                  <q-tooltip>
+                    <div class="text-caption text-weight-medium text-white">Play</div>
+                  </q-tooltip>
+                </q-btn>
+                <q-btn round bordered>
+                  <IconifyIcon
+                    icon="hugeicons:forward-02"
+                    width="24px"
+                    height="24px"
+                    class="text-grey-7"
+                  />
+                  <q-tooltip>
+                    <div class="text-caption text-weight-medium text-white">Forward</div>
+                  </q-tooltip>
+                </q-btn>
+              </div>
+            </div>
+
             <div class="col-12">
               <div class="bg-grey-2">
                 <div class="map-container">
@@ -312,13 +437,13 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 #map {
-  min-height: calc(100vh - 300px); // Default height for small devices
+  min-height: calc(100vh - 250px); // Default height for small devices
   z-index: 1;
   filter: grayscale(0.8);
 
   @media (min-width: 1024px) {
     // Medium devices and larger
-    min-height: calc(100vh - 214px);
+    min-height: calc(100vh - 250px);
   }
 }
 
@@ -356,5 +481,33 @@ onMounted(() => {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
     background: #1565c0;
   }
+}
+
+.glass-bg {
+  background: rgba(255, 255, 255, 0.13);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(2.3px);
+  -webkit-backdrop-filter: blur(2.3px);
+  border: 1px solid rgba(255, 255, 255, 0.21);
+}
+@keyframes gentle-heartbeat {
+  0% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(1.08);
+  }
+  60% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.gentle-heartbeat {
+  animation: gentle-heartbeat 2.5s ease-in-out infinite;
+  transform-origin: center;
 }
 </style>

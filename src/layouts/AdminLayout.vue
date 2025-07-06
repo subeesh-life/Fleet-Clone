@@ -154,8 +154,14 @@
           </div>
           <div>
             <q-btn flat round>
-              <q-badge color="red" rounded class="absolute-top-right q-mr-xs q-mt-xs" />
-              <q-tooltip>Notifications</q-tooltip>
+              <q-badge
+                :color="isOnline ? 'positive' : 'negative'"
+                rounded
+                class="absolute-top-right q-mr-xs q-mt-xs"
+              >
+                {{ isOnline ? 'ON' : 'OFF' }}
+              </q-badge>
+              <q-tooltip>{{ isOnline ? 'Online' : 'Offline' }}</q-tooltip>
               <iconify-icon
                 icon="hugeicons:notification-01"
                 width="24px"
@@ -163,6 +169,9 @@
                 class="text-grey-9"
               />
             </q-btn>
+          </div>
+          <div>
+            <NetworkStatusIndicator />
           </div>
           <div>
             <q-separator vertical class="q-mx-sm" style="height: 30px" />
@@ -389,6 +398,8 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useQuasar } from 'quasar';
 import { useKeyboardShortcuts } from '../composables/useKeyboardShortcuts';
+import { useNetworkStatus } from '../composables/useNetworkStatus';
+import NetworkStatusIndicator from '../components/shared/NetworkStatusIndicator.vue';
 
 const router = useRouter();
 const $q = useQuasar();
@@ -400,6 +411,9 @@ const addNewMenu = ref(false);
 
 // Initialize keyboard shortcuts
 useKeyboardShortcuts(router);
+
+// Initialize network status monitoring
+const { isOnline } = useNetworkStatus();
 
 // Add dispatch submenu items
 const dispatchMenu = [

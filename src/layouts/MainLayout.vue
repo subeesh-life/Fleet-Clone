@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useQuasar } from 'quasar';
 import { useKeyboardShortcuts } from '../composables/useKeyboardShortcuts';
+import NetworkStatusIndicator from '../components/shared/NetworkStatusIndicator.vue';
 
 const router = useRouter();
 const $q = useQuasar();
@@ -341,6 +342,9 @@ const copyEmail = async () => {
               />
             </q-btn>
           </div>
+          <div class="gt-sm">
+            <NetworkStatusIndicator />
+          </div>
           <div>
             <q-separator vertical class="q-mx-sm" style="height: 30px" />
           </div>
@@ -644,7 +648,7 @@ const copyEmail = async () => {
   z-index: 2000 !important;
 }
 
-.page-container-with-fixed-footer {
+/* .page-container-with-fixed-footer {
   padding-bottom: 56px !important;
-}
+} */
 </style>

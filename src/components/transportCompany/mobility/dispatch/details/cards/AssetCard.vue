@@ -17,25 +17,13 @@ import VehiclePlate from 'components/shared/card/VehiclePlate.vue';
         indicator-color="primary"
         active-bg-color="primary"
       >
-        <q-tab
-          name="vehicles"
-          :class="{ 'bg-grey-2': activeTab !== 'vehicles' }"
-        >
+        <q-tab name="vehicles" :class="{ 'bg-grey-2': activeTab !== 'vehicles' }">
           <template v-slot:default>
-            <IconifyIcon
-              icon="hugeicons:bus-03"
-              width="24px"
-              height="24px"
-              class="q-mr-sm"
-            />
+            <IconifyIcon icon="hugeicons:bus-03" width="24px" height="24px" class="q-mr-sm" />
             <span>Vehicles</span>
           </template>
         </q-tab>
-        <q-tab
-          name="drivers"
-          v-model="activeTab"
-          :class="{ 'bg-grey-2': activeTab !== 'drivers' }"
-        >
+        <q-tab name="drivers" v-model="activeTab" :class="{ 'bg-grey-2': activeTab !== 'drivers' }">
           <template v-slot:default>
             <IconifyIcon
               icon="healthicons:truck-driver-outline"
@@ -52,27 +40,13 @@ import VehiclePlate from 'components/shared/card/VehiclePlate.vue';
           :class="{ 'bg-grey-2': activeTab !== 'assistants' }"
         >
           <template v-slot:default>
-            <IconifyIcon
-              icon="hugeicons:user-square"
-              width="24px"
-              height="24px"
-              class="q-mr-sm"
-            />
+            <IconifyIcon icon="hugeicons:user-square" width="24px" height="24px" class="q-mr-sm" />
             <span>Assistants</span>
           </template>
         </q-tab>
-        <q-tab
-          name="staff"
-          v-model="activeTab"
-          :class="{ 'bg-grey-2': activeTab !== 'staff' }"
-        >
+        <q-tab name="staff" v-model="activeTab" :class="{ 'bg-grey-2': activeTab !== 'staff' }">
           <template v-slot:default>
-            <IconifyIcon
-              icon="hugeicons:user-account"
-              width="24px"
-              height="24px"
-              class="q-mr-sm"
-            />
+            <IconifyIcon icon="hugeicons:user-account" width="24px" height="24px" class="q-mr-sm" />
             <span>Staff</span>
           </template>
         </q-tab>
@@ -92,31 +66,19 @@ import VehiclePlate from 'components/shared/card/VehiclePlate.vue';
                     class="bg-grey-3 text-grey-7 text-weight-bold text-caption"
                   >
                     2025
-                    <q-chip
-                      color="primary"
-                      text-color="white"
-                      size="sm"
-                      class="q-ml-sm"
-                    >
-                      Primary Vehicle
+                    <q-chip color="primary" text-color="white" size="sm" class="q-ml-sm">
+                      Medium Bus
                     </q-chip>
                   </q-badge>
                 </div>
                 <div class="text-caption text-weight-medium flex items-center">
                   Mercedes, Sprinter
                 </div>
-                <q-tooltip>Bus, Mini Bus</q-tooltip>
               </div>
             </div>
             <div class="col-4">
-              <div
-                class="text-body2 text-weight-medium text-right text-positive"
-              >
-                Available
-              </div>
-              <div
-                class="text-caption text-weight-medium text-right text-grey-7"
-              >
+              <div class="text-body2 text-weight-medium text-right text-positive">Available</div>
+              <div class="text-caption text-weight-medium text-right text-grey-7">
                 Since 17 Minutes ago
               </div>
             </div>
@@ -132,25 +94,13 @@ import VehiclePlate from 'components/shared/card/VehiclePlate.vue';
                   <img src="https://i.pravatar.cc/150?img=59" />
                 </q-avatar>
                 <div class="column">
-                  <div class="text-body2 text-weight-medium q-pl-sm">
-                    John Doe
-                  </div>
+                  <div class="text-body2 text-weight-medium q-pl-sm">John Doe</div>
                   <div class="row items-center q-pl-sm">
-                    <q-chip
-                      class="bg-blue-1 text-blue text-caption"
-                      dense
-                      square
-                    >
-                      #4D96F2
-                    </q-chip>
+                    <q-chip class="bg-blue-1 text-blue text-caption" dense square> #4D96F2 </q-chip>
                     <q-chip
                       dense
                       rounded
-                      style="
-                        height: 24px;
-                        width: 24px;
-                        border: 1px solid #0000001f;
-                      "
+                      style="height: 24px; width: 24px; border: 1px solid #0000001f"
                       class="q-mr-sm bg-white"
                     >
                       <IconifyIcon
@@ -164,11 +114,7 @@ import VehiclePlate from 'components/shared/card/VehiclePlate.vue';
                     <q-chip
                       dense
                       rounded
-                      style="
-                        height: 24px;
-                        width: 24px;
-                        border: 1px solid #0000001f;
-                      "
+                      style="height: 24px; width: 24px; border: 1px solid #0000001f"
                       class="q-mr-sm bg-white"
                     >
                       <IconifyIcon
@@ -184,14 +130,8 @@ import VehiclePlate from 'components/shared/card/VehiclePlate.vue';
               </div>
             </div>
             <div class="col-4">
-              <div
-                class="text-body2 text-weight-medium text-right text-positive"
-              >
-                Available
-              </div>
-              <div
-                class="text-caption text-weight-medium text-right text-grey-7"
-              >
+              <div class="text-body2 text-weight-medium text-right text-positive">Available</div>
+              <div class="text-caption text-weight-medium text-right text-grey-7">
                 Since 41 Minutes ago
               </div>
             </div>
@@ -202,9 +142,7 @@ import VehiclePlate from 'components/shared/card/VehiclePlate.vue';
         <q-tab-panel name="assistants" class="q-pa-none cursor-pointer">
           <div class="row q-pa-sm flex items-center">
             <div class="col-12 text-center q-pa-md">
-              <div class="text-body2 text-weight-medium text-grey-7">
-                No assistant added yet!
-              </div>
+              <div class="text-body2 text-weight-medium text-grey-7">No assistant added yet!</div>
             </div>
           </div>
         </q-tab-panel>
@@ -213,9 +151,7 @@ import VehiclePlate from 'components/shared/card/VehiclePlate.vue';
         <q-tab-panel name="staff" class="q-pa-none cursor-pointer">
           <div class="row q-pa-sm flex items-center">
             <div class="col-12 text-center q-pa-md">
-              <div class="text-body2 text-weight-medium text-grey-7">
-                No staff added yet!
-              </div>
+              <div class="text-body2 text-weight-medium text-grey-7">No staff added yet!</div>
             </div>
           </div>
         </q-tab-panel>

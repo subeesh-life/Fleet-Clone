@@ -2,9 +2,10 @@
 import { ref } from 'vue';
 const tab = ref('details');
 import TabDetails from './details/TabDetails.vue';
+import TabRouteInfo from './routeInfo/TabRouteInfo.vue';
 </script>
 <template>
-  <q-card flat bordered class="q-pa-xs q-mb-md full-width">
+  <q-card flat bordered class="q-pa-xs full-width">
     <q-card-section class="q-pa-none">
       <div class="row">
         <div class="col-md-12 col-xs-12 bg-white rounded-borders q-pa-md">
@@ -103,6 +104,9 @@ import TabDetails from './details/TabDetails.vue';
           <q-tab-panels v-model="tab" animated>
             <q-tab-panel name="details" class="q-px-none q-pb-none">
               <TabDetails />
+            </q-tab-panel>
+            <q-tab-panel name="route-details" class="q-px-none q-pb-none">
+              <TabRouteInfo />
             </q-tab-panel>
           </q-tab-panels>
         </div>
