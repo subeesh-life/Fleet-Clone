@@ -6,10 +6,12 @@ import VehiclePlate from 'src/components/shared/card/VehiclePlate.vue';
 import FleetBreadcrumbs from 'src/components/shared/FleetBreadcrumbs.vue';
 import FleetTable from 'src/components/shared/FleetTable.vue';
 import FleetAvatar from 'src/components/shared/FleetAvatar.vue';
+import ConfigurableFilterDrawer from 'src/components/shared/ConfigurableFilterDrawer.vue';
 import moment from 'moment';
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { useTripsStore } from '../store/trip.store';
 import { useAutoHeight } from 'src/composables/useAutoHeight';
+import { useConfigurableFilters } from 'src/composables/useConfigurableFilters';
 import type { TripMode, TripStatus } from '../types/trip-config.types';
 import type { TripResponse } from '../types/trip-api.types';
 import type { Moment } from 'moment';
@@ -18,6 +20,7 @@ import {
   TRIP_STATUS_CONFIG,
   TRIP_MODE_CONFIG,
 } from '../constants/trip.constants';
+import { TRIP_FILTER_GROUPS } from '../config/trip-filters.config';
 
 const store = useTripsStore();
 
@@ -55,53 +58,19 @@ const tripSearchTypes = [
   { label: 'Event ID', value: 'event_unique_id' },
 ];
 
-// Search is now handled through store state
-const dispatchFilterDrawer = ref(false);
-const organization = ref([]);
-const organizationOptions = ref([
-  { label: 'Abu Dhabi - Operations', value: 'organization1' },
-  { label: 'Dubai - Operations', value: 'organization2' },
-  { label: 'Sharjah - Operations', value: 'organization3' },
-  { label: 'Ajman - Operations', value: 'organization4' },
-  { label: 'Umm Al Quwain - Operations', value: 'organization5' },
-  { label: 'Fujairah - Operations', value: 'organization6' },
-  { label: 'Ras Al Khaimah - Operations', value: 'organization7' },
-  { label: 'Al Ain - Operations', value: 'organization8' },
-  { label: 'Al Dhafra - Operations', value: 'organization9' },
-]);
-const assetName = ref([]);
-const assetNameOptions = ref([
-  { label: 'Vehicle', value: 'vehicle' },
-  { label: 'Motorcycle', value: 'motorcycle' },
-]);
-const assetCategory = ref([]);
-const assetCategoryOptions = ref([
-  { label: 'Car', value: 'car' },
-  { label: 'Bus', value: 'bus' },
-  { label: 'Truck', value: 'truck' },
-  { label: 'Van', value: 'van' },
-]);
-const assetType = ref([]);
-const assetTypeOptions = ref([
-  { label: 'Coach Bus', value: 'coachBus' },
-  { label: 'Medium Bus', value: 'mediumBus' },
-  { label: 'Small Bus', value: 'smallBus' },
-]);
-const usageMode = ref([]);
-const usageModeOptions = ref([
-  { label: 'Business', value: 'business' },
-  { label: 'Internal', value: 'internal' },
-]);
-const eventType = ref([]);
-const eventTypeOptions = ref([
-  { label: 'Oneway', value: 'oneway' },
-  { label: 'Roundtrip', value: 'roundtrip' },
-  { label: 'Home to School', value: 'homeToSchool' },
-  { label: 'Home to Office', value: 'homeToOffice' },
-  { label: 'Office to Home', value: 'officeToHome' },
-  { label: 'Office to Office', value: 'officeToOffice' },
-  { label: 'Other', value: 'other' },
-]);
+// Initialize configurable filters
+const {
+  filters,
+  hasActiveFilters,
+  activeFilterCount,
+  clearFilters: clearConfigurableFilters,
+} = useConfigurableFilters({
+  filterGroups: TRIP_FILTER_GROUPS,
+  autoApply: false,
+});
+
+// Filter drawer reference
+const filterDrawerRef = ref();
 
 const actionButtons = computed(() => [
   {
@@ -111,13 +80,9 @@ const actionButtons = computed(() => [
   },
   {
     icon: 'hugeicons:filter',
-    tooltip: 'Filter',
-    onClick: () => (dispatchFilterDrawer.value = true),
-  },
-  {
-    icon: 'hugeicons:chart-bar-line',
-    tooltip: 'Statistics',
-    class: 'gt-sm',
+    tooltip: `Filter${hasActiveFilters.value ? ` (${activeFilterCount.value})` : ''}`,
+    onClick: () => filterDrawerRef.value?.openDrawer(),
+    class: hasActiveFilters.value ? 'bg-primary text-white' : '',
   },
   {
     icon: 'hugeicons:add-01',
@@ -303,6 +268,18 @@ const handleClearSearch = () => {
   console.log('Search cleared');
 };
 
+// Filter handlers
+const handleApplyFilters = (filterValues: Record<string, any>) => {
+  console.log('Filters applied:', filterValues);
+  // Here you can integrate with your store or API
+  // For example: store.setFilters(formatFiltersForAPI());
+};
+
+const handleClearFilters = () => {
+  clearConfigurableFilters();
+  console.log('Filters cleared');
+};
+
 // Handle refresh from table
 const handleRefresh = () => {
   void store.fetchTripStats();
@@ -311,10 +288,11 @@ const handleRefresh = () => {
 };
 
 // Handle clear filters from table
-const handleClearFilters = () => {
+const handleClearAllFilters = () => {
   // Reset all filters to default state
   store.clearTripStatuses();
   store.clearSearch();
+  clearConfigurableFilters();
   store.resetPagination(); // Reset pagination when clearing filters
   // Reset date/time to today
   store.dateTimeRange = {
@@ -521,7 +499,7 @@ onUnmounted((): void => {
           selection="multiple"
           row-key="id"
           @refresh="handleRefresh"
-          @clear-filters="handleClearFilters"
+          @clear-filters="handleClearAllFilters"
           @request="onPaginationRequest"
           @update:pagination="onPaginationUpdate"
         >
@@ -825,7 +803,7 @@ onUnmounted((): void => {
               color="grey-7"
               icon="filter_list_off"
               label="Clear All Filters"
-              @click="handleClearFilters"
+              @click="handleClearAllFilters"
             />
           </template>
         </FleetTable>
@@ -1015,132 +993,17 @@ onUnmounted((): void => {
       @clear="handleClearSearch"
     />
 
-    <!-- Model - Filter Drawer-->
-    <q-dialog
-      persistent
-      backdrop-filter="blur(2px)"
-      v-model="dispatchFilterDrawer"
-      position="right"
-      :full-height="true"
-    >
-      <q-card class="column">
-        <q-card-section class="q-pb-none">
-          <div class="row items-start justify-between">
-            <div>
-              <div class="text-h6 text-weight-bold">Filter Dispatch</div>
-              <div class="text-caption text-grey-7">
-                Select the filters applicable to this dispatch
-              </div>
-            </div>
-            <div class="row items-center q-gutter-x-xs">
-              <q-btn color="primary" label="Apply" />
-              <q-btn flat round dense>
-                <IconifyIcon
-                  icon="hugeicons:refresh"
-                  width="20px"
-                  height="20px"
-                  class="text-grey-7"
-                />
-                <q-tooltip>Clear</q-tooltip>
-              </q-btn>
-              <q-btn
-                flat
-                round
-                dense
-                icon="close"
-                @click="dispatchFilterDrawer = false"
-                class="text-grey-7"
-              >
-                <q-tooltip>Close</q-tooltip>
-              </q-btn>
-            </div>
-          </div>
-          <q-separator class="q-my-md" />
-        </q-card-section>
-        <q-card-section class="q-pt-none">
-          <div class="row q-col-gutter-lg">
-            <div class="col-12">
-              <div class="text-subtitle1 text-weight-medium">Organization</div>
-              <div class="q-mt-sm q-gutter-y-xs">
-                <div class="text-subtitle2 text-grey-7">Select Organization</div>
-                <q-select
-                  dense
-                  outlined
-                  multiple
-                  use-chips
-                  v-model="organization"
-                  :options="organizationOptions"
-                  placeholder="Select Organization"
-                />
-              </div>
-            </div>
-            <div class="col-12">
-              <div class="text-subtitle1 text-weight-medium">Assets Preference</div>
-              <div class="q-mt-sm q-gutter-y-xs">
-                <div class="text-subtitle2 text-grey-7">Asset Name</div>
-                <q-select
-                  dense
-                  outlined
-                  multiple
-                  use-chips
-                  v-model="assetName"
-                  :options="assetNameOptions"
-                  placeholder="Select Asset Name"
-                />
-              </div>
-              <div class="q-mt-sm q-gutter-y-xs">
-                <div class="text-subtitle2 text-grey-7">Asset Category</div>
-                <q-select
-                  dense
-                  outlined
-                  multiple
-                  use-chips
-                  v-model="assetCategory"
-                  :options="assetCategoryOptions"
-                  placeholder="Select Asset Category"
-                />
-              </div>
-              <div class="q-mt-sm q-gutter-y-xs">
-                <div class="text-subtitle2 text-grey-7">Asset Type</div>
-                <q-select
-                  dense
-                  outlined
-                  multiple
-                  use-chips
-                  v-model="assetType"
-                  :options="assetTypeOptions"
-                  placeholder="Select Asset Type"
-                />
-              </div>
-              <div class="q-mt-sm q-gutter-y-xs">
-                <div class="text-subtitle2 text-grey-7">Usage Mode</div>
-                <q-select
-                  dense
-                  outlined
-                  multiple
-                  use-chips
-                  v-model="usageMode"
-                  :options="usageModeOptions"
-                  placeholder="Select Usage Mode"
-                />
-              </div>
-              <div class="q-mt-sm q-gutter-y-xs">
-                <div class="text-subtitle2 text-grey-7">Event Type</div>
-                <q-select
-                  dense
-                  outlined
-                  multiple
-                  use-chips
-                  v-model="eventType"
-                  :options="eventTypeOptions"
-                  placeholder="Select Event Type"
-                />
-              </div>
-            </div>
-          </div>
-        </q-card-section>
-      </q-card>
-    </q-dialog>
+    <!-- Configurable Filter Drawer -->
+    <ConfigurableFilterDrawer
+      ref="filterDrawerRef"
+      v-model="filters"
+      :filter-groups="TRIP_FILTER_GROUPS"
+      title="Filter Dispatch"
+      apply-button-text="Apply"
+      clear-button-text="Clear"
+      @apply="handleApplyFilters"
+      @clear="handleClearFilters"
+    />
   </q-page>
 </template>
 
