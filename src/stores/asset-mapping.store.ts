@@ -2,16 +2,16 @@ import { defineStore, acceptHMRUpdate } from 'pinia';
 import { ref, computed } from 'vue';
 import { httpService } from 'src/helpers/httpService';
 import type {
-  MappingState,
+  AssetMappingState,
   TransportCategory,
   Service,
   OptionItem,
   ServiceOption,
   EventOption,
   TransferableType,
-  MappingResponse,
+  AssetMappingResponse,
   TransferableTypesResponse
-} from './types/mapping.types';
+} from './types/asset-mapping.types';
 
 // Utility functions
 export const createOptionsMapper = (
@@ -58,7 +58,7 @@ export const findServiceById = (mapping: TransportCategory[], serviceId: number)
   );
 };
 
-const initState = (): MappingState => ({
+const initState = (): AssetMappingState => ({
   assetsMapping: [],
   eventsMapping: [],
   serviceId: null,
@@ -72,9 +72,9 @@ const initState = (): MappingState => ({
   usageModeId: null,
 });
 
-export const useMappingStore = defineStore('mapping', () => {
+export const useAssetMappingStore = defineStore('asset-mapping', () => {
   // State
-  const state = ref<MappingState>(initState());
+  const state = ref<AssetMappingState>(initState());
 
   // Getters
   const serviceId = computed(() => state.value.serviceId);
@@ -309,8 +309,8 @@ export const useMappingStore = defineStore('mapping', () => {
   const fetchData = async () => {
     try {
       const [assetsResponse, eventsResponse] = await Promise.all([
-        httpService.get<MappingResponse>('tpc-settings/preset/asset-type-mapping'),
-        httpService.get<MappingResponse>('tpc-settings/preset/event-type-mapping')
+        httpService.get<AssetMappingResponse>('tpc-settings/preset/asset-type-mapping'),
+        httpService.get<AssetMappingResponse>('tpc-settings/preset/event-type-mapping')
       ]);
 
       setAssetsMapping(assetsResponse.data?.transport_categories ?? []);
@@ -385,8 +385,8 @@ export const useMappingStore = defineStore('mapping', () => {
   };
 });
 
-export type MappingStore = ReturnType<typeof useMappingStore>;
+export type AssetMappingStore = ReturnType<typeof useAssetMappingStore>;
 
 if (import.meta.hot) {
-  import.meta.hot.accept(acceptHMRUpdate(useMappingStore, import.meta.hot));
+  import.meta.hot.accept(acceptHMRUpdate(useAssetMappingStore, import.meta.hot));
 }

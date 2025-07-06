@@ -55,7 +55,7 @@ export interface TransferableType {
   [key: string]: any;
 }
 
-export interface MappingState {
+export interface AssetMappingState {
   assetsMapping: TransportCategory[];
   eventsMapping: TransportCategory[];
   serviceId: number | null;
@@ -79,7 +79,7 @@ export interface EventOption extends OptionItem {
   usage_mode_name?: string;
 }
 
-export interface MappingResponse {
+export interface AssetMappingResponse {
   data?: {
     transport_categories: TransportCategory[];
   };

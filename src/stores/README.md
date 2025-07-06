@@ -1,28 +1,28 @@
-# Mapping Store Usage
+# Asset Mapping Store Usage
 
 This store provides a centralized way to manage asset and service mappings throughout the application.
 
 ## Usage Example
 
 ```typescript
-import { useMappingStore } from 'src/stores/mapping.store';
+import { useAssetMappingStore } from 'src/stores/asset-mapping.store';
 
 // In a component
 export default defineComponent({
   setup() {
-    const mappingStore = useMappingStore();
+    const assetMappingStore = useAssetMappingStore();
     
     // Fetch initial data
     onMounted(async () => {
-      await mappingStore.fetchData();
+      await assetMappingStore.fetchData();
     });
     
     // Get service options
-    const serviceOptions = computed(() => mappingStore.serviceOptions);
+    const serviceOptions = computed(() => assetMappingStore.serviceOptions);
     
     // Set selected service
     const setService = (service) => {
-      mappingStore.setServiceId({
+      assetMappingStore.setServiceId({
         id: service.id,
         business_category_id: service.business_category_id,
         business_category_name: service.business_category_name
@@ -30,19 +30,19 @@ export default defineComponent({
     };
     
     // Get asset name options (dependent on selected service)
-    const assetNameOptions = computed(() => mappingStore.assetNameOptions);
+    const assetNameOptions = computed(() => assetMappingStore.assetNameOptions);
     
     // Get current service info
-    const currentService = computed(() => mappingStore.currentService);
+    const currentService = computed(() => assetMappingStore.currentService);
     
     return {
       serviceOptions,
       assetNameOptions,
       currentService,
       setService,
-      setAssetNameId: mappingStore.setAssetNameId,
-      setAssetCategoryId: mappingStore.setAssetCategoryId,
-      setAssetTypeId: mappingStore.setAssetTypeId,
+      setAssetNameId: assetMappingStore.setAssetNameId,
+      setAssetCategoryId: assetMappingStore.setAssetCategoryId,
+      setAssetTypeId: assetMappingStore.setAssetTypeId,
     };
   }
 });
@@ -83,7 +83,7 @@ export default defineComponent({
 ## Utility Functions
 
 ```typescript
-import { createOptionsMapper, flattenCategories, findServiceById } from 'src/stores/mapping.store';
+import { createOptionsMapper, flattenCategories, findServiceById } from 'src/stores/asset-mapping.store';
 
 // Map any array to option format
 const options = createOptionsMapper(items, 'id', 'name', ['extra_field']);
